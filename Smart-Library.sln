@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smart-Library", "Smart-Library.csproj", "{7ABF8B24-1A06-4FD0-B8D1-498537D236AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7ABF8B24-1A06-4FD0-B8D1-498537D236AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ABF8B24-1A06-4FD0-B8D1-498537D236AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ABF8B24-1A06-4FD0-B8D1-498537D236AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ABF8B24-1A06-4FD0-B8D1-498537D236AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2A3C069C-E071-4159-8820-FACA494D34DF}
+	EndGlobalSection
+EndGlobal
