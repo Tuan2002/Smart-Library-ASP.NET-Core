@@ -35,7 +35,6 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
 // Redirect to login page if user is not authenticated
 app.UseStatusCodePages(async context =>
 {
@@ -44,6 +43,17 @@ app.UseStatusCodePages(async context =>
     if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
     {
         response.Redirect("/account/login");
+        await Task.CompletedTask;
+        return;
+    }
+    if (response.StatusCode == (int)HttpStatusCode.NotFound)
+    {
+        response.Redirect("/error/notfound");
+        await Task.CompletedTask;
+    }
+    if (response.StatusCode == (int)HttpStatusCode.InternalServerError)
+    {
+        response.Redirect("/error/internalservererror");
         await Task.CompletedTask;
     }
 });
@@ -54,10 +64,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication(); ;
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 app.Run();
 
