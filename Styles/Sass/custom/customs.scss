@@ -1,0 +1,14 @@
+.card .card-header, .edit-profile__body label, .admin-condition {
+    text-transform: none;
+}
+.layout-dark .admin {
+    background-image: url(/img/admin-bg-dark.png);
+}
+.admin {
+    background-image: url(/img/admin-bg-light.png);
+}
+
+.admin .edit-profile__logos img {
+    width: 240px;
+    max-width: 100%;
+  }
