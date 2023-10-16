@@ -1,10 +1,33 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+using System.Net;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Rewrite;
+using Microsoft.EntityFrameworkCore;
+using Smart_Library.Data;
+using Smart_Library.Entities;
+using static Smart_Library.Config.AppRules;
+using static Smart_Library.Services.Middlewares.Middleware;
 
+var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("TuanLocal") ?? throw new InvalidOperationException("Connection string not found.");
+// Add services to connect to database
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
+    options.UseSqlServer(connectionString, x => x.UseDateOnlyTimeOnly()));
+// Add services to authentication
+builder.Services.AddIdentity<ApplicationUser, UserRole>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<ApplicationDBContext>();
+// Add service to compile sass
+#if DEBUG
+builder.Services.AddSassCompiler();
+#endif
+// Add services to lower case url
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
-
+var options = new RewriteOptions().Add(new RedirectLowerCaseRule());
+app.UseRewriter(options);
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -13,11 +36,23 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// Redirect to login page if user is not authenticated
+app.UseStatusCodePages(async context =>
+{
+    var request = context.HttpContext.Request;
+    var response = context.HttpContext.Response;
+    if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
+    {
+        response.Redirect("/account/login");
+        await Task.CompletedTask;
+    }
+});
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication(); ;
 app.UseAuthorization();
 
 app.MapControllerRoute(
