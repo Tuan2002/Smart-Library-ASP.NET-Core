@@ -7,8 +7,16 @@
 .admin {
     background-image: url(/img/admin-bg-light.png);
 }
-
 .admin .edit-profile__logos img {
     width: 240px;
     max-width: 100%;
-  }
+}
+@media screen and (max-width: 768px) {
+    .navbar-right__menu {
+        display: none;
+    }
+}
+.dropdown-custom .dropdown-wrapper--small {
+   min-width: 160px;
+   padding: 4px !important;
+}
