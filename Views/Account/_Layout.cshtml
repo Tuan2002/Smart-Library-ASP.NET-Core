@@ -1,6 +1,53 @@
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-<div class="admin">
-    @RenderBody()
-</div>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Hệ thống thư viện thông minh</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- inject:css-->
+
+    <link rel="stylesheet" href="/assets/vendor_assets/css/footable.standalone.min.css">
+    <link rel="stylesheet" href="/assets/vendor_assets/css/trumbowyg.min.css">
+    <link rel="stylesheet" href="/assets/vendor_assets/css/fontawesome.css">
+    <link rel="stylesheet" href="/assets/vendor_assets/css/slick.css">
+    <link rel="stylesheet" href="/assets/vendor_assets/css/magnific-popup.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+
+    <!-- endinject -->
+
+    <link rel="icon" type="icon" href="/img/favicon.ico">
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+
+</head>
+
+<body class="layout-light">
+    <main role="main" class="main-content">
+        <div class="admin">
+            @RenderBody()
+        </div>
+    </main>
+    <footer class="border-top footer text-muted">
+        <div class="container text-center mb-3">
+            &copy; 2023 - Tuấn Nguyễn - Bùi Phương
+        </div>
+    </footer>
+    <!-- inject:js-->
+    <script src="/assets/vendor_assets/js/jquery/jquery-3.7.1.min.js"></script>
+    <script src="/assets/vendor_assets/js/jquery/jquery-ui.min.js"></script>
+    <script src="/assets/vendor_assets/js/bootstrap/bootstrap.min.js"></script>
+    <script src="/assets/vendor_assets/js/autoComplete.js"></script>
+    <script src="/assets/vendor_assets/js/loader.js"></script>
+    <script src="/assets/theme_assets/js/main.js"></script>
+    <script src="/assets/js/script.js"></script>
+    <!-- endinject-->
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

@@ -1407,46 +1407,51 @@
     myMember.show();
   }
 
-  /* Sidebar Change */
-  const layoutChangeBtns = document.querySelectorAll("[data-layout]");
+  // /* Sidebar Change */
+  // const layoutChangeBtns = document.querySelectorAll("[data-layout]");
+  // console.log(layoutChangeBtns);
+  // // Get current layout from localStorage
+  // function changeLayout(e) {
+  //   e.preventDefault();
+  //   if (this.dataset.layout === "light") {
+  //     localStorage.setItem("layout", "dark");
+  //     $('ul.l_sidebar li a,.l_sidebar a').removeClass('active');
+  //     $(this).addClass("active");
+  //     $("body").removeClass("layout-dark");
+  //     $("body").addClass("layout-light");
+  //   } else if (this.dataset.layout === "dark") {
+  //     localStorage.setItem("layout", "dark");
+  //     $('ul.l_sidebar li a,.l_sidebar a').removeClass('active');
+  //     $(this).addClass("active");
+  //     $("body").removeClass("layout-light");
+  //     $("body").addClass("layout-dark");
+  //   } else if (this.dataset.layout === "side") {
+  //     localStorage.setItem("menu", "side");
+  //     $('ul.l_navbar li a,.l_navbar a').removeClass('active');
+  //     $(this).addClass("active");
+  //     $("body").removeClass("top-menu");
+  //     $("body").addClass("side-menu");
+  //   } else if (this.dataset.layout === "top") {
+  //     localStorage.setItem("menu", "top");
+  //     $('ul.l_navbar li a,.l_navbar a').removeClass('active');
+  //     $(this).addClass("active");
+  //     $("body").removeClass("side-menu");
+  //     $("body").addClass("top-menu");
+  //   }
+  // }
+  // $('.enable-dark-mode').click(function () {
+  //   $("body").toggleClass('layout-dark');
+  //   $('.enable-dark-mode a').toggleClass('active');
+  // });
 
-  function changeLayout(e) {
-    e.preventDefault();
-    if (this.dataset.layout === "light") {
-      $('ul.l_sidebar li a,.l_sidebar a').removeClass('active');
-      $(this).addClass("active");
-      $("body").removeClass("layout-dark");
-      $("body").addClass("layout-light");
-    } else if (this.dataset.layout === "dark") {
-      $('ul.l_sidebar li a,.l_sidebar a').removeClass('active');
-      $(this).addClass("active");
-      $("body").removeClass("layout-light");
-      $("body").addClass("layout-dark");
-    } else if (this.dataset.layout === "side") {
-      $('ul.l_navbar li a,.l_navbar a').removeClass('active');
-      $(this).addClass("active");
-      $("body").removeClass("top-menu");
-      $("body").addClass("side-menu");
-    } else if (this.dataset.layout === "top") {
-      $('ul.l_navbar li a,.l_navbar a').removeClass('active');
-      $(this).addClass("active");
-      $("body").removeClass("side-menu");
-      $("body").addClass("top-menu");
-    }
-  }
-  $('.enable-dark-mode').click(function () {
-    $("body").toggleClass('layout-dark');
-    $('.enable-dark-mode a').toggleClass('active');
-  });
-
-  if (layoutChangeBtns) {
-    layoutChangeBtns.forEach((layoutChangeBtn) =>
-      layoutChangeBtn.addEventListener("click", changeLayout)
-    );
-    layoutChangeBtns.forEach((layoutChangeBtn) =>
-      layoutChangeBtn.addEventListener("click", closeCustomizer)
-    );
-  }
+  // if (layoutChangeBtns) {
+  //   layoutChangeBtns.forEach((layoutChangeBtn) =>
+  //     layoutChangeBtn.addEventListener("click", changeLayout)
+  //   );
+  //   layoutChangeBtns.forEach((layoutChangeBtn) =>
+  //     layoutChangeBtn.addEventListener("click", closeCustomizer)
+  //   );
+  // }
 
   /* Customizing */
   const customizerBtn = document.querySelector(".customizer-trigger");
@@ -1461,12 +1466,12 @@
     $('.customizer-overlay').addClass('show');
   }
 
-  function closeCustomizer(e) {
-    e.preventDefault();
-    customizer.classList.remove("show");
-    customizerBtn.classList.remove("show");
-    customizerOverlay.classList.remove("show");
-  }
+  // function closeCustomizer(e) {
+  //   e.preventDefault();
+  //   customizer.classList.remove("show");
+  //   customizerBtn.classList.remove("show");
+  //   customizerOverlay.classList.remove("show");
+  // }
 
   if (customizerBtn) {
     customizerBtn.addEventListener("click", toggleCustomizer);
