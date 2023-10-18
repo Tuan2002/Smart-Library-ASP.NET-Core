@@ -33,7 +33,7 @@ namespace Smart_Library.Data
                 EmailConfirmed = true,
                 FirstName = "Nguyễn Ngọc Anh",
                 LastName = "Tuấn",
-                ProfileImage = "https://i.imgur.com/6NQ1n0V.png",
+                ProfileImage = "/upload/user-upload/admin.webp",
                 CreatedAt = DateTime.Now,
                 DateOfBirth = new DateOnly(2002, 07, 02),
                 PhoneNumber = "0123456789"
