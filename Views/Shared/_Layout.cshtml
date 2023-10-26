@@ -68,6 +68,7 @@
   </main>
   <div class="overlay-dark-sidebar"></div>
   <div class="customizer-overlay"></div>
+  <div class="message-wrapper"></div>
   <div class="customizer-wrapper">
     <div class="customizer">
       <div class="customizer__head">
@@ -139,7 +140,6 @@
       </div>
     </div>
   </div>
-
   <footer class="border-top footer text-muted">
     <div class="container text-center mb-3">
       &copy; 2023 - Nguyễn Ngọc Anh Tuấn
@@ -172,7 +172,6 @@
   <script src="/assets/vendor_assets/js/leaflet.js"></script>
   <script src="/assets/vendor_assets/js/leaflet.markercluster.js"></script>
   <script src="/assets/vendor_assets/js/loader.js"></script>
-  <script src="/assets/vendor_assets/js/message.js"></script>
   <script src="/assets/vendor_assets/js/moment.js"></script>
   <script src="/assets/vendor_assets/js/muuri.min.js"></script>
   <script src="/assets/vendor_assets/js/notification.js"></script>
@@ -191,9 +190,10 @@
   <script src="/assets/theme_assets/js/jvectormap-init.js"></script>
   <script src="/assets/theme_assets/js/leaflet-init.js"></script>
   <script src="/assets/theme_assets/js/main.js"></script>
+  <script src="/assets/js/message.js"></script>
   <script src="/assets/js/script.js"></script>
   <!-- endinject-->
-  @await RenderSectionAsync("Scripts", required: false)
+  @RenderSection("Scripts", required: false)
 </body>
 
 </html>

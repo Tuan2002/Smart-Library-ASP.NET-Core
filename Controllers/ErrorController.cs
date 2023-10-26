@@ -15,22 +15,16 @@ namespace Smart_Library.Controllers
         {
             return Redirect("/");
         }
-        [Route("NotFound")]
-        public new IActionResult NotFound()
+        [Route("{code}")]
+        public IActionResult Error(int code)
         {
-            return View("NotFound");
+            return code switch
+            {
+                404 => View("NotFound"),
+                403 => View("Forbidden"),
+                500 => View("InternalServerError"),
+                _ => View("InternalServerError"),
+            };
         }
-        [Route("InternalServerError")]
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult InternalServerError()
-        {
-            return View("InternalServerError");
-        }
-        [Route("Forbidden")]
-        public IActionResult Forbidden()
-        {
-            return View("Forbidden");
-        }
-
     }
 }

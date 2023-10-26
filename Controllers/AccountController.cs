@@ -56,14 +56,22 @@ namespace Smart_Library.Controllers
                     ModelState.AddModelError(string.Empty, "Thông tin đăng nhập không chính xác");
                     return View(loginModel);
                 }
-                var result = await _signInManager.PasswordSignInAsync(user, loginModel.Password, loginModel.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(user, loginModel.Password, loginModel.RememberMe, lockoutOnFailure: true);
                 if (!result.Succeeded)
                 {
+                    if (result.IsLockedOut)
+                    {
+                        ModelState.AddModelError(string.Empty, "Tài khoản của bạn đã bị khóa do đăng nhập sai quá nhiều lần");
+                        return View(loginModel);
+                    }
                     ModelState.AddModelError(string.Empty, "Thông tin đăng nhập không chính xác");
+                    await _userManager.AccessFailedAsync(user);
                     return View(loginModel);
                 }
                 if (!string.IsNullOrEmpty(loginModel.ReturnUrl) && Url.IsLocalUrl(loginModel.ReturnUrl))
                     return Redirect(loginModel.ReturnUrl);
+                TempData["Message"] = "Đăng nhập thành công";
+                TempData["Type"] = "success";
 
                 return RedirectToAction("Index", "Home");
             }

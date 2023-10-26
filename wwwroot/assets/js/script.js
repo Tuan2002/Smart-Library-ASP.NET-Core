@@ -79,3 +79,4 @@ function loadThemeFromLocal(){
       layoutChangeBtn.addEventListener("click", closeCustomizer)
     );
   }
+

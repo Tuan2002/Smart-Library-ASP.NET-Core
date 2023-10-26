@@ -1,7 +1,29 @@
 ﻿@{
     ViewData["Title"] = "Trang chủ";
 }
-
+@if (TempData["Message"] != null)
+{
+    @section Scripts {
+    <script>
+        const messageType = '@TempData["Type"]'
+            let icon = "";
+            switch (messageType) {
+                case 'success':
+                    icon = 'check-circle';
+                    break;
+                case 'error':
+                    icon = 'times-circle';
+                    break;
+                case 'warning':
+                    icon = 'exclamation-circle';
+                    break;
+                default:
+                    icon = 'circle-info'
+            }
+            showMessage(messageType, icon, '@TempData["Message"]?.ToString()')
+        </script>
+}
+}
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>

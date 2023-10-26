@@ -7,6 +7,11 @@
 .admin {
     background-image: url(/img/admin-bg-light.png);
 }
+.admin .edit-profile{
+    padding-top: 10%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
 .admin .edit-profile__logos img {
     width: 240px;
     max-width: 100%;
@@ -19,4 +24,14 @@
 .dropdown-custom .dropdown-wrapper--small {
    min-width: 160px;
    padding: 4px !important;
+}
+.spin-embadded .loaded-spin{
+    top: 58%;
+}
+
+.footer{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }

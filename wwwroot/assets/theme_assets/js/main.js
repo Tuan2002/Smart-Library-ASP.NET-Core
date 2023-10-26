@@ -1406,7 +1406,12 @@
     var myMember = new bootstrap.Modal(document.getElementById("add-contact"));
     myMember.show();
   }
-
+  function closeCustomizer(e) {
+    e.preventDefault();
+    customizer.classList.remove("show");
+    customizerBtn.classList.remove("show");
+    customizerOverlay.classList.remove("show");
+  }
   // /* Sidebar Change */
   // const layoutChangeBtns = document.querySelectorAll("[data-layout]");
   // console.log(layoutChangeBtns);

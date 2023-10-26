@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Smart_Library.Data;
 using Smart_Library.Entities;
 using static Smart_Library.Config.AppRules;
-using static Smart_Library.Services.Middlewares.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +13,16 @@ var connectionString = builder.Configuration.GetConnectionString("TuanLocal") ??
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(connectionString, x => x.UseDateOnlyTimeOnly()));
 // Add services to authentication
-builder.Services.AddIdentity<ApplicationUser, UserRole>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddIdentity<ApplicationUser, UserRole>(options => { options.SignIn.RequireConfirmedAccount = false; })
     .AddEntityFrameworkStores<ApplicationDBContext>();
+// Add services to configure lockout settings
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Default Lockout settings.
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
+});
 // Add service to compile sass
 #if DEBUG
 builder.Services.AddSassCompiler();
@@ -31,7 +38,7 @@ app.UseRewriter(options);
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/error/500");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
@@ -46,18 +53,18 @@ app.UseStatusCodePages(async context =>
         await Task.CompletedTask;
         return;
     }
-    if (response.StatusCode == (int)HttpStatusCode.NotFound)
-    {
-        response.Redirect("/error/notfound");
-        await Task.CompletedTask;
-    }
-    if (response.StatusCode == (int)HttpStatusCode.InternalServerError)
-    {
-        response.Redirect("/error/internalservererror");
-        await Task.CompletedTask;
-    }
+    // if (response.StatusCode == (int)HttpStatusCode.NotFound)
+    // {
+    //     response.Redirect("/error/notfound");
+    //     await Task.CompletedTask;
+    // }
+    // if (response.StatusCode == (int)HttpStatusCode.InternalServerError)
+    // {
+    //     response.Redirect("/error/internalservererror");
+    //     await Task.CompletedTask;
+    // }
 });
-
+app.UseStatusCodePagesWithReExecute("/error/{0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
