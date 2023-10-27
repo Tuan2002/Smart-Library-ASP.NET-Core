@@ -376,7 +376,7 @@
                                            !currentPath.StartsWithSegments("/admin"))
                                             {
                                                 <li>
-                                                    <a href="/admin">
+                                                    <a href="/admin/">
                                                         <i class="uil uil-apps"></i>Trang quản trị</a>
                                                 </li>
                                             }
@@ -402,8 +402,13 @@
                                                     <i class="uil uil-bell"></i> Help</a>
                                             </li>
                                         </ul>
-                                        <a href="/account/logout" class="nav-author__signout text-danger">
-                                            <i class="uil uil-sign-out-alt"></i>Đăng xuất</a>
+                                        <form asp-action="Logout" asp-controller="Account"
+                                            asp-route-returnurl="@ViewData["ReturnUrl"]">
+                                            <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                            <button type="submit" class="nav-author__signout border-0 w-100 text-danger">
+                                                <i class="uil uil-sign-out-alt"></i>Đăng xuất</button>
+                                        </form>
+
                                     </div>
                                 </div>
                                 <!-- ends: .dropdown-wrapper -->

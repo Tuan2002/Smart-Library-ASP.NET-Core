@@ -21,7 +21,7 @@
                     </div>
                     <div class="card-body">
                         <form id="login-form" class="edit-profile__body" asp-controller="Account" asp-action="Login"
-                            asp-route-returnurl="@ViewData["returnurl"]" method="post">
+                            asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
                             @Html.AntiForgeryToken()
                             <div class="form-group mb-25">
                                 <label asp-for="Email">Tài khoản</label>

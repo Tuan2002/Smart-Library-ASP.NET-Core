@@ -35,3 +35,11 @@
     left: 0;
     right: 0;
 }
+.sidebar__menu-group ul.sidebar_nav li>a {
+    text-transform: none;
+}
+.sidebar.collapsed .sidebar__menu-group li.has-child ul li a {
+    padding-left: 12px;
+    width: auto;
+    margin: auto;
+}

@@ -23,13 +23,14 @@ namespace Smart_Library.Controllers
         {
             return Redirect("/");
         }
-        [HttpGet]
         [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("Logout")]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout(string returnUrl = null!)
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Login", "Account", new { returnUrl });
         }
         [HttpGet]
         [Route("Login")]
@@ -68,11 +69,13 @@ namespace Smart_Library.Controllers
                     await _userManager.AccessFailedAsync(user);
                     return View(loginModel);
                 }
-                if (!string.IsNullOrEmpty(loginModel.ReturnUrl) && Url.IsLocalUrl(loginModel.ReturnUrl))
-                    return Redirect(loginModel.ReturnUrl);
                 TempData["Message"] = "Đăng nhập thành công";
                 TempData["Type"] = "success";
-
+                if (!string.IsNullOrEmpty(loginModel.ReturnUrl) && Url.IsLocalUrl(loginModel.ReturnUrl))
+                    return Redirect(loginModel.ReturnUrl);
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.Contains("Admin"))
+                    return Redirect("/admin");
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
