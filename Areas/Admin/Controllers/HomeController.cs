@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 namespace Smart_Library.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Route("Admin/[controller]")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
