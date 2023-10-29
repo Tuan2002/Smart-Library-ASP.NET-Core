@@ -2,7 +2,6 @@
 @using Smart_Library.Entities
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-@inject RoleManager<UserRole> RoleManager
 @{
     var currentPath = Context.Request.Path;
 }
@@ -350,7 +349,6 @@
                 {
                     var user = UserManager.GetUserAsync(User).Result;
                     var UserRole = UserManager.GetRolesAsync(user).Result.FirstOrDefault();
-                    var role = RoleManager.Roles.Where(role => role.Name == UserRole).FirstOrDefault();
                     <li class="nav-author">
                         <div class="dropdown-custom">
                             <a href="#" class="nav-item-toggle"><img src=@user?.ProfileImage alt="" class="rounded-circle">
@@ -359,20 +357,18 @@
                             </a>
                             <div class="dropdown-parent-wrapper">
                                 <div class="dropdown-wrapper">
-                                    <a href="#">
-                                        <div class="nav-author__info">
-                                            <div class="author-img">
-                                                <img src=@user?.ProfileImage alt="image profile" class="rounded-circle">
-                                            </div>
-                                            <div>
-                                                <h6>@user?.FirstName @user?.LastName</h6>
-                                                <span>@role?.RoleDescription</span>
-                                            </div>
+                                    <div class="nav-author__info">
+                                        <div class="author-img">
+                                            <img src=@user?.ProfileImage alt="image profile" class="rounded-circle">
                                         </div>
-                                    </a>
+                                        <div>
+                                            <h6>@user?.FirstName @user?.LastName</h6>
+                                            <span>@UserRole</span>
+                                        </div>
+                                    </div>
                                     <div class="nav-author__options">
                                         <ul>
-                                            @if (UserRole?.ToLower() == "admin" &&
+                                            @if (UserRole?.ToUpper() == "QUẢN TRỊ VIÊN" &&
                                            !currentPath.StartsWithSegments("/admin"))
                                             {
                                                 <li>
@@ -382,24 +378,15 @@
                                             }
                                             <li>
                                                 <a href="">
-                                                    <i class="uil uil-user"></i> Profile</a>
+                                                    <i class="uil uil-user"></i>Trang cá nhân</a>
                                             </li>
                                             <li>
                                                 <a href="">
-                                                    <i class="uil uil-setting"></i>
-                                                    Settings</a>
+                                                    <i class="uil uil-setting"></i>Cài đặt ứng dungk</a>
                                             </li>
                                             <li>
                                                 <a href="">
-                                                    <i class="uil uil-key-skeleton"></i> Billing</a>
-                                            </li>
-                                            <li>
-                                                <a href="">
-                                                    <i class="uil uil-users-alt"></i> Activity</a>
-                                            </li>
-                                            <li>
-                                                <a href="">
-                                                    <i class="uil uil-bell"></i> Help</a>
+                                                    <i class="uil uil-bell"></i>Trợ giúp</a>
                                             </li>
                                         </ul>
                                         <form asp-action="Logout" asp-controller="Account"

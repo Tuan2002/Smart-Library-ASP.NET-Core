@@ -35,6 +35,16 @@
     left: 0;
     right: 0;
 }
+.userDatatable-title {
+    text-transform: none;
+}
+.user-member .action-btn a {
+    text-transform: none;
+}
+
+.breadcrumb-title {
+    color: var(--color-gray);
+}
 .sidebar__menu-group ul.sidebar_nav li>a {
     text-transform: none;
 }
@@ -42,4 +52,9 @@
     padding-left: 12px;
     width: auto;
     margin: auto;
+}
+.warning-tag-message{
+    margin-left: 0;
+    padding: 12px;
+    border-radius: 12px;
 }

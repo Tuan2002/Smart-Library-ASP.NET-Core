@@ -13,7 +13,7 @@ var connectionString = builder.Configuration.GetConnectionString("TuanLocal") ??
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(connectionString, x => x.UseDateOnlyTimeOnly()));
 // Add services to authentication
-builder.Services.AddIdentity<ApplicationUser, UserRole>(options => { options.SignIn.RequireConfirmedAccount = false; })
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => { options.SignIn.RequireConfirmedAccount = false; })
     .AddEntityFrameworkStores<ApplicationDBContext>();
 // Add services to configure lockout settings
 builder.Services.Configure<IdentityOptions>(options =>

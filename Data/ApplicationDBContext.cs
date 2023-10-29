@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +5,7 @@ using Smart_Library.Entities;
 
 namespace Smart_Library.Data
 {
-    public class ApplicationDBContext : IdentityDbContext<ApplicationUser, UserRole, Guid>
+    public class ApplicationDBContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
@@ -17,15 +13,12 @@ namespace Smart_Library.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            this.SeedData(modelBuilder);
+            SeedData(modelBuilder);
         }
         private void SeedData(ModelBuilder modelBuilder)
         {
-            var userId = Guid.NewGuid();
-            var roleId = Guid.NewGuid();
-            ApplicationUser User = new ApplicationUser
+            ApplicationUser ExampleUser = new ApplicationUser
             {
-                Id = userId, // primary key
                 UserName = "admin@admin.com",
                 NormalizedUserName = "admin@admin.com".ToUpper(),
                 Email = "admin@admin.com",
@@ -39,16 +32,21 @@ namespace Smart_Library.Data
                 PhoneNumber = "0123456789"
             };
             PasswordHasher<ApplicationUser> passwordHasher = new PasswordHasher<ApplicationUser>();
-            User.PasswordHash = passwordHasher.HashPassword(User, "Admin@123");
-            modelBuilder.Entity<ApplicationUser>().HasData(User);
-            modelBuilder.Entity<UserRole>().HasData(new UserRole { Id = roleId, Name = "Admin", RoleDescription = "Quản trị viên", NormalizedName = "ADMIN".ToUpper() });
-            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(
-                new IdentityUserRole<Guid>
-                {
-                    RoleId = roleId,
-                    UserId = userId
-                }
-            );
+            ExampleUser.PasswordHash = passwordHasher.HashPassword(ExampleUser, "Admin@123");
+
+            IdentityRole ExampleRole = new IdentityRole
+            {
+                Name = "Quản trị viên",
+                NormalizedName = "QUẢN TRỊ VIÊN"
+            };
+            IdentityUserRole<string> UserRole = new IdentityUserRole<string>
+            {
+                RoleId = ExampleRole.Id,
+                UserId = ExampleUser.Id
+            };
+            modelBuilder.Entity<ApplicationUser>().HasData(ExampleUser);
+            modelBuilder.Entity<IdentityRole>().HasData(ExampleRole);
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(UserRole);
         }
     }
 }
