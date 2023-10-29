@@ -23,13 +23,14 @@ namespace Smart_Library.Controllers
         {
             return Redirect("/");
         }
-        [HttpGet]
         [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("Logout")]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout(string returnUrl = null!)
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Login", "Account", new { returnUrl });
         }
         [HttpGet]
         [Route("Login")]
@@ -56,15 +57,25 @@ namespace Smart_Library.Controllers
                     ModelState.AddModelError(string.Empty, "Thông tin đăng nhập không chính xác");
                     return View(loginModel);
                 }
-                var result = await _signInManager.PasswordSignInAsync(user, loginModel.Password, loginModel.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(user, loginModel.Password, loginModel.RememberMe, lockoutOnFailure: true);
                 if (!result.Succeeded)
                 {
+                    if (result.IsLockedOut)
+                    {
+                        ModelState.AddModelError(string.Empty, "Tài khoản của bạn đã bị khóa do đăng nhập sai quá nhiều lần");
+                        return View(loginModel);
+                    }
                     ModelState.AddModelError(string.Empty, "Thông tin đăng nhập không chính xác");
+                    await _userManager.AccessFailedAsync(user);
                     return View(loginModel);
                 }
+                TempData["Message"] = "Đăng nhập thành công";
+                TempData["Type"] = "success";
                 if (!string.IsNullOrEmpty(loginModel.ReturnUrl) && Url.IsLocalUrl(loginModel.ReturnUrl))
                     return Redirect(loginModel.ReturnUrl);
-
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.Contains("Admin"))
+                    return Redirect("/admin");
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)

@@ -58,13 +58,15 @@
 
 </head>
 
-<body class="layout-dark side-menu">
-  <partial name="~/Views/Shared/Components/Header/Header.cshtml" />
+<body class="side-menu">
+  <partial name="./Components/Header/Header.cshtml" />
   <main role="main" class="main-content">
     <div class="sidebar-wrapper">
-      <partial name="~/Views/Shared/Components/Sidebar/Sidebar.cshtml" />
+      <partial name="./Components/Sidebar/Sidebar.cshtml" />
     </div>
-    @RenderBody()
+    <div class="contents">
+      @RenderBody()
+    </div>
   </main>
   <div class="overlay-dark-sidebar"></div>
   <div class="customizer-overlay"></div>
@@ -142,7 +144,7 @@
   </div>
   <footer class="border-top footer text-muted">
     <div class="container text-center mb-3">
-      &copy; 2023 - Nguyễn Ngọc Anh Tuấn
+      &copy; 2023 - Tuấn Nguyễn - Bùi Phương
     </div>
   </footer>
   <!-- inject:js-->
@@ -194,6 +196,7 @@
   <script src="/assets/js/script.js"></script>
   <!-- endinject-->
   @RenderSection("Scripts", required: false)
+  @RenderSection("Delete", required: false)
 </body>
 
 </html>

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Smart_Library.Entities
 {
-    public class ApplicationUser : IdentityUser<Guid>
+    public class ApplicationUser : IdentityUser
     {
         public string? FirstName { get; set; }
         [Required]
@@ -15,7 +15,5 @@ namespace Smart_Library.Entities
         public string? ProfileImage { get; set; } = null!;
         public DateOnly DateOfBirth { get; set; }
         public DateTime CreatedAt { get; set; }
-
-
     }
 }
