@@ -1,0 +1,7 @@
+@using Microsoft.AspNetCore.Identity;
+@model IList<IdentityRole>
+
+@foreach (var role in Model.ToList())
+{
+    <option value="@role.Name">@role.Name</option>
+}

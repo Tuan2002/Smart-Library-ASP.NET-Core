@@ -32,11 +32,12 @@
   })
   /* DatePicker  */
   $("#datepicker,#datepicker2,#datepicker3,#datepicker4,#datepicker5,#datepicker6,#datepicker7").datepicker({
-    dateFormat: "d MM yy",
+    dateFormat: "dd/mm/yy",
+    altFormat: "dd/mm/yy",
     duration: "medium",
     changeMonth: true,
     changeYear: true,
-    yearRange: "2010:2059",
+    yearRange: "1910:2099",
   });
   $("#datepicker9").datepicker({
     dateFormat: 'yy-mm-dd',
@@ -98,7 +99,6 @@
     } catch (error) {
       date = null;
     }
-
     return date;
   }
 

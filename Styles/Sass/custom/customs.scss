@@ -1,3 +1,7 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    text-transform: none;
+}
 .card .card-header, .edit-profile__body label, .admin-condition {
     text-transform: none;
 }
@@ -30,13 +34,26 @@
 }
 
 .footer{
+    background-color: var(--color-white);
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
 }
-.userDatatable-title {
-    text-transform: none;
+.layout-dark .footer{
+    background-color: var(--content-bg);
+} 
+.userDatatable {
+    .userDatatable-title {
+        text-transform: none;
+    }
+    .card {
+        background-color: transparent;
+        box-shadow: unset;
+        .dm-empty__image img {
+            max-width: 120px;
+        }
+    }
 }
 .user-member .action-btn a {
     text-transform: none;
@@ -57,4 +74,16 @@
     margin-left: 0;
     padding: 12px;
     border-radius: 12px;
+}
+.select2-search__field {
+    border-radius: 8px !important;
+    padding: 6px 10px !important;
+    border: 1px solid var(--color-primary) !important;
+    background-color: var(--input-bg) !important;
+    &::placeholder {
+        font-size: 0.9rem;
+    }
+}
+.layout-dark .select2-search__field {
+    color: var(--color-white) !important;
 }

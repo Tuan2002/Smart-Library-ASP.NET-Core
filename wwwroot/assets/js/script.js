@@ -34,7 +34,7 @@ function loadThemeFromLocal(){
         $("body").addClass("top-menu");
         }
 }
-    loadThemeFromLocal();
+  loadThemeFromLocal();
   /* Sidebar Change */
   const layoutChangeBtns = document.querySelectorAll("[data-layout]");
   // Get current layout from localStorage
@@ -79,4 +79,12 @@ function loadThemeFromLocal(){
       layoutChangeBtn.addEventListener("click", closeCustomizer)
     );
   }
-
+$("select").select2({
+    // options 
+    searchInputPlaceholder: 'Tìm kiếm...',
+    "language": {
+      "noResults": function(){
+          return "Không tìm thấy kết quả nào";
+      }
+  },
+});
