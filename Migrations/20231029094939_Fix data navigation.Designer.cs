@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Smart_Library.Data;
 
@@ -11,9 +12,10 @@ using Smart_Library.Data;
 namespace Smart_Library.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231029094939_Fix data navigation")]
+    partial class Fixdatanavigation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,8 +53,8 @@ namespace Smart_Library.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4804626e-9a1c-407a-b7aa-2a96a6326f41",
-                            ConcurrencyStamp = "f9e32a50-b724-4662-8124-9b68ccfb1311",
+                            Id = "71482c1f-dfe9-4477-934f-575677201be1",
+                            ConcurrencyStamp = "1d72f4f0-fdb2-4073-822a-f3e328b46a83",
                             Name = "Quản trị viên",
                             NormalizedName = "QUẢN TRỊ VIÊN"
                         });
@@ -147,8 +149,8 @@ namespace Smart_Library.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "a96e7f92-457d-4787-8c93-0ebdddabe8fc",
-                            RoleId = "4804626e-9a1c-407a-b7aa-2a96a6326f41"
+                            UserId = "57e2a957-45f4-4f10-964e-71bfcc2f6d57",
+                            RoleId = "71482c1f-dfe9-4477-934f-575677201be1"
                         });
                 });
 
@@ -263,11 +265,11 @@ namespace Smart_Library.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a96e7f92-457d-4787-8c93-0ebdddabe8fc",
+                            Id = "57e2a957-45f4-4f10-964e-71bfcc2f6d57",
                             AccessFailedCount = 0,
                             Address = "Vinh, Nghệ An",
-                            ConcurrencyStamp = "a8c22cb2-d3d7-417a-b9c3-29f154ad6467",
-                            CreatedAt = new DateTime(2023, 10, 29, 17, 13, 50, 679, DateTimeKind.Local).AddTicks(9580),
+                            ConcurrencyStamp = "e5b238f0-694e-4923-9a6b-a34510e87470",
+                            CreatedAt = new DateTime(2023, 10, 29, 16, 49, 39, 517, DateTimeKind.Local).AddTicks(5010),
                             DateOfBirth = new DateOnly(2002, 7, 2),
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
@@ -276,14 +278,14 @@ namespace Smart_Library.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAECSvlQuNnnZtXP2CuUfAY2QTlSOfOCJXw7UElpQ5HB2lehTcPhyn8DkWNg0b65/7SQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEQOCsBXy1Wm7rsWNeDIJy8KdbDgOr9vNc0W/OErMZOE3/fogVhwman7F5xEquL0JQ==",
                             PhoneNumber = "0123456789",
                             PhoneNumberConfirmed = false,
                             ProfileImage = "/upload/user-upload/admin.webp",
-                            SecurityStamp = "e0fc00f8-09cf-42ce-9b93-677a5e972fda",
+                            SecurityStamp = "0a4a14c2-788e-4929-90f0-423cfcc628fc",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com",
-                            WorkspaceId = "4da7d3f8-7793-4108-a5d5-16a4fc6888a2"
+                            WorkspaceId = "828f50fd-0f6f-4c19-84f3-985afdf33632"
                         });
                 });
 
@@ -306,8 +308,8 @@ namespace Smart_Library.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4da7d3f8-7793-4108-a5d5-16a4fc6888a2",
-                            CreatedAt = new DateTime(2023, 10, 29, 17, 13, 50, 679, DateTimeKind.Local).AddTicks(9530),
+                            Id = "828f50fd-0f6f-4c19-84f3-985afdf33632",
+                            CreatedAt = new DateTime(2023, 10, 29, 16, 49, 39, 517, DateTimeKind.Local).AddTicks(4960),
                             WorkspaceName = "Viện KT và CN"
                         });
                 });

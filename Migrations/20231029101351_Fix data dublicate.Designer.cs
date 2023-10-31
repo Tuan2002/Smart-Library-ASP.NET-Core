@@ -12,8 +12,8 @@ using Smart_Library.Data;
 namespace Smart_Library.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20231029060051_Create Auth tables and seed example data")]
-    partial class CreateAuthtablesandseedexampledata
+    [Migration("20231029101351_Fix data dublicate")]
+    partial class Fixdatadublicate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,8 +53,8 @@ namespace Smart_Library.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3055acee-8623-4adb-bcb2-e87716b0df93",
-                            ConcurrencyStamp = "8052d6a6-fe8e-48a1-970a-21a3753b26eb",
+                            Id = "4804626e-9a1c-407a-b7aa-2a96a6326f41",
+                            ConcurrencyStamp = "f9e32a50-b724-4662-8124-9b68ccfb1311",
                             Name = "Quản trị viên",
                             NormalizedName = "QUẢN TRỊ VIÊN"
                         });
@@ -149,8 +149,8 @@ namespace Smart_Library.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "b5125355-44e0-4cbf-9a9c-5ea9711afd47",
-                            RoleId = "3055acee-8623-4adb-bcb2-e87716b0df93"
+                            UserId = "a96e7f92-457d-4787-8c93-0ebdddabe8fc",
+                            RoleId = "4804626e-9a1c-407a-b7aa-2a96a6326f41"
                         });
                 });
 
@@ -180,6 +180,9 @@ namespace Smart_Library.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -241,6 +244,10 @@ namespace Smart_Library.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -251,15 +258,18 @@ namespace Smart_Library.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("WorkspaceId");
+
                     b.ToTable("AspNetUsers", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = "b5125355-44e0-4cbf-9a9c-5ea9711afd47",
+                            Id = "a96e7f92-457d-4787-8c93-0ebdddabe8fc",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1f359da2-4e46-49eb-88fd-45d9ac662d76",
-                            CreatedAt = new DateTime(2023, 10, 29, 13, 0, 51, 348, DateTimeKind.Local).AddTicks(1050),
+                            Address = "Vinh, Nghệ An",
+                            ConcurrencyStamp = "a8c22cb2-d3d7-417a-b9c3-29f154ad6467",
+                            CreatedAt = new DateTime(2023, 10, 29, 17, 13, 50, 679, DateTimeKind.Local).AddTicks(9580),
                             DateOfBirth = new DateOnly(2002, 7, 2),
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
@@ -268,13 +278,39 @@ namespace Smart_Library.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGCnY51kORtdXtTOCtgGiXpobahp6eR+Z2yWUkJ1aUW2naspzTZXFbGpF0hkjuMdWg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECSvlQuNnnZtXP2CuUfAY2QTlSOfOCJXw7UElpQ5HB2lehTcPhyn8DkWNg0b65/7SQ==",
                             PhoneNumber = "0123456789",
                             PhoneNumberConfirmed = false,
                             ProfileImage = "/upload/user-upload/admin.webp",
-                            SecurityStamp = "d7ea7ee0-a436-418c-afa6-7e32054e7fd5",
+                            SecurityStamp = "e0fc00f8-09cf-42ce-9b93-677a5e972fda",
                             TwoFactorEnabled = false,
-                            UserName = "admin@admin.com"
+                            UserName = "admin@admin.com",
+                            WorkspaceId = "4da7d3f8-7793-4108-a5d5-16a4fc6888a2"
+                        });
+                });
+
+            modelBuilder.Entity("Smart_Library.Entities.Workspace", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("WorkspaceName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Workspaces");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "4da7d3f8-7793-4108-a5d5-16a4fc6888a2",
+                            CreatedAt = new DateTime(2023, 10, 29, 17, 13, 50, 679, DateTimeKind.Local).AddTicks(9530),
+                            WorkspaceName = "Viện KT và CN"
                         });
                 });
 
@@ -327,6 +363,17 @@ namespace Smart_Library.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Smart_Library.Entities.ApplicationUser", b =>
+                {
+                    b.HasOne("Smart_Library.Entities.Workspace", "Workspace")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Workspace");
                 });
 #pragma warning restore 612, 618
         }

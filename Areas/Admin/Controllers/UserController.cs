@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Smart_Library.Areas.Admin.Models;
+using Smart_Library.Data;
 using Smart_Library.Entities;
 
 namespace Smart_Library.Areas.Admin.Controllers
@@ -18,11 +19,12 @@ namespace Smart_Library.Areas.Admin.Controllers
     {
         private readonly ILogger<UserController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
-
-        public UserController(ILogger<UserController> logger, UserManager<ApplicationUser> userManager)
+        private readonly ApplicationDBContext _context;
+        public UserController(ILogger<UserController> logger, UserManager<ApplicationUser> userManager, ApplicationDBContext context)
         {
             _logger = logger;
             _userManager = userManager;
+            _context = context;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -37,23 +39,32 @@ namespace Smart_Library.Areas.Admin.Controllers
                     Email = user.Email,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
+                    ProfileImage = user.ProfileImage,
+                    Address = user.Address,
+                    WorkspaceName = user.Workspace?.WorkspaceName,
                     Role = _userManager.GetRolesAsync(user).Result.FirstOrDefault(),
                     CreatedAt = user.CreatedAt,
-                    Status = _userManager.IsLockedOutAsync(user).Result
+                    IsLocked = _userManager.IsLockedOutAsync(user).Result
                 };
                 UserList.Add(UserInfo);
             }
             return View(UserList);
         }
-
-        [HttpPost]
-        [Route("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(string id)
+        [HttpGet]
+        [Route("Create")]
+        public IActionResult CreateUser()
         {
-            TempData["Message"] = "Xoá người dùng thành công";
-            TempData["Type"] = "success";
-            return RedirectToAction("Index", "User");
+            return View();
         }
+
+        // [HttpPost]
+        // [Route("Delete")]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> Delete(string id)
+        // {
+        //     TempData["Message"] = "Xoá người dùng thành công";
+        //     TempData["Type"] = "success";
+        //     return RedirectToAction("Index", "User");
+        // }
     }
 }

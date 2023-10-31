@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Smart_Library.Migrations
 {
-    public partial class CreateAuthtablesandseedexampledata : Migration
+    public partial class CreateAuthtablesWorkspacetableandseedexampledatá : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,33 +24,16 @@ namespace Smart_Library.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
+                name: "Workspaces",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProfileImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    WorkspaceName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.PrimaryKey("PK_Workspaces", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -70,6 +53,44 @@ namespace Smart_Library.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProfileImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WorkspaceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Workspaces_WorkspaceId",
+                        column: x => x.WorkspaceId,
+                        principalTable: "Workspaces",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -162,17 +183,22 @@ namespace Smart_Library.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "3055acee-8623-4adb-bcb2-e87716b0df93", "8052d6a6-fe8e-48a1-970a-21a3753b26eb", "Quản trị viên", "QUẢN TRỊ VIÊN" });
+                values: new object[] { "41533e67-30e6-44e0-90bc-6b0ed3cbd347", "0583c25c-ca36-45c2-aeff-99a276cab2e0", "Quản trị viên", "QUẢN TRỊ VIÊN" });
+
+            migrationBuilder.InsertData(
+                table: "Workspaces",
+                columns: new[] { "Id", "CreatedAt", "WorkspaceName" },
+                values: new object[] { "382f2854-02fc-4fd0-89cc-6876ebb61edf", new DateTime(2023, 10, 29, 15, 59, 39, 846, DateTimeKind.Local).AddTicks(4130), "Viện KT và CN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "DateOfBirth", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfileImage", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b5125355-44e0-4cbf-9a9c-5ea9711afd47", 0, "1f359da2-4e46-49eb-88fd-45d9ac662d76", new DateTime(2023, 10, 29, 13, 0, 51, 348, DateTimeKind.Local).AddTicks(1050), new DateOnly(2002, 7, 2), "admin@admin.com", true, "Nguyễn Ngọc Anh", "Tuấn", false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEGCnY51kORtdXtTOCtgGiXpobahp6eR+Z2yWUkJ1aUW2naspzTZXFbGpF0hkjuMdWg==", "0123456789", false, "/upload/user-upload/admin.webp", "d7ea7ee0-a436-418c-afa6-7e32054e7fd5", false, "admin@admin.com" });
+                columns: new[] { "Id", "AccessFailedCount", "Address", "ConcurrencyStamp", "CreatedAt", "DateOfBirth", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfileImage", "SecurityStamp", "TwoFactorEnabled", "UserName", "WorkspaceId" },
+                values: new object[] { "4ac63404-ba33-41b0-b551-352830aac62f", 0, "Vinh, Nghệ An", "f5e654ac-2b4d-4e1f-91e5-874ef933aba0", new DateTime(2023, 10, 29, 15, 59, 39, 846, DateTimeKind.Local).AddTicks(4170), new DateOnly(2002, 7, 2), "admin@admin.com", true, "Nguyễn Ngọc Anh", "Tuấn", false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEBN1EVTmKx6Sa1OwzPRo/P9ofQmI2rYAenNbQk9vB/eqrDl4+tGU8un8/yL2Rwjmzg==", "0123456789", false, "/upload/user-upload/admin.webp", "b45246d3-2f03-464d-a923-ba224266bda5", false, "admin@admin.com", "382f2854-02fc-4fd0-89cc-6876ebb61edf" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "3055acee-8623-4adb-bcb2-e87716b0df93", "b5125355-44e0-4cbf-9a9c-5ea9711afd47" });
+                values: new object[] { "41533e67-30e6-44e0-90bc-6b0ed3cbd347", "4ac63404-ba33-41b0-b551-352830aac62f" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -207,6 +233,11 @@ namespace Smart_Library.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_WorkspaceId",
+                table: "AspNetUsers",
+                column: "WorkspaceId");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -236,6 +267,9 @@ namespace Smart_Library.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Workspaces");
         }
     }
 }

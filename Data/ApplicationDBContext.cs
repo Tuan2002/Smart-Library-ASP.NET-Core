@@ -15,8 +15,18 @@ namespace Smart_Library.Data
             base.OnModelCreating(modelBuilder);
             SeedData(modelBuilder);
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+            base.OnConfiguring(optionsBuilder);
+        }
         private void SeedData(ModelBuilder modelBuilder)
         {
+            Workspace ExampleWorkspace = new Workspace
+            {
+                WorkspaceName = "Viện KT và CN",
+                CreatedAt = DateTime.Now
+            };
             ApplicationUser ExampleUser = new ApplicationUser
             {
                 UserName = "admin@admin.com",
@@ -27,6 +37,8 @@ namespace Smart_Library.Data
                 FirstName = "Nguyễn Ngọc Anh",
                 LastName = "Tuấn",
                 ProfileImage = "/upload/user-upload/admin.webp",
+                Address = "Vinh, Nghệ An",
+                WorkspaceId = ExampleWorkspace.Id,
                 CreatedAt = DateTime.Now,
                 DateOfBirth = new DateOnly(2002, 07, 02),
                 PhoneNumber = "0123456789"
@@ -44,9 +56,11 @@ namespace Smart_Library.Data
                 RoleId = ExampleRole.Id,
                 UserId = ExampleUser.Id
             };
+            modelBuilder.Entity<Workspace>().HasData(ExampleWorkspace);
             modelBuilder.Entity<ApplicationUser>().HasData(ExampleUser);
             modelBuilder.Entity<IdentityRole>().HasData(ExampleRole);
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(UserRole);
         }
+        public DbSet<Workspace> Workspace { get; set; } = null!;
     }
 }
