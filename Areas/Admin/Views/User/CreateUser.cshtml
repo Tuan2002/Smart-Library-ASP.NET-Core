@@ -1,3 +1,4 @@
+@model Smart_Library.Admin.Models.CreateUserModel
 @{
     ViewData["Title"] = "Thêm người dùng mới";
 }
@@ -11,12 +12,13 @@
     </div>
     <div class="card p-30">
         <div class="row justify-content-start">
-            <form action="#">
+            <form asp-action="CreateUser" enctype="multipart/form-data" asp-controller="User" asp-area="Admin"
+                method="POST">
                 <div class="col-12">
                     <div class="d-flex justify-content-start">
                         <div class="account-profile d-flex align-items-center mb-4 ">
                             <div class="ap-img pro_img_wrapper">
-                                <input id="file-upload" type="file" name="fileUpload"
+                                <input id="file-upload" type="file" accept="image/png, image/jpeg, image/jpg, image/webp, image/heic" asp-for="ProfileImage"
                                     class="d-none upload-avatar-input">
                                 <label for="file-upload">
                                     <img class="dm-upload-avatar avatrSrc ap-img__main rounded-circle wh-120 bg-lighter d-flex"
@@ -42,32 +44,34 @@
                         <div class="row d-flex justify-content-start">
                             <div class="col-lg-6 col-sm-12 p-20">
                                 <div class="form-group mb-25">
-                                    <label for="name2">Địa chỉ E-mail</label>
-                                    <input type="email" class="form-control" id="name2" placeholder="Nhập e-mail">
+                                    <label asp-for="Email">Địa chỉ E-mail</label>
+                                    <input asp-for="Email" type="email" class="form-control" id="name2"
+                                        placeholder="Nhập e-mail">
                                 </div>
                                 <div class="form-group mb-25">
-                                    <label for="first-name">Họ</label>
-                                    <input type="text" class="form-control" id="first-name"
+                                    <label asp-for="FirstName">Họ</label>
+                                    <input type="text" class="form-control" asp-for="FirstName"
                                         placeholder="Vui lòng nhập họ và tên lót">
                                 </div>
                                 <div class="form-group mb-25">
-                                    <label for="last-name">Tên</label>
-                                    <input type="text" class="form-control" id="last-name"
+                                    <label asp-for="LastName">Tên</label>
+                                    <input type="text" class="form-control" asp-for="LastName"
                                         placeholder="Vui lòng nhập tên">
                                 </div>
                                 <div class="form-group mb-25 form-group-calender">
                                     <label for="datepicker">Ngày sinh</label>
                                     <div class="dm-date-picker">
                                         <div class="form-group mb-0 form-group-calender position-relative">
-                                            <input type="text" class="form-control form-control-lg" id="datepicker"
-                                                placeholder="Chọn ngày sinh">
+                                            <input asp-for="DateOfBirth" type="text"
+                                                class="form-control form-control-lg" id="datepicker"
+                                                placeholder="Chọn hoặc nhập ngày sinh dạng: 2000/01/31">
                                             <a><img class="svg" src="/img/svg/calendar.svg" alt="calendar"></a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group mb-25">
-                                    <label for="phoneNumber5">Số điện thoại</label>
-                                    <input type="tel" class="form-control" id="phoneNumber5"
+                                    <label asp-for="Phone">Số điện thoại</label>
+                                    <input type="tel" class="form-control" asp-for="Phone"
                                         placeholder="Nhập số điện thoại">
                                 </div>
                             </div>
@@ -79,11 +83,10 @@
                                         </label>
                                         <div class="dm-select-list">
                                             <div class="dm-select">
-                                                <select name="select-search" id="cityOption"
-                                                    data-select2-id="cityOption"
-                                                    class="form-control js-example-basic-single js-data-example-ajax js-states form-control select2-results__option"
+                                                <select id="cityOption" asp-for="Province" data-select2-id="cityOption"
+                                                    class="form-control js-example-basic-single js-states form-control select2-results__option"
                                                     aria-hidden="true">
-                                                    <option data-select2-id="1">Chọn Tỉnh/Thành phố
+                                                    <option>Chọn Tỉnh/Thành phố
                                                     </option>
                                                 </select>
                                             </div>
@@ -95,11 +98,11 @@
                                         </label>
                                         <div class="dm-select-list">
                                             <div class="dm-select">
-                                                <select role="select" name="select-search" id="district"
+                                                <select role="select" asp-for="District" id="district"
                                                     data-select2-id="district"
                                                     class="form-control js-example-basic-single js-states form-control select2-results__option"
                                                     aria-hidden="true">
-                                                    <option data-select2-id="2">Chọn Quận/Huyện</option>
+                                                    <option>Chọn Quận/Huyện</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -110,7 +113,7 @@
                                         <label for="role">
                                             Vai trò người dùng
                                         </label>
-                                        <select role="select" name="select-search"
+                                        <select role="select" asp-for="RoleName"
                                             class="js-example-basic-single js-states form-control select2-results__option"
                                             id="role" data-select2-id="role" tabindex="-1" aria-hidden="true">
                                             @await Component.InvokeAsync("RoleOptions")
@@ -122,7 +125,7 @@
                                         <label for="workspace">
                                             Vị trí làm việc
                                         </label>
-                                        <select role="select" name="select-search"
+                                        <select role="select" asp-for="WorkspaceId"
                                             class="js-example-basic-single js-states form-control select2-results__option"
                                             id="workspace" data-select2-id="workspace" tabindex="-1" aria-hidden="true">
                                             @await Component.InvokeAsync("WorkspaceOptions")
@@ -147,7 +150,7 @@
         const baseURL = "https://provinces.open-api.vn/api";
         function loadProvinces() {
             $.ajax({
-                url: `${baseURL}/p/`,
+                url: `${baseURL}/p?depth=1`,
                 method: "GET",
                 success: function (data) {
                     // Clear the existing options
@@ -184,7 +187,7 @@
                     $("#district").empty();
                     // Add the new options from the API response
                     data.districts.forEach(function (district) {
-                        $("#district").append(`<option id="${district.code}" value="${district.name}">${district.name}</option>`);
+                        $("#district").append(`<option value="${district.name}">${district.name}</option>`);
                     });
                     // Initialize the select2 plugin
                     $("#district").select2({
@@ -202,7 +205,7 @@
             });
         }
         $("#cityOption").change(function () {
-            const provinceCode = $(this).children("option:selected").attr("id");
+            const provinceCode = $("#cityOption").children("option:selected").attr("id");
             loadDistricts(provinceCode);
         });
         loadProvinces();

@@ -31,6 +31,7 @@ builder.Services.AddSassCompiler();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDateOnlyTimeOnlyStringConverters();
 
 var app = builder.Build();
 var options = new RewriteOptions().Add(new RedirectLowerCaseRule());

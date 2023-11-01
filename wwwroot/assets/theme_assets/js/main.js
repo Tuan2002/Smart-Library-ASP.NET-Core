@@ -32,8 +32,8 @@
   })
   /* DatePicker  */
   $("#datepicker,#datepicker2,#datepicker3,#datepicker4,#datepicker5,#datepicker6,#datepicker7").datepicker({
-    dateFormat: "dd/mm/yy",
-    altFormat: "dd/mm/yy",
+    dateFormat: "yy/mm/dd",
+    altFormat: "yy/mm/dd",
     duration: "medium",
     changeMonth: true,
     changeYear: true,
