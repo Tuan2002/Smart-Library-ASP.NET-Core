@@ -20,8 +20,8 @@ namespace Smart_Library.Controllers
         {
             return code switch
             {
-                404 => View("NotFound"),
                 403 => View("Forbidden"),
+                404 => View("NotFound"),
                 500 => View("InternalServerError"),
                 _ => View("InternalServerError"),
             };

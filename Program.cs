@@ -1,4 +1,6 @@
 using System.Net;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,11 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 // Add services to authentication
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => { options.SignIn.RequireConfirmedAccount = false; })
     .AddEntityFrameworkStores<ApplicationDBContext>();
+// Add services to configure cookie 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.AccessDeniedPath = "/error/403";
+});
 // Add services to configure lockout settings
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -54,16 +61,6 @@ app.UseStatusCodePages(async context =>
         await Task.CompletedTask;
         return;
     }
-    // if (response.StatusCode == (int)HttpStatusCode.NotFound)
-    // {
-    //     response.Redirect("/error/notfound");
-    //     await Task.CompletedTask;
-    // }
-    // if (response.StatusCode == (int)HttpStatusCode.InternalServerError)
-    // {
-    //     response.Redirect("/error/internalservererror");
-    //     await Task.CompletedTask;
-    // }
 });
 app.UseStatusCodePagesWithReExecute("/error/{0}");
 app.UseHttpsRedirection();

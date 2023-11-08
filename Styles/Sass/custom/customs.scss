@@ -87,3 +87,22 @@ body {
 .layout-dark .select2-search__field {
     color: var(--color-white) !important;
 }
+#create-user-form .form-control {
+    border-radius: 12px !important;
+
+}
+.form-group {
+    .just-validate-error-field {
+        border-color: var(--color-danger) !important;
+    }
+    .just-validate-error-label {
+        margin-top: 4px;
+    }
+    .form-group-calender a {
+        content: "";
+        position: absolute;
+        right: 15px;
+        top: 0;
+        transform: translateY(50%);
+    }
+}

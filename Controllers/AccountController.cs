@@ -71,10 +71,14 @@ namespace Smart_Library.Controllers
                 }
                 TempData["Message"] = "Đăng nhập thành công";
                 TempData["Type"] = "success";
-                if (!string.IsNullOrEmpty(loginModel.ReturnUrl) && Url.IsLocalUrl(loginModel.ReturnUrl))
-                    return Redirect(loginModel.ReturnUrl);
                 var roles = await _userManager.GetRolesAsync(user);
-                if (roles.Contains("Admin"))
+                if (!string.IsNullOrEmpty(loginModel.ReturnUrl) && Url.IsLocalUrl(loginModel.ReturnUrl))
+                {
+                    if (!roles.Contains("Quản trị viên") && loginModel.ReturnUrl.Contains("/admin"))
+                        return RedirectToAction("Index", "Home");
+                    return Redirect(loginModel.ReturnUrl);
+                }
+                if (roles.Contains("Quản trị viên"))
                     return Redirect("/admin");
                 return RedirectToAction("Index", "Home");
             }

@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Castle.Core.Internal;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,12 +14,13 @@ namespace Smart_Library.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
-    public class UserController : Controller
+    [Authorize(Roles = "Quản trị viên")]
+    public class UsersController : Controller
     {
-        private readonly ILogger<UserController> _logger;
+        private readonly ILogger<UsersController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDBContext _context;
-        public UserController(ILogger<UserController> logger, UserManager<ApplicationUser> userManager, ApplicationDBContext context)
+        public UsersController(ILogger<UsersController> logger, UserManager<ApplicationUser> userManager, ApplicationDBContext context)
         {
             _logger = logger;
             _userManager = userManager;
@@ -69,10 +66,39 @@ namespace Smart_Library.Areas.Admin.Controllers
             {
                 return View();
             }
-            // Implement create user logic here
-            string imagePaths = UploadImage.UploadSingleImage(model.ProfileImage, "users") ?? "/uploads/images/default-user.png";
-
-            return RedirectToAction("Index", "User");
+            var IsEmailUsed = await _userManager.FindByEmailAsync(model.Email);
+            if (IsEmailUsed != null)
+            {
+                ModelState.AddModelError(string.Empty, "Email này đã được sử dụng cho một tài khoản khác");
+                return View(model);
+            }
+            var NewUser = new ApplicationUser
+            {
+                Email = model.Email,
+                UserName = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Address = model.GetAddress(),
+                DateOfBirth = model.DateOfBirth,
+                ProfileImage = UploadImage.UploadSingleImage(model.ProfileImage) ?? "/uploads/images/default-user.png",
+                CreatedAt = DateTime.Now,
+                WorkspaceId = model.WorkspaceId,
+            };
+            var CreateNewUser = await _userManager.CreateAsync(NewUser, model.GeneratePassword());
+            if (!CreateNewUser.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, "Không thể tạo người dùng, vui lòng thử lại sau");
+                return View();
+            }
+            var AddRole = await _userManager.AddToRoleAsync(NewUser, model.RoleName);
+            if (!AddRole.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, "Không thể tạo người dùng, lỗi phân quyền");
+                return View();
+            }
+            TempData["Message"] = "Thêm người dùng thành công";
+            TempData["Type"] = "success";
+            return RedirectToAction("Index", "Users");
         }
         // [HttpPost]
         // [Route("Delete")]
