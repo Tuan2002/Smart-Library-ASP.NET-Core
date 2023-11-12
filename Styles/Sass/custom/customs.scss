@@ -1,6 +1,6 @@
 body {
     font-family: 'Roboto', sans-serif;
-    text-transform: none;
+    text-transform: none !important;
 }
 .card .card-header, .edit-profile__body label, .admin-condition {
     text-transform: none;
@@ -105,4 +105,40 @@ body {
         top: 0;
         transform: translateY(50%);
     }
+}
+.on-drag {
+    border: 2px dashed var(--color-success);
+    opacity: 0.7;
+}
+
+.userTable-body tr:nth-child(even){
+    background-color: rgba(130, 49, 211, 0.05);
+
+}
+
+.ap-po-details .overview-content p {
+    text-transform: none;
+}
+.ap-po-details__titlebar.error {
+    p,h1 {
+        color: var(--color-danger);
+    }
+}
+.ap-po-details__titlebar.warning {
+    p,h1 {
+        color: var(--color-warning);
+    }
+}
+.ap-po-details__titlebar.success {
+    p,h1 {
+        color: var(--color-success);
+    }
+}
+.ap-po-details__titlebar.total {
+    p,h1 {
+        color: var(--color-primary);
+    }
+}
+.support-form .support-form__input-status label {
+    text-transform: none;
 }

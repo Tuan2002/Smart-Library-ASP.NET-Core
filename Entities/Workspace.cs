@@ -11,9 +11,8 @@ namespace Smart_Library.Entities
     public class Workspace
     {
         [Key]
-        [Required]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-        [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int WorkspaceId { get; set; }
         public string? WorkspaceName { get; set; }
         public DateTime CreatedAt { get; set; }
     }

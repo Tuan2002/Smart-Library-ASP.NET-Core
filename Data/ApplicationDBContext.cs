@@ -24,6 +24,7 @@ namespace Smart_Library.Data
         {
             Workspace ExampleWorkspace = new Workspace
             {
+                WorkspaceId = 1,
                 WorkspaceName = "Viện KT và CN",
                 CreatedAt = DateTime.Now
             };
@@ -38,7 +39,7 @@ namespace Smart_Library.Data
                 LastName = "Tuấn",
                 ProfileImage = "/upload/user-upload/admin.webp",
                 Address = "Vinh, Nghệ An",
-                WorkspaceId = ExampleWorkspace.Id,
+                WorkspaceId = ExampleWorkspace.WorkspaceId,
                 CreatedAt = DateTime.Now,
                 DateOfBirth = new DateOnly(2002, 07, 02),
                 PhoneNumber = "0123456789"

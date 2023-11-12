@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Smart_Library.Admin.Models;
 using Smart_Library.Areas.Admin.Models;
 using Smart_Library.Data;
@@ -93,6 +94,7 @@ namespace Smart_Library.Areas.Admin.Controllers
             var AddRole = await _userManager.AddToRoleAsync(NewUser, model.RoleName);
             if (!AddRole.Succeeded)
             {
+                await _userManager.DeleteAsync(NewUser);
                 ModelState.AddModelError(string.Empty, "Không thể tạo người dùng, lỗi phân quyền");
                 return View();
             }
@@ -100,14 +102,127 @@ namespace Smart_Library.Areas.Admin.Controllers
             TempData["Type"] = "success";
             return RedirectToAction("Index", "Users");
         }
-        // [HttpPost]
-        // [Route("Delete")]
-        // [ValidateAntiForgeryToken]
-        // public async Task<IActionResult> Delete(string id)
-        // {
-        //     TempData["Message"] = "Xoá người dùng thành công";
-        //     TempData["Type"] = "success";
-        //     return RedirectToAction("Index", "User");
-        // }
+        [HttpPost]
+        [Route("Lockout")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Lockout(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                TempData["Message"] = "Người dùng không tồn tại";
+                TempData["Type"] = "warning";
+                return RedirectToAction("Index", "Users");
+            }
+            var setLocked = await _userManager.SetLockoutEnabledAsync(user, true);
+            var lockUntil = await _userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddYears(100));
+            if (!setLocked.Succeeded || !lockUntil.Succeeded)
+            {
+                TempData["Message"] = "Không thể khóa người dùng này";
+                TempData["Type"] = "warning";
+                return RedirectToAction("Index", "Users");
+            }
+            TempData["Message"] = "Đã khóa người dùng";
+            TempData["Type"] = "success";
+            return RedirectToAction("Index", "Users");
+        }
+
+        [HttpPost]
+        [Route("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                TempData["Message"] = "Người dùng không tồn tại";
+                TempData["Type"] = "warning";
+                return RedirectToAction("Index", "Users");
+            }
+            var Result = await _userManager.DeleteAsync(user);
+            if (!Result.Succeeded)
+            {
+                TempData["Message"] = "Không thể xoá người dùng";
+                TempData["Type"] = "warning";
+                return RedirectToAction("Index", "Users");
+            }
+            TempData["Message"] = "Xoá người dùng thành công";
+            TempData["Type"] = "success";
+            return RedirectToAction("Index", "Users");
+        }
+        [HttpGet]
+        [Route("Import")]
+        public IActionResult Import(string type)
+        {
+            switch (type)
+            {
+                case "excel":
+                    return View("ImportExcel");
+                case "url":
+                    return NotFound();
+                default:
+                    return NotFound();
+            }
+        }
+        [HttpPost]
+        [Route("Import/Excel")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ImportExcel(string UserList)
+        {
+            var ValidUsers = JsonConvert.DeserializeObject<List<ImportUserModel>>(UserList);
+            var ImportId = Guid.NewGuid().ToString();
+            ImportUsers Import = new ImportUsers(_userManager, _context, _logger);
+            var Result = await Import.ImportMultiUserAsync(ValidUsers);
+            if (Result.IsNullOrEmpty())
+            {
+                TempData["Message"] = "Không có người dùng nào được thêm";
+                TempData["Type"] = "warning";
+                return RedirectToAction("Index", "Users");
+            }
+            TempData["ImportId"] = ImportId;
+            TempData["Result"] = JsonConvert.SerializeObject(Result).ToString();
+            return RedirectToAction("ImportResult", new { importId = ImportId });
+        }
+        [HttpGet]
+        [Route("Import/Result")]
+        public IActionResult ImportResult(string? importId)
+        {
+            var StoredImportId = TempData["ImportId"]?.ToString();
+            var JSONData = TempData["Result"]?.ToString();
+            if (StoredImportId != importId || StoredImportId == null || importId == null)
+                return NotFound();
+            var ImportedUsers = JsonConvert.DeserializeObject<List<ImportUserModel>>(JSONData ?? string.Empty);
+            if (ImportedUsers.IsNullOrEmpty() || ImportedUsers?.Count == 0)
+                return RedirectToAction("Index", "Users");
+            var countSucceeded = ImportedUsers?.Count(user => user.Status == "succeeded");
+            if (countSucceeded == 0)
+            {
+                TempData["Message"] = "Không có người dùng nào được thêm";
+                TempData["Type"] = "warning";
+            }
+            else
+            {
+                TempData["Message"] = "Đã thêm " + countSucceeded + " người dùng thành công";
+                TempData["Type"] = "success";
+            }
+            return View(ImportedUsers);
+        }
+        [HttpGet]
+        [Route("Import/Download")]
+        public IActionResult DownloadExcelTemplate()
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "documents", "DULIEUMAU.xlsx");
+            if (!System.IO.File.Exists(path))
+            {
+                return NotFound();
+            }
+            var file = DownloadFiles.DownloadSingleFile(path);
+            if (file == null)
+            {
+                return NotFound();
+            }
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DULIEUMAU.xlsx");
+        }
+
     }
 }

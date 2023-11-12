@@ -17,7 +17,7 @@ namespace Smart_Library.Entities
         public DateOnly DateOfBirth { get; set; }
         public string? Address { get; set; }
         [ForeignKey("WorkspaceId")]
-        public string WorkspaceId { get; set; } = null!;
+        public int WorkspaceId { get; set; }
         public virtual Workspace Workspace { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
     }

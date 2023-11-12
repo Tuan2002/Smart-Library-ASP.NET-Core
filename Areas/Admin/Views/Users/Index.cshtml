@@ -11,18 +11,18 @@
                     <div class="d-flex align-items-center user-member__title justify-content-center me-sm-25">
                         <h4 class="fw-500 breadcrumb-title">Quản lý người dùng hệ thống</h4>
                     </div>
-                    <form action="/" class="d-flex align-items-center user-member__form my-sm-0 my-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="svg replaced-svg">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                        <input class="form-control me-sm-2 border-0 box-shadow-none" type="text"
-                            placeholder="Tìm kiếm người dùng" aria-label="Search">
-                    </form>
+                    
                 </div>
-                <div class="action-btn">
+                <div class="action-btn d-flex gap-4">
+                    <div class="dropdown dropleft content-center d-flex">
+                        <a class="btn btn-primary btn-default btn-transparent-primary rounded-pill content-center". data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           <i class="fa fa-file-import"></i>
+                            Nhập dữ liệu</a>
+                        <div class="dropdown-menu mt-1 py-2 radius-lg">
+                            <a class="dropdown-item justify-content-start d-flex align-center"asp-area="Admin" asp-action="Import" asp-controller="Users" asp-route-type="excel"><img src="/img/svg/excel.svg" alt="excel" class="svg">Nhập từ Excel</a>
+                            <a class="dropdown-item justify-content-start d-flex align-center"asp-area="Admin" asp-action="Import" asp-controller="Users" asp-route-type="url"><img src="/img/svg/url.svg" alt="api" class="svg">Nhập từ URL</a>
+                        </div>
+                    </div>
                     <a href="/admin/users/create" class="btn px-15 btn-primary rounded-pill">
                        <i class="las la-plus fs-16"></i>Thêm người dùng
                     </a>
@@ -294,7 +294,7 @@
             </div>
             <div class="modal-body">
                 <div class="new-member-modal">
-                    <form asp-action="Delete" asp-controller="Users" asp-area="Admin" method="POST">
+                    <form action="" method="POST" id="confirm-action-form">
                         <input type="hidden" name="id" class="user-id">
                         <div class="media bg-white radius-xl px-2 py-3 users-list shadow-lg ">
                             <img class="me-20 rounded-circle wh-50 bg-opacity-primary user-image-url" src="/img/tm1.png"
@@ -308,7 +308,7 @@
                                         </div>
                                         <div class="users-list__button mt-xl-0 mt-15">
                                             <a
-                                                class="btn btn-warning btn-transparent-warning btn-rounded px-15 global-shadow">Khoá
+                                                class="lockout-btn btn btn-warning btn-transparent-warning btn-rounded px-15 global-shadow">Khoá
                                                 tài khoản</a>
                                             </a>
                                         </div>
@@ -322,7 +322,7 @@
                             viễn dữ liệu của người này trên hệ thống. Nếu không thật sự cần thiết, bạn nên
                             khoá tài khoá tài khoản này để đảm bảo quyền lợi cho khách hàng!</p>
                         <div class="button-group d-flex pt-25 justify-content-end">
-                            <button type="submit" class="btn btn-danger btn-rounded">Xác
+                            <button class="delete-btn btn btn-danger btn-rounded">Xác
                                 nhận
                             </button>
                             <button type="button" class="btn btn-light btn-default btn-rounded"
@@ -377,14 +377,28 @@
                     userImage: deleteModal.querySelector('.user-image-url'),
                     userRole: deleteModal.querySelector('.user-role')
                 }
+                const form = deleteModal.querySelector('#confirm-action-form')
+                const lockoutBtn = deleteModal.querySelector('.lockout-btn')
+                const deleteBtn = deleteModal.querySelector('.delete-btn')
+                const formAction = {
+                    delete: '/admin/users/delete',
+                    lock: '/admin/users/lockout'
+                }
                 // If necessary, you could initiate an Ajax request here
                 // and then do the updating in a callback.
-
                 // Update the modal's content.
                 modalData.userId.value = userData.id
                 modalData.userName.textContent = userData.name
                 modalData.userImage.src = userData.image
                 modalData.userRole.textContent = userData.role
+                lockoutBtn.addEventListener('click', () => {
+                    form.action = formAction.lock
+                    form.submit()
+                })
+                deleteBtn.addEventListener('click', () => {
+                    form.action = formAction.delete
+                    form.submit()
+                })
             })
         }
     </script>

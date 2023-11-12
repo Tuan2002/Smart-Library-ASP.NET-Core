@@ -21,7 +21,7 @@ namespace Smart_Library.Areas.Admin.Components
                 from workspace in _context.Workspace
                 select new WorkspaceViewModel
                 {
-                    Id = workspace.Id,
+                    WorkspaceId = workspace.WorkspaceId,
                     WorkspaceName = workspace.WorkspaceName,
                     CreatedAt = workspace.CreatedAt
                 }).ToListAsync();

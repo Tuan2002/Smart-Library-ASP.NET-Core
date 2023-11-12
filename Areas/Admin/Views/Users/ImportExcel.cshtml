@@ -1,0 +1,236 @@
+@{
+    ViewData["Title"] = "Nhập dữ liệu người dùng từ bảng tính";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="breadcrumb-main mb-20">
+                <h4 class="breadcrumb-title">Nhập dữ liệu từ Excel
+                </h4>
+                <div class="mt-sm-3 d-flex justify-content-start">
+                    <a asp-action="DownloadExcelTemplate" asp-controller="Users" asp-area="Admin"
+                        class="btn btn-success btn-default btn-transparent-success rounded-pill">
+                        <i class="fas fa-cloud-download-alt"></i>
+                        Tải tệp mẫu</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="dm-upload">
+                <div class="dm-upload-avatar media-import">
+                    <img class="file-image wh-50" src="/img/svg/import-2.svg" alt="upload">
+                    <p class="color-dark fs-20 input-message">Kéo thả hoặc nhấn để chọn tệp</p>
+                </div>
+                <div class="avatar-up">
+                    <input type="file" accept=".xls,.xlsx" class="upload-avatar-input" id="uploadExcel">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row d-none" id="user-found-table">
+        <div class="col-lg-12">
+            <div class="userDatatable global-shadow border-light-0 px-30 py-20 bg-white radius-xl w-100">
+                <div class="d-flex justify-content-between align-content-center">
+                    <div class="mb-3 fw-bold text-small text-primary table-message">
+                    </div>
+                    <form id="form-import" action="/admin/users/import/excel" method="POST">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" id="form-data-input" name="UserList[]" />
+                        <button type="submit" class="btn btn-xs btn-warning btn-transparent-waring rounded-pill">Nhập
+                            dữ liệu</button>
+                    </form>
+                </div>
+                <div class="table-responsive">
+                    <table class="table mb-0 table-borderless">
+                        <thead>
+                            <tr class="userDatatable-header">
+                                <th>
+                                    <div class="d-flex align-items-center">
+                                        <span class="userDatatable-title">Người dùng</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <span class="userDatatable-title">Email</span>
+                                </th>
+                                <th>
+                                    <span class="userDatatable-title">Ngày sinh</span>
+                                </th>
+                                <th>
+                                    <span class="userDatatable-title">Nơi làm việc</span>
+                                </th>
+                                <th>
+                                    <span class="userDatatable-title">Vai trò</span>
+                                </th>
+                                <th>
+                                    <span class="userDatatable-title">Số điện thoại</span>
+                                </th>
+                                <th>
+                                    <span class="userDatatable-title float-end">Thao tác</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="userTable-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Import {
+    <script>
+        const dropArea = $('.media-import');
+        const fileInput = $('#uploadExcel');
+        const fileInputText = $('.input-message');
+        const fileImage = $('.file-image');
+        const tableUser = $('#user-found-table');
+        const tableUserBody = $('.userTable-body');
+        const tableMessage = $('.table-message');
+        const dataToImport = [];
+        const formSubmit = $('#form-import');
+        const formImport = $('#form-data-input');
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+        dropArea.on('dragenter', function (ev) {
+            fileInputText.text('Thả tệp vào đây');
+            dropArea.addClass('on-drag');
+        });
+        dropArea.on('dragleave', function (ev) {
+            fileInputText.text('Kéo thả hoặc nhấn để chọn tệp');
+            dropArea.removeClass('on-drag');
+        });
+        dropArea.on('drop', function (ev) {
+            ev.preventDefault();
+        @* ev.stopPropagation(); *@
+                dropArea.removeClass('on-drag');
+            const file = ev.originalEvent.dataTransfer.files[0];
+            let fileName = file.name;
+            let fileExtension = fileName.split('.').pop();
+            if (fileExtension !== 'xlsx' && fileExtension !== 'csv' && fileExtension !== 'xls') {
+                fileInputText.text('Chỉ chấp nhận tệp .csv hoặc .xlsx');
+                fileImage.attr('src', '/img/svg/import-2.svg');
+                return;
+            }
+            fileInputText.text(file.name);
+            fileImage.attr('src', '/img/svg/excel.svg');
+            handleFileSelected(file);
+        });
+        dropArea.on('dragover', function (ev) {
+            ev.preventDefault();
+        });
+        fileInput.change(function () {
+            const file = this.files[0];
+            console.log(file);
+            if (!file) {
+                fileInputText.text('Kéo thả hoặc nhấn để chọn tệp');
+                fileImage.attr('src', '/img/svg/import-2.svg');
+                return;
+            }
+            let fileName = file.name;
+            let fileExtension = fileName.split('.').pop();
+            if (fileExtension !== 'xlsx') {
+                fileInputText.text('Chỉ chấp nhận tệp .csv hoặc .xlsx');
+                fileImage.attr('src', '/img/svg/upload.svg');
+                return;
+            }
+            fileInputText.text(file.name);
+            fileImage.attr('src', '/img/svg/excel.svg');
+            handleFileSelected(file);
+        });
+        async function handleFileSelected(file) {
+            if (!file)
+                return;
+            const data = await file.arrayBuffer();
+            /* data is an ArrayBuffer */
+            const workbook = XLSX.read(data);
+            const worksheet = workbook.Sheets["Users"];
+            if (!worksheet) {
+                return;
+            }
+            const usersData = XLSX.utils.sheet_to_json(worksheet);
+            const validUsers = usersData.filter(row => Object.values(row).some(v => v !== ""));
+            if (validUsers.length === 0) {
+                return;
+            }
+            tableUser.removeClass('d-none');
+            tableUserBody.empty();
+            dataToImport.length = 0;
+            tableMessage.text(`Có tất cả ${validUsers.length} bản ghi được tìm thấy`);
+            // Render table
+            validUsers.map((user, index) => {
+                dataToImport.push({
+                    FirstName: user?.FirstName,
+                    LastName: user?.LastName,
+                    Email: user?.Email,
+                    DateOfBirth: user?.DateOfBirth,
+                    District: user?.District,
+                    Province: user?.Province,
+                    WorkspaceId: user?.WorkspaceId,
+                    WorkspaceName: user.WorkspaceName,
+                    RoleName: user?.Role,
+                    Phone: user?.Phone
+                });
+                let fullName = user?.FirstName + ' ' + user?.LastName;
+                let dateOfBirth = user?.DateOfBirth.split('/').reverse().join('/');
+                let address = user?.District + ', ' + user?.Province;
+                const html =
+                    `<tr>
+                        <td>
+                            <div class="d-flex">
+                                <div class="userDatatable-inline-title">
+                                    <a href="#" class="text-dark fw-500">
+                                        <h6>${fullName}</h6>
+                                    </a>
+                                    <p class="d-block mb-0">${address}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="userDatatable-content">${user?.Email}</div>
+                        </td>
+                        <td>
+                            <div class="userDatatable-content">${dateOfBirth}</div>
+                        </td>
+                        <td>
+                            <div class="userDatatable-content">${user?.WorkspaceName}</div>
+                        </td>
+                        <td>
+                            <div class="userDatatable-content">${user?.Role}</div>
+                        </td>
+                        <td>
+                            <div class="userDatatable-content">${user?.Phone}</div>
+                        </td>
+                        <td>
+                            <ul class="orderDatatable_actions mb-0 d-flex flex-wrap">
+                                <li>
+                                    <button data-index="${index}" id="btnRemoveUser"
+                                        class="btn btn-xs btn-danger btn-transparent-danger rounded-pill d-flex align-content-center"><i class="uil uil-trash-alt"></i>Xoá bỏ</button>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>`
+                tableUserBody.append(html);
+            })
+        }
+        $(document).on('click', '#btnRemoveUser', function () {
+            let index = $(this).data('index');
+            dataToImport.splice(index, 1);
+            $(this).closest('tr').remove();
+            tableMessage.text(`Còn lại ${dataToImport.length} bản ghi`);
+            if (dataToImport.length === 0) {
+                tableUser.addClass('d-none');
+            }
+        })
+        formSubmit.on('submit', function (e) {
+            if (dataToImport.length === 0 || !dataToImport) {
+                e.preventDefault();
+                return;
+            }
+            formImport.val(JSON.stringify(dataToImport));
+            formSubmit.submit();
+        })
+    </script>
+}

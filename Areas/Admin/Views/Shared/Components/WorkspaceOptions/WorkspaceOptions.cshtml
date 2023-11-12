@@ -2,6 +2,6 @@
 @model IList<WorkspaceViewModel>
 @foreach (var workspace in Model.ToList())
 {
-    <option value="@workspace.Id">@workspace.WorkspaceName</option>
+    <option value="@workspace.WorkspaceId">@workspace.WorkspaceName</option>
 
 }

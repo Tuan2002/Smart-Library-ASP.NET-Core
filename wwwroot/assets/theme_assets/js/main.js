@@ -146,22 +146,18 @@
         $(e.target).is('.header-top *') == false) {
         $(".sidebar").addClass("collapsed");
         $(".contents").addClass("expanded");
-        $(".footer-wrapper").addClass("expanded");
       }
     }
   });
 
-  const sidebarToggle = document.querySelector(".sidebar-toggle");
-
+  const sidebarToggle = $(".sidebar-toggle");
   function sidebarCollapse(e) {
     e.preventDefault();
-    $('.overlay-dark-sidebar').toggleClass('show');
     document.querySelector(".sidebar").classList.toggle("collapsed");
     document.querySelector(".contents").classList.toggle("expanded");
-    document.querySelector(".footer-wrapper").classList.toggle("expanded");
   }
   if (sidebarToggle) {
-    sidebarToggle.addEventListener("click", sidebarCollapse);
+    sidebarToggle.on("click", sidebarCollapse);
   }
 
   $(window).on('scroll', function (e) {
