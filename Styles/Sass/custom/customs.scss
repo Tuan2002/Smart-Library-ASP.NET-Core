@@ -147,3 +147,27 @@ body {
 .support-form .support-form__input-status label {
     text-transform: none;
 }
+.changelog__accordingCollapsed{
+    &.collapsed {
+        .changelog__accordingTitle .v-num .arrow-icon {
+            transition: transform 0.4s ease;
+            transform: rotate(-90deg);
+        }
+
+    }
+    .changelog__accordingTitle .v-num .arrow-icon {
+        transition: transform 0.4s ease;
+        transform: rotate(0deg);
+    }
+}
+.job-details-card ul li {
+    word-break: normal;
+}
+
+.found-users-table {
+    max-height: 400px !important;
+}
+.found-users-table thead th {
+    position: sticky; /* make the table heads sticky */
+    top: 0px; /* table head will be placed from the top of the table and sticks to it */
+  }

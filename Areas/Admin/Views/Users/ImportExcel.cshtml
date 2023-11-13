@@ -18,8 +18,8 @@
     </div>
     <div class="row">
         <div class="col-lg-12">
-            <div class="dm-upload">
-                <div class="dm-upload-avatar media-import">
+            <div class="dm-upload" role="button">
+                <div class="dm-upload-avatar media-import user-select-none">
                     <img class="file-image wh-50" src="/img/svg/import-2.svg" alt="upload">
                     <p class="color-dark fs-20 input-message">Kéo thả hoặc nhấn để chọn tệp</p>
                 </div>
@@ -29,8 +29,106 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-12 mb-30">
+            <div id="accordion">
+                <div class="card">
+                    <div class="card-header w-100 px-sm-30 px-15" id="heading8">
+                        <div role="button" class="w-100 changelog__accordingCollapsed" data-bs-toggle="collapse"
+                            data-bs-target="#collapse8" aria-expanded="false" aria-controls="collapse8">
+                            <div
+                                class="user-select-none changelog__accordingTitle d-flex justify-content-between w-100">
+                                <div class="v-num"><i class="arrow-icon la la-angle-down"></i><span
+                                        class="ms-2 rl-date">Nhấn để
+                                        đóng hoặc mở hướng dẫn sử dụng</span>
+                                </div>
+                                <div class="changelog__accordingArrow">
+                                    <span data-feather="la la-angle-down"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="collapse8" class="collapse show" aria-labelledby="heading8" data-parent="#accordion"
+                        style="">
+                        <div class="card-body">
+                            <div class="col-12">
+                                <div class="job-details-card p-2">
+                                    <div class="job-details-card__top flex-wrap">
+                                        <div class="job-item__image">
+                                            <img class="job-item__image-img img-fluid" src="/img/svg/excel.svg"
+                                                alt="digital-chair">
+                                            <div class="job-item__title">
+                                                <h3 class="card-title">Hướng dẫn nhập dữ liệu người dùng từ Excel</h3>
+                                                <span>Tĩnh năng hỗ trợ</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="job-details-card__middle">
+                                        <h4>Mô tả tính năng</h4>
+                                        <p>Tính năng nhập dữ liệu người dùng từ Excel là tính năng hỗ trợ cho người quản
+                                            trị, giúp tạo nhanh
+                                            một số lượng lớn tài khoản cho người dùng. Đặc biệt là tạo các dạng tài
+                                            khoản cho sinh viên, học
+                                            sinh trong các trường học, cơ sở giáo dục.</p>
+                                        <h4 class="mt-10">Cách sử dụng tính năng</h4>
+                                        <ul class="usage-guide">
+                                            <li>Tải tệp dữ liệu mẫu <a asp-action="DownloadExcelTemplate"
+                                                    asp-controller="Users" asp-area="Admin">tại đây</a> hoặc bấm vào nút
+                                                <span class="dm-tag tag-success rounded-pill tag-transparented">Tải tệp
+                                                    mẫu</span> ở phía
+                                                trên.
+                                            </li>
+                                            </li>
+                                            <li>Nhập liệu đúng các trường được quy định trong tệp dữ liệu mẫu vừa tải về
+                                            </li>
+                                            <li>Trường <span
+                                                    class="dm-tag tag-primary rounded-pill tag-transparented">Ngày
+                                                    sinh</span> phải nhập dạng văn bản, không dùng kiểu dữ liệu
+                                                Date/Time.</li>
+                                            <li>Trường <span
+                                                    class="dm-tag tag-primary rounded-pill tag-transparented">Vai trò
+                                                </span> và <span
+                                                    class="dm-tag tag-primary rounded-pill tag-transparented">Nơi làm
+                                                    việc</span> phải chọn từ danh mục được cho sẵm, không tự nhập bằng
+                                                tay.</li>
+                                            <li>Trường <span
+                                                    class="dm-tag tag-primary rounded-pill tag-transparented">WorkspaceId
+                                                </span> là trường tự động điền, nếu phần mềm không tự điền, vui lòng sao
+                                                chép công thức từ
+                                                các ô phía trên.</li>
+                                            <li>Sau khi nhập dữ liệu và kiểm tra không có sai sót, lưu tệp <span
+                                                    class="dm-tag tag-success rounded-pill tag-transparented">Excel
+                                                </span> với tên không dấu, viết liền.</li>
+                                            <li class="text-wrap">Kéo thả hoặc chọn tệp <span
+                                                    class="dm-tag tag-success rounded-pill tag-transparented">Excel
+                                                </span> vào vùng trống phía trên và chờ hệ thống xử lý.</li>
+                                            <li>
+                                                Sau khi xử lý, danh sách người dùng có thể nhập vào sẽ
+                                                hiển thị ở bảng
+                                                phía dưới. Vui lòng kiểm tra các thông tin người dùng đã được liệt
+                                                kê,
+                                                có thể xoá các người dùng
+                                                bằng cách bấm nút <span
+                                                    class="dm-tag tag-danger rounded-pill tag-transparented">Xoá bỏ
+                                                </span>
+                                            </li>
+                                            <li>Sau khi kiểm tra xong, bấm nút <span
+                                                    class="dm-tag tag-warning rounded-pill tag-transparented">Nhập dữ
+                                                    liệu
+                                                </span> để hoàn thành quá trình nhập dữ liệu</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* Users Table *@
     <div class="row d-none" id="user-found-table">
-        <div class="col-lg-12">
+        <div class="col-lg-12 mb-30">
             <div class="userDatatable global-shadow border-light-0 px-30 py-20 bg-white radius-xl w-100">
                 <div class="d-flex justify-content-between align-content-center">
                     <div class="mb-3 fw-bold text-small text-primary table-message">
@@ -38,11 +136,12 @@
                     <form id="form-import" action="/admin/users/import/excel" method="POST">
                         @Html.AntiForgeryToken()
                         <input type="hidden" id="form-data-input" name="UserList[]" />
-                        <button type="submit" class="btn btn-xs btn-warning btn-transparent-waring rounded-pill">Nhập
+                        <button type="submit"
+                            class="push-data-button btn btn-xs btn-primary btn-transparent-primary rounded-pill">Nhập
                             dữ liệu</button>
                     </form>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive found-users-table">
                     <table class="table mb-0 table-borderless">
                         <thead>
                             <tr class="userDatatable-header">
@@ -72,12 +171,15 @@
                             </tr>
                         </thead>
                         <tbody class="userTable-body">
+
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+    @* End Users Table *@
+
 </div>
 @section Import {
     <script>
@@ -91,6 +193,23 @@
         const dataToImport = [];
         const formSubmit = $('#form-import');
         const formImport = $('#form-data-input');
+        const pushDataButton = $('.push-data-button');
+        const noData = `<tr class="no-data-table">
+                                            <td colspan="7">
+                                                <div class="card card-default card-md mb-4">
+                                                    <div class="card-body">
+                                                        <div class="dm-empty text-center">
+                                                            <div class="dm-empty__image">
+                                                                <img src="/img/svg/empty.svg" alt="Empty table">
+                                                            </div>
+                                                            <div class="dm-empty__text">
+                                                                <p class="">Không tìm thấy người dùng nào!</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>`;
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
         }
@@ -153,8 +272,13 @@
             const usersData = XLSX.utils.sheet_to_json(worksheet);
             const validUsers = usersData.filter(row => Object.values(row).some(v => v !== ""));
             if (validUsers.length === 0) {
+                tableUser.removeClass('d-none');
+                pushDataButton.attr('disabled', true);
+                tableUserBody.empty();
+                tableUserBody.append(noData);
                 return;
             }
+            pushDataButton.attr('disabled', false);
             tableUser.removeClass('d-none');
             tableUserBody.empty();
             dataToImport.length = 0;
@@ -162,6 +286,7 @@
             // Render table
             validUsers.map((user, index) => {
                 dataToImport.push({
+                    _id: index,
                     FirstName: user?.FirstName,
                     LastName: user?.LastName,
                     Email: user?.Email,
@@ -178,50 +303,56 @@
                 let address = user?.District + ', ' + user?.Province;
                 const html =
                     `<tr>
-                        <td>
-                            <div class="d-flex">
-                                <div class="userDatatable-inline-title">
-                                    <a href="#" class="text-dark fw-500">
-                                        <h6>${fullName}</h6>
-                                    </a>
-                                    <p class="d-block mb-0">${address}</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="userDatatable-content">${user?.Email}</div>
-                        </td>
-                        <td>
-                            <div class="userDatatable-content">${dateOfBirth}</div>
-                        </td>
-                        <td>
-                            <div class="userDatatable-content">${user?.WorkspaceName}</div>
-                        </td>
-                        <td>
-                            <div class="userDatatable-content">${user?.Role}</div>
-                        </td>
-                        <td>
-                            <div class="userDatatable-content">${user?.Phone}</div>
-                        </td>
-                        <td>
-                            <ul class="orderDatatable_actions mb-0 d-flex flex-wrap">
-                                <li>
-                                    <button data-index="${index}" id="btnRemoveUser"
-                                        class="btn btn-xs btn-danger btn-transparent-danger rounded-pill d-flex align-content-center"><i class="uil uil-trash-alt"></i>Xoá bỏ</button>
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>`
+                                                                            <td>
+                                                                                <div class="d-flex">
+                                                                                    <div class="userDatatable-inline-title">
+                                                                                        <a href="#" class="text-dark fw-500">
+                                                                                            <h6>${fullName}</h6>
+                                                                                        </a>
+                                                                                        <p class="d-block mb-0">${address}</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="userDatatable-content">${user?.Email}</div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="userDatatable-content">${dateOfBirth}</div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="userDatatable-content">${user?.WorkspaceName}</div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="userDatatable-content">${user?.Role}</div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="userDatatable-content">${user?.Phone}</div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <ul class="orderDatatable_actions mb-0 d-flex flex-wrap">
+                                                                                    <li>
+                                                                                        <button data-index="${index}" id="btnRemoveUser"
+                                                                                            class="btn btn-xs btn-danger btn-transparent-danger rounded-pill d-flex align-content-center"><i class="uil uil-trash-alt"></i>Xoá bỏ</button>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </td>
+                                                                        </tr>`
                 tableUserBody.append(html);
             })
         }
         $(document).on('click', '#btnRemoveUser', function () {
-            let index = $(this).data('index');
-            dataToImport.splice(index, 1);
+            let id = $(this).data('index');
+            dataToImport.find((user, index) => {
+                if (user._id === id) {
+                    dataToImport.splice(index, 1);
+                    return true;
+                }
+            })
             $(this).closest('tr').remove();
             tableMessage.text(`Còn lại ${dataToImport.length} bản ghi`);
             if (dataToImport.length === 0) {
-                tableUser.addClass('d-none');
+                pushDataButton.attr('disabled', true);
+                tableUserBody.append(noData);
             }
         })
         formSubmit.on('submit', function (e) {
