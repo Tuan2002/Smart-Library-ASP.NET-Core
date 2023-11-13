@@ -114,6 +114,13 @@ namespace Smart_Library.Areas.Admin.Controllers
                 return RedirectToAction("Index", "Users");
             }
             var user = await _userManager.FindByIdAsync(id);
+            var checkUserLock = await _userManager.IsLockedOutAsync(user);
+            if (checkUserLock)
+            {
+                TempData["UsersMessage"] = "Tài khoản này đã bị khóa từ trước";
+                TempData["Type"] = "warning";
+                return RedirectToAction("Index", "Users");
+            }
             if (user == null)
             {
                 TempData["UsersMessage"] = "Người dùng không tồn tại";
@@ -141,6 +148,13 @@ namespace Smart_Library.Areas.Admin.Controllers
             if (user == null)
             {
                 TempData["UsersMessage"] = "Người dùng không tồn tại";
+                TempData["Type"] = "warning";
+                return RedirectToAction("Index", "Users");
+            }
+            var checkUserLock = await _userManager.IsLockedOutAsync(user);
+            if (!checkUserLock)
+            {
+                TempData["UsersMessage"] = "Tài khoản này không bị khóa";
                 TempData["Type"] = "warning";
                 return RedirectToAction("Index", "Users");
             }

@@ -60,15 +60,28 @@ namespace Smart_Library.Controllers
                 var result = await _signInManager.PasswordSignInAsync(user, loginModel.Password, loginModel.RememberMe, lockoutOnFailure: true);
                 if (!result.Succeeded)
                 {
+                    var accessFailedCount = await _userManager.GetAccessFailedCountAsync(user);
                     if (result.IsLockedOut)
                     {
-                        ModelState.AddModelError(string.Empty, "Tài khoản của bạn đã bị khóa do đăng nhập sai quá nhiều lần");
+                        var getLockedTimeUntil = await _userManager.GetLockoutEndDateAsync(user);
+                        var getLockedTime = getLockedTimeUntil - DateTime.Now;
+                        if (getLockedTime.Value.TotalMinutes < 6)
+                        {
+                            ModelState.AddModelError(string.Empty, "Tài khoản bị khóa do đăng nhập sai nhiều lần, vui lòng thử lại sau: " + getLockedTime.Value.ToString("mm") + " phút");
+                            return View(loginModel);
+                        }
+                        ModelState.AddModelError(string.Empty, "Tài khoản của bạn đã bị khóa bởi quản trị viên");
                         return View(loginModel);
                     }
-                    ModelState.AddModelError(string.Empty, "Thông tin đăng nhập không chính xác");
-                    await _userManager.AccessFailedAsync(user);
+                    if (accessFailedCount < 2)
+                    {
+                        ModelState.AddModelError(string.Empty, "Thông tin đăng nhập không chính xác");
+                        return View(loginModel);
+                    }
+                    ModelState.AddModelError(string.Empty, "Thông tin đăng nhập không chính xác, bạn còn " + (5 - accessFailedCount) + " lần thử");
                     return View(loginModel);
                 }
+                await _userManager.ResetAccessFailedCountAsync(user);
                 TempData["Message"] = "Đăng nhập thành công";
                 TempData["Type"] = "success";
                 var roles = await _userManager.GetRolesAsync(user);
