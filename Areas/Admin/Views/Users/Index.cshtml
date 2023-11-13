@@ -11,20 +11,25 @@
                     <div class="d-flex align-items-center user-member__title justify-content-center me-sm-25">
                         <h4 class="fw-500 breadcrumb-title">Quản lý người dùng hệ thống</h4>
                     </div>
-                    
+
                 </div>
                 <div class="action-btn d-flex gap-4">
                     <div class="dropdown dropleft content-center d-flex">
-                        <a class="btn btn-primary btn-default btn-transparent-primary rounded-pill content-center". data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                           <i class="fa fa-file-import"></i>
+                        <a class="btn btn-primary btn-default btn-transparent-primary rounded-pill content-center" .
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-file-import"></i>
                             Nhập dữ liệu</a>
                         <div class="dropdown-menu mt-1 py-2 radius-lg">
-                            <a class="dropdown-item justify-content-start d-flex align-center"asp-area="Admin" asp-action="Import" asp-controller="Users" asp-route-type="excel"><img src="/img/svg/excel.svg" alt="excel" class="svg">Nhập từ Excel</a>
-                            <a class="dropdown-item justify-content-start d-flex align-center"asp-area="Admin" asp-action="Import" asp-controller="Users" asp-route-type="url"><img src="/img/svg/url.svg" alt="api" class="svg">Nhập từ URL</a>
+                            <a class="dropdown-item justify-content-start d-flex align-center" asp-area="Admin"
+                                asp-action="Import" asp-controller="Users" asp-route-type="excel"><img
+                                    src="/img/svg/excel.svg" alt="excel" class="svg">Nhập từ Excel</a>
+                            <a class="dropdown-item justify-content-start d-flex align-center" asp-area="Admin"
+                                asp-action="Import" asp-controller="Users" asp-route-type="url"><img
+                                    src="/img/svg/url.svg" alt="api" class="svg">Nhập từ URL</a>
                         </div>
                     </div>
                     <a href="/admin/users/create" class="btn px-15 btn-primary rounded-pill">
-                       <i class="las la-plus fs-16"></i>Thêm người dùng
+                        <i class="las la-plus fs-16"></i>Thêm người dùng
                     </a>
                 </div>
             </div>
@@ -100,7 +105,8 @@
                                                         <div class="checkbox-group d-flex">
                                                             <div
                                                                 class="checkbox-theme-default custom-checkbox checkbox-group__single d-flex">
-                                                                <input class="checkbox" type="checkbox" id="check-grp-content14">
+                                                                <input class="checkbox" type="checkbox"
+                                                                    id="check-grp-content14">
                                                                 <label for="check-grp-content14"></label>
                                                             </div>
                                                         </div>
@@ -112,7 +118,7 @@
                                                     <a href="#" class="text-dark fw-500">
                                                         <h6>@FullName</h6>
                                                     </a>
-                                                    <p class="d-block mb-0">@user.Address</p>
+                                                    <p style="max-width: 200px;" class="d-block mb-0 text-truncate">@user.Address</p>
                                                 </div>
                                             </div>
                                         </td>
@@ -131,36 +137,48 @@
                                         </td>
                                         <td>
                                             <div class="userDatatable-content d-inline-block">
-                                                            @if (user.IsLocked)
-                                                            {
+                                                @if (user.IsLocked)
+                                                {
                                                     <span
                                                         class="bg-opacity-warning color-warning rounded-pill userDatatable-content-status active">
                                                         Tạm khoá</span>
-                                                            }
-                                                            else
-                                                            {
+                                                }
+                                                else
+                                                {
                                                     <span
                                                         class="bg-opacity-success  color-success rounded-pill userDatatable-content-status active">Hoạt
                                                         động</span>
-                                                            }
+                                                }
                                             </div>
                                         </td>
                                         <td>
-                                            <ul class="orderDatatable_actions mb-0 d-flex flex-wrap">
+                                            <ul data-userid="@user.Id" data-username="@FullName" data-image="@user.ProfileImage"
+                                                data-userrole="@user.Role"
+                                                class="user-data-container orderDatatable_actions mb-0 d-flex flex-wrap">
                                                 <li>
-                                                    <a class="view">
-                                                        <i class="uil uil-eye"></i>
-                                                    </a>
+                                                    @if (user.IsLocked)
+                                                    {
+                                                        <a title="Mở khoá" class="unlock" data-bs-toggle="modal"
+                                                            data-bs-target="#confirm-unlock-user">
+                                                            <i class="uil uil-unlock"></i>
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a title="Khoá" class="lock" data-bs-toggle="modal"
+                                                            data-bs-target="#confirm-lockout-user">
+                                                            <i class="uil uil-lock"></i>
+                                                        </a>
+                                                    }
                                                 </li>
                                                 <li>
-                                                    <a class="edit">
+                                                    <a title="Chỉnh sửa" class="edit">
                                                         <i class="uil uil-edit"></i>
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a data-userid="@user.Id" data-username="@FullName" data-image="@user.ProfileImage"
-                                                        data-userrole="@user.Role" data-bs-toggle="modal"
-                                                        data-bs-target="#confirm-delete-user" class="remove">
+                                                    <a title="Xoá" data-bs-toggle="modal" data-bs-target="#confirm-delete-user"
+                                                        class="remove">
                                                         <i class="uil uil-trash-alt"></i>
                                                     </a>
                                                 </li>
@@ -169,25 +187,29 @@
                                     </tr>
                                 }
                             }
-                            <tr>
+                            @* <tr>
                                 <td>
                                     <div class="d-flex">
                                         <div class="userDatatable__imgWrapper d-flex align-items-center">
                                             <div class="checkbox-group-wrapper">
                                                 <div class="checkbox-group d-flex">
-                                                    <div class="checkbox-theme-default custom-checkbox checkbox-group__single d-flex">
-                                                        <input class="checkbox" type="checkbox" id="check-grp-content15" />
+                                                    <div
+                                                        class="checkbox-theme-default custom-checkbox checkbox-group__single d-flex">
+                                                        <input class="checkbox" type="checkbox"
+                                                            id="check-grp-content15" />
                                                         <label for="check-grp-content15"></label>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <a href="#" class="profile-image rounded-circle d-block m-0 wh-38" style="background-image: url('/uploads/images/admin-2.webp'); background-size: cover;"></a>
+                                            <a href="#" class="profile-image rounded-circle d-block m-0 wh-38"
+                                                style="background-image: url('/uploads/images/admin-2.webp'); background-size: cover;"></a>
                                         </div>
                                         <div class="userDatatable-inline-title">
                                             <a href="#" class="text-dark fw-500">
                                                 <h6>Bùi Trương Phương</h6>
                                             </a>
-                                            <p class="d-block mb-0">Thành phố Vinh, Tỉnh Nghệ An</p>
+                                            <p style="max-width: 200px;" class="d-block mb-0 text-truncate">Thành phố
+                                                Vinh, Tỉnh Nghệ An</p>
                                         </div>
                                     </div>
                                 </td>
@@ -205,14 +227,19 @@
                                 </td>
                                 <td>
                                     <div class="userDatatable-content d-inline-block">
-                                        <span class="bg-opacity-warning color-warning rounded-pill userDatatable-content-status active">Tạm khoá</span>
+                                        <span
+                                            class="bg-opacity-warning color-warning rounded-pill userDatatable-content-status active">Tạm
+                                            khoá</span>
                                     </div>
                                 </td>
                                 <td>
-                                    <ul class="orderDatatable_actions mb-0 d-flex flex-wrap">
+                                    <ul data-userid="9198" data-username="Bùi Trương Phương"
+                                        data-image="/uploads/images/admin-2.webp" data-userrole="Quản trị viên"
+                                        class="user-data-container orderDatatable_actions mb-0 d-flex flex-wrap">
                                         <li>
-                                            <a href="#" class="view">
-                                                <i class="uil uil-eye"></i>
+                                            <a data-bs-toggle="modal" data-bs-target="#confirm-lockout-user" href="#"
+                                                class="view">
+                                                <i class="uil uil-lock"></i>
                                             </a>
                                         </li>
                                         <li>
@@ -221,155 +248,113 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a data-userid="9198" data-username="Bùi Trương Phương" data-image="/upload/user-upload/admin-2.webp" data-userrole="Quản trị viên" data-bs-toggle="modal" data-bs-target="#confirm-delete-user" class="remove">
+                                            <a data-bs-toggle="modal" data-bs-target="#confirm-delete-user"
+                                                class="remove">
                                                 <i class="uil uil-trash-alt"></i>
                                             </a>
                                         </li>
                                     </ul>
                                 </td>
-                            </tr>
-                    </tbody>
-                </table>
-            </div>
-            @if (Model?.ToList().Count > 0 || Model != null) 
-            {
-                <div class="d-flex justify-content-end pt-30">
-                    <nav class="dm-page ">
-                        <ul class="dm-pagination d-flex">
-                            <li class="dm-pagination__item">
-                                <a href="#" class="dm-pagination__link rounded-pill pagination-control">
-                                    <span class="la la-angle-left"></span>
-                                </a>
-                                <a href="#" class="dm-pagination__link rounded-pill active">
-                                    <span class="page-number">1</span>
-                                </a>
-                                <a href="#" class="dm-pagination__link rounded-pill">
-                                    <span class="page-number">2</span>
-                                </a>
-                                <a href="#" class="dm-pagination__link rounded-pill">
-                                    <span class="page-number">3</span>
-                                </a>
-                                <a href="#" class="dm-pagination__link rounded-pill pagination-control">
-                                    <span class="page-number">...</span>
-                                </a>
-                                <a href="#" class="dm-pagination__link rounded-pill">
-                                    <span class="page-number">12</span>
-                                </a>
-                                <a href="#" class="dm-pagination__link rounded-pill pagination-control">
-                                    <span class="la la-angle-right"></span>
-                                </a>
-                                <a href="#" class="dm-pagination__option"></a>
-                            </li>
-                            <li class="dm-pagination__item">
-                                <div class="paging-option">
-                                    <select name="page-number" class="page-selection rounded-pill">
-                                        <option value="20">20 dòng/trang</option>
-                                        <option value="40">40 dòng/trang</option>
-                                        <option value="60">60 dòng/trang</option>
-                                    </select>
-                                </div>
-                            </li>
-                        </ul>
-                    </nav>
+                            </tr> *@
+                        </tbody>
+                    </table>
                 </div>
-                }
-        </div>
-    </div>
-</div>
-</div>
-<div class="modal fade new-member" id="confirm-delete-user" role="dialog" tabindex="-1"
-    aria-labelledby="staticBackdropLabel">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content radius-xl">
-            <div class="modal-header">
-                <h6 class="modal-title fs-5 fw-500" id="staticBackdropLabel">Xác nhận xoá người dùng</h6>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="svg replaced-svg">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="new-member-modal">
-                    <form action="" method="POST" id="confirm-action-form">
-                        <input type="hidden" name="id" class="user-id">
-                        <div class="media bg-white radius-xl px-2 py-3 users-list shadow-lg ">
-                            <img class="me-20 rounded-circle wh-50 bg-opacity-primary user-image-url" src="/img/tm1.png"
-                                alt="Generic placeholder image">
-                            <div class="media-body d-xl-flex users-list-body">
-                                <div class="flex-1 users-list-body__title">
-                                    <div class="d-flex flex-1 justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="mt-0 fw-500 user-name">Nguyễn Anh Tuấn</h6>
-                                            <span class="user-role">Quản trị viên</span>
-                                        </div>
-                                        <div class="users-list__button mt-xl-0 mt-15">
-                                            <a
-                                                class="lockout-btn btn btn-warning btn-transparent-warning btn-rounded px-15 global-shadow">Khoá
-                                                tài khoản</a>
-                                            </a>
-                                        </div>
+                @if (Model?.ToList().Count > 0 || Model != null)
+                {
+                    <div class="d-flex justify-content-end pt-30">
+                        <nav class="dm-page ">
+                            <ul class="dm-pagination d-flex">
+                                <li class="dm-pagination__item">
+                                    <a href="#" class="dm-pagination__link rounded-pill pagination-control">
+                                        <span class="la la-angle-left"></span>
+                                    </a>
+                                    <a href="#" class="dm-pagination__link rounded-pill active">
+                                        <span class="page-number">1</span>
+                                    </a>
+                                    <a href="#" class="dm-pagination__link rounded-pill">
+                                        <span class="page-number">2</span>
+                                    </a>
+                                    <a href="#" class="dm-pagination__link rounded-pill">
+                                        <span class="page-number">3</span>
+                                    </a>
+                                    <a href="#" class="dm-pagination__link rounded-pill pagination-control">
+                                        <span class="page-number">...</span>
+                                    </a>
+                                    <a href="#" class="dm-pagination__link rounded-pill">
+                                        <span class="page-number">12</span>
+                                    </a>
+                                    <a href="#" class="dm-pagination__link rounded-pill pagination-control">
+                                        <span class="la la-angle-right"></span>
+                                    </a>
+                                    <a href="#" class="dm-pagination__option"></a>
+                                </li>
+                                <li class="dm-pagination__item">
+                                    <div class="paging-option">
+                                        <select name="page-number" class="page-selection rounded-pill">
+                                            <option value="20">20 dòng/trang</option>
+                                            <option value="40">40 dòng/trang</option>
+                                            <option value="60">60 dòng/trang</option>
+                                        </select>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="mt-2 warning-tag-message bg-opacity-danger dm-tag tag-danger tag-transparented">
-                            Cảnh báo: Thao
-                            tác này sẽ xoá vĩnh
-                            viễn dữ liệu của người này trên hệ thống. Nếu không thật sự cần thiết, bạn nên
-                            khoá tài khoá tài khoản này để đảm bảo quyền lợi cho khách hàng!</p>
-                        <div class="button-group d-flex pt-25 justify-content-end">
-                            <button class="delete-btn btn btn-danger btn-rounded">Xác
-                                nhận
-                            </button>
-                            <button type="button" class="btn btn-light btn-default btn-rounded"
-                                data-bs-dismiss="modal">Huỷ bỏ</button>
-                        </div>
-                    </form>
-                </div>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                }
             </div>
         </div>
     </div>
 </div>
-@if (TempData["Message"] != null)
+@* Confirm delete modal *@
+@if (Model?.Count() > 0)
 {
-    @section Scripts {
+    <partial name="./ConfirmDeleteUser.cshtml" />
+}
+@* Confirm lockout modal *@
+@if (Model?.Count(user => user.IsLocked == true) > 0)
+{
+    <partial name="./ConfirmUnlockUser.cshtml" />
+}
+@* Confirm unlock modal *@
+<partial name="./ConfirmLockUser.cshtml" />
+
+@if (TempData["UsersMessage"] != null)
+{
+    @section Messages {
     <script>
         const messageType = '@TempData["Type"]'
-            let icon = "";
-            switch (messageType) {
-                case 'success':
-                    icon = 'check-circle';
-                    break;
-                case 'error':
-                    icon = 'times-circle';
-                    break;
-                case 'warning':
-                    icon = 'exclamation-circle';
-                    break;
-                default:
-                    icon = 'circle-info'
-            }
-            showMessage(messageType, icon, '@TempData["Message"]?.ToString()')
-        </script>
+        let icon = "";
+        switch (messageType) {
+            case 'success':
+                icon = 'check-circle';
+                break;
+            case 'error':
+                icon = 'times-circle';
+                break;
+            case 'warning':
+                icon = 'exclamation-circle';
+                break;
+            default:
+                icon = 'circle-info'
+        }
+        showMessage(messageType, icon, '@TempData["UsersMessage"]?.ToString()')
+    </script>
 }
 }
-@section Delete {
+@section TableAction {
     <script>
         const deleteModal = document.getElementById('confirm-delete-user')
+        const lockoutModal = document.getElementById('confirm-lockout-user')
+        const unlockModal = document.getElementById('confirm-unlock-user')
         if (deleteModal) {
             deleteModal.addEventListener('show.bs.modal', event => {
-                // Button that triggered the modal
-                const button = event.relatedTarget
+                const dataContainer = $(event.relatedTarget).closest('.user-data-container');
                 // Extract info from data-bs-* attributes
                 const userData = {
-                    id: button.getAttribute('data-userid'),
-                    name: button.getAttribute('data-username'),
-                    image: button.getAttribute('data-image'),
-                    role: button.getAttribute('data-userrole')
+                    id: dataContainer.data('userid'),
+                    name: dataContainer.data('username'),
+                    image: dataContainer.data('image'),
+                    role: dataContainer.data('userrole')
                 }
                 const modalData = {
                     userId: deleteModal.querySelector('.user-id'),
@@ -399,6 +384,56 @@
                     form.action = formAction.delete
                     form.submit()
                 })
+            })
+        }
+        if (lockoutModal) {
+            lockoutModal.addEventListener('show.bs.modal', event => {
+                const dataContainer = $(event.relatedTarget).closest('.user-data-container');
+                // Extract info from data-bs-* attributes
+                const userData = {
+                    id: dataContainer.data('userid'),
+                    name: dataContainer.data('username'),
+                    image: dataContainer.data('image'),
+                    role: dataContainer.data('userrole')
+                }
+                const modalData = {
+                    userId: lockoutModal.querySelector('.user-id'),
+                    userName: lockoutModal.querySelector('.user-name'),
+                    userImage: lockoutModal.querySelector('.user-image-url'),
+                    userRole: lockoutModal.querySelector('.user-role')
+                }
+                // If necessary, you could initiate an Ajax request here
+                // and then do the updating in a callback.
+                // Update the modal's content.
+                modalData.userId.value = userData.id
+                modalData.userName.textContent = userData.name
+                modalData.userImage.src = userData.image
+                modalData.userRole.textContent = userData.role
+            })
+        }
+        if (unlockModal) {
+            unlockModal.addEventListener('show.bs.modal', event => {
+                const dataContainer = $(event.relatedTarget).closest('.user-data-container');
+                // Extract info from data-bs-* attributes
+                const userData = {
+                    id: dataContainer.data('userid'),
+                    name: dataContainer.data('username'),
+                    image: dataContainer.data('image'),
+                    role: dataContainer.data('userrole')
+                }
+                const modalData = {
+                    userId: unlockModal.querySelector('.user-id'),
+                    userName: unlockModal.querySelector('.user-name'),
+                    userImage: unlockModal.querySelector('.user-image-url'),
+                    userRole: unlockModal.querySelector('.user-role')
+                }
+                // If necessary, you could initiate an Ajax request here
+                // and then do the updating in a callback.
+                // Update the modal's content.
+                modalData.userId.value = userData.id
+                modalData.userName.textContent = userData.name
+                modalData.userImage.src = userData.image
+                modalData.userRole.textContent = userData.role
             })
         }
     </script>

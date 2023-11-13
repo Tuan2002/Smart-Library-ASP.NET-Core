@@ -159,6 +159,22 @@
         color: var(--color-primary);
       }
     }
+    &.unlock:hover {
+      background: rgba(var(--color-success-rgba), 0.10);
+
+      svg,
+      i {
+        color: var(--color-success);
+      }
+    }
+    &.lock:hover {
+      background: rgba(var(--color-warning-rgba), 0.10);
+
+      svg,
+      i {
+        color: var(--color-warning);
+      }
+    }
 
     &.edit:hover {
       background: rgba(var(--color-info-rgba), 0.10);

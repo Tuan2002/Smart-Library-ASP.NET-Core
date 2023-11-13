@@ -106,6 +106,11 @@ body {
         transform: translateY(50%);
     }
 }
+
+.modal .warning-tag-message {
+    margin-left: 4px !important;
+
+}
 .on-drag {
     border: 2px dashed var(--color-success);
     opacity: 0.7;

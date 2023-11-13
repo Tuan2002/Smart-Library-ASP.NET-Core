@@ -1,0 +1,57 @@
+<div class="modal fade new-member" id="confirm-unlock-user" role="dialog" tabindex="-1"
+    aria-labelledby="staticBackdropLabel">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content radius-xl">
+            <div class="modal-header">
+                <h6 class="modal-title fs-5 fw-500" id="staticBackdropLabel">Xác nhận mở khoá tài khoản</h6>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="svg replaced-svg">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="new-member-modal">
+                    <form action="/admin/users/unlock" method="POST" id="confirm-unlock-form">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" class="user-id">
+                        <div class="media bg-white radius-xl px-2 py-3 users-list shadow-lg ">
+                            <img class="me-20 rounded-circle wh-50 user-image-url" src="/img/tm1.png"
+                                alt="Generic placeholder image">
+                            <div class="media-body d-xl-flex users-list-body">
+                                <div class="flex-1 users-list-body__title">
+                                    <div class="d-flex flex-1 justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mt-0 fw-500 user-name"></h6>
+                                            <span class="user-role"></span>
+                                        </div>
+                                        <div class="users-list__button mt-xl-0 mt-15">
+                                            <a href=""
+                                                class="lockout-btn btn btn-info btn-transparent-info btn-rounded px-15 global-shadow">Trang
+                                                cá nhân</a>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mt-2 warning-tag-message bg-opacity-warning dm-tag tag-warning tag-transparented">
+                            Lưu ý: Thao tác này sẽ khôi phục lại các hoạt động của người dùng trên hệ thống, nếu trước
+                            đây người dùng này bị khoá do vi phạm chính sách hoạt động, vui lòng xem xét kỹ trước khi
+                            thực hiện mở khoá</p>
+                        <div class="button-group d-flex pt-25 justify-content-end">
+                            <button type="submit" class="confirm-btn btn btn-primary btn-rounded">Xác
+                                nhận
+                            </button>
+                            <button type="button" class="btn btn-light btn-default btn-rounded"
+                                data-bs-dismiss="modal">Huỷ bỏ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

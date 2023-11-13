@@ -98,7 +98,7 @@ namespace Smart_Library.Areas.Admin.Controllers
                 ModelState.AddModelError(string.Empty, "Không thể tạo người dùng, lỗi phân quyền");
                 return View();
             }
-            TempData["Message"] = "Thêm người dùng thành công";
+            TempData["UsersMessage"] = "Thêm người dùng thành công";
             TempData["Type"] = "success";
             return RedirectToAction("Index", "Users");
         }
@@ -107,10 +107,16 @@ namespace Smart_Library.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Lockout(string id)
         {
+            if (id == _userManager.GetUserId(User))
+            {
+                TempData["UsersMessage"] = "Không thể khoá tài khoản của chính mình";
+                TempData["Type"] = "error";
+                return RedirectToAction("Index", "Users");
+            }
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
-                TempData["Message"] = "Người dùng không tồn tại";
+                TempData["UsersMessage"] = "Người dùng không tồn tại";
                 TempData["Type"] = "warning";
                 return RedirectToAction("Index", "Users");
             }
@@ -118,11 +124,34 @@ namespace Smart_Library.Areas.Admin.Controllers
             var lockUntil = await _userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddYears(100));
             if (!setLocked.Succeeded || !lockUntil.Succeeded)
             {
-                TempData["Message"] = "Không thể khóa người dùng này";
+                TempData["UsersMessage"] = "Không thể khóa tài khoản này";
                 TempData["Type"] = "warning";
                 return RedirectToAction("Index", "Users");
             }
-            TempData["Message"] = "Đã khóa người dùng";
+            TempData["UsersMessage"] = "Đã khóa tài khoản người dùng";
+            TempData["Type"] = "success";
+            return RedirectToAction("Index", "Users");
+        }
+        [HttpPost]
+        [Route("Unlock")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Unlock(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                TempData["UsersMessage"] = "Người dùng không tồn tại";
+                TempData["Type"] = "warning";
+                return RedirectToAction("Index", "Users");
+            }
+            var lockUntil = await _userManager.SetLockoutEndDateAsync(user, null);
+            if (!lockUntil.Succeeded)
+            {
+                TempData["UsersMessage"] = "Không thể mở khóa tài khoản này";
+                TempData["Type"] = "warning";
+                return RedirectToAction("Index", "Users");
+            }
+            TempData["UsersMessage"] = "Đã mở khóa tài khoản người dùng";
             TempData["Type"] = "success";
             return RedirectToAction("Index", "Users");
         }
@@ -132,21 +161,27 @@ namespace Smart_Library.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string id)
         {
+            if (id == _userManager.GetUserId(User))
+            {
+                TempData["UsersMessage"] = "Không thể xoá tài khoản của chính mình";
+                TempData["Type"] = "error";
+                return RedirectToAction("Index", "Users");
+            }
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
-                TempData["Message"] = "Người dùng không tồn tại";
+                TempData["UsersMessage"] = "Người dùng không tồn tại";
                 TempData["Type"] = "warning";
                 return RedirectToAction("Index", "Users");
             }
             var Result = await _userManager.DeleteAsync(user);
             if (!Result.Succeeded)
             {
-                TempData["Message"] = "Không thể xoá người dùng";
+                TempData["UsersMessage"] = "Không thể xoá người dùng này";
                 TempData["Type"] = "warning";
                 return RedirectToAction("Index", "Users");
             }
-            TempData["Message"] = "Xoá người dùng thành công";
+            TempData["UsersMessage"] = "Xoá người dùng thành công";
             TempData["Type"] = "success";
             return RedirectToAction("Index", "Users");
         }
@@ -175,7 +210,7 @@ namespace Smart_Library.Areas.Admin.Controllers
             var Result = await Import.ImportMultiUserAsync(ValidUsers);
             if (Result.IsNullOrEmpty())
             {
-                TempData["Message"] = "Không có người dùng nào được thêm";
+                TempData["UsersMessage"] = "Không có người dùng nào được thêm";
                 TempData["Type"] = "warning";
                 return RedirectToAction("Index", "Users");
             }
@@ -197,12 +232,12 @@ namespace Smart_Library.Areas.Admin.Controllers
             var countSucceeded = ImportedUsers?.Count(user => user.Status == "succeeded");
             if (countSucceeded == 0)
             {
-                TempData["Message"] = "Không có người dùng nào được thêm";
+                TempData["UsersMessage"] = "Không có người dùng nào được thêm";
                 TempData["Type"] = "warning";
             }
             else
             {
-                TempData["Message"] = "Đã thêm " + countSucceeded + " người dùng thành công";
+                TempData["UsersMessage"] = "Đã thêm " + countSucceeded + " người dùng thành công";
                 TempData["Type"] = "success";
             }
             return View(ImportedUsers);
