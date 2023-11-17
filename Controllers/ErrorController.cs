@@ -15,6 +15,11 @@ namespace Smart_Library.Controllers
         {
             return Redirect("/");
         }
+        [Route("Locked")]
+        public IActionResult Locked()
+        {
+            return View();
+        }
         [Route("{code}")]
         public IActionResult Error(int code)
         {

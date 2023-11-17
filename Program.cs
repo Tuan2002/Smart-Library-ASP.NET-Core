@@ -1,11 +1,10 @@
 using System.Net;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Smart_Library.Data;
 using Smart_Library.Entities;
+using Smart_Library.Middleware;
 using static Smart_Library.Config.AppRules;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -65,7 +64,7 @@ app.UseStatusCodePages(async context =>
 app.UseStatusCodePagesWithReExecute("/error/{0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseMiddleware<ForceSignOutOnLockout>();
 app.UseRouting();
 app.UseAuthentication(); ;
 app.UseAuthorization();
