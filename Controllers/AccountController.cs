@@ -61,6 +61,7 @@ namespace Smart_Library.Controllers
                 if (!result.Succeeded)
                 {
                     var accessFailedCount = await _userManager.GetAccessFailedCountAsync(user);
+                    int accessFailedRemaining = 5 - accessFailedCount;
                     if (result.IsLockedOut)
                     {
                         var getLockedTimeUntil = await _userManager.GetLockoutEndDateAsync(user);
@@ -78,7 +79,7 @@ namespace Smart_Library.Controllers
                         ModelState.AddModelError(string.Empty, "Thông tin đăng nhập không chính xác");
                         return View(loginModel);
                     }
-                    ModelState.AddModelError(string.Empty, "Thông tin đăng nhập không chính xác, bạn còn " + (5 - accessFailedCount) + " lần thử");
+                    ModelState.AddModelError(string.Empty, $"Thông tin đăng nhập không chính xác, bạn còn {accessFailedRemaining} lần thử");
                     return View(loginModel);
                 }
                 await _userManager.ResetAccessFailedCountAsync(user);

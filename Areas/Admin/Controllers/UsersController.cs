@@ -82,7 +82,7 @@ namespace Smart_Library.Areas.Admin.Controllers
                 LastName = model.LastName,
                 Address = model.GetAddress(),
                 DateOfBirth = model.DateOfBirth,
-                ProfileImage = UploadImage.UploadSingleImage(model.ProfileImage) ?? "/uploads/images/default-user.png",
+                ProfileImage = UploadImage.UploadSingleImage(model.ProfileImage) ?? "/img/default-user.webp",
                 CreatedAt = DateTime.Now,
                 WorkspaceId = model.WorkspaceId,
             };
@@ -256,7 +256,7 @@ namespace Smart_Library.Areas.Admin.Controllers
             }
             else
             {
-                TempData["UsersMessage"] = "Đã thêm " + countSucceeded + " người dùng thành công";
+                TempData["UsersMessage"] = $"Đã thêm {countSucceeded} người dùng thành công";
                 TempData["Type"] = "success";
                 await _webSocketHandler.SendMessageAsync($"Data has been updated", "/admin/users");
             }

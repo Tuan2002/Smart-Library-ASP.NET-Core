@@ -64,15 +64,15 @@ app.UseStatusCodePages(async context =>
         return;
     }
 });
-app.UseWebSockets();
-app.UseMiddleware<WebSocketMiddleware>();
-app.UseMiddleware<ForceSignOutOnLockout>();
 app.UseStatusCodePagesWithReExecute("/error/{0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication(); ;
 app.UseAuthorization();
+app.UseMiddleware<ForceSignOutOnLockout>();
+app.UseWebSockets();
+app.UseMiddleware<WebSocketMiddleware>();
 app.MapControllerRoute(
     name: "areas",
     pattern: "{Area:exists}/{controller=Home}/{action=Index}/{id?}"

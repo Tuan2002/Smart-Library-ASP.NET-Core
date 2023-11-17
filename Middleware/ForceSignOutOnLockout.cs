@@ -11,9 +11,10 @@ namespace Smart_Library.Middleware
         {
             _next = next;
         }
-        public async Task Invoke(HttpContext context, UserManager<ApplicationUser> userManager)
+        public async Task InvokeAsync(HttpContext context, UserManager<ApplicationUser> userManager)
         {
             var user = await userManager.GetUserAsync(context.User);
+            Console.WriteLine("User: " + user);
             if (user != null && await userManager.IsLockedOutAsync(user))
             {
                 await context.SignOutAsync(IdentityConstants.ApplicationScheme);
