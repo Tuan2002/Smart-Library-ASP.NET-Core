@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Smart_Library.Admin.Models;
 using Smart_Library.Areas.Admin.Models;
@@ -21,11 +20,13 @@ namespace Smart_Library.Areas.Admin.Controllers
         private readonly ILogger<UsersController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDBContext _context;
-        public UsersController(ILogger<UsersController> logger, UserManager<ApplicationUser> userManager, ApplicationDBContext context)
+        private readonly WebSocketHandler _webSocketHandler;
+        public UsersController(ILogger<UsersController> logger, UserManager<ApplicationUser> userManager, ApplicationDBContext context, WebSocketHandler webSocketHandler)
         {
             _logger = logger;
             _userManager = userManager;
             _context = context;
+            _webSocketHandler = webSocketHandler;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -100,6 +101,7 @@ namespace Smart_Library.Areas.Admin.Controllers
             }
             TempData["UsersMessage"] = "Thêm người dùng thành công";
             TempData["Type"] = "success";
+            await _webSocketHandler.SendMessageAsync($"Data has been updated", "/admin/users");
             return RedirectToAction("Index", "Users");
         }
         [HttpPost]
@@ -137,6 +139,7 @@ namespace Smart_Library.Areas.Admin.Controllers
             }
             TempData["UsersMessage"] = "Đã khóa tài khoản người dùng";
             TempData["Type"] = "success";
+            await _webSocketHandler.SendMessageAsync($"Data has been updated", "/admin/users");
             return RedirectToAction("Index", "Users");
         }
         [HttpPost]
@@ -167,6 +170,7 @@ namespace Smart_Library.Areas.Admin.Controllers
             }
             TempData["UsersMessage"] = "Đã mở khóa tài khoản người dùng";
             TempData["Type"] = "success";
+            await _webSocketHandler.SendMessageAsync($"Data has been updated", "/admin/users");
             return RedirectToAction("Index", "Users");
         }
 
@@ -197,6 +201,7 @@ namespace Smart_Library.Areas.Admin.Controllers
             }
             TempData["UsersMessage"] = "Xoá người dùng thành công";
             TempData["Type"] = "success";
+            await _webSocketHandler.SendMessageAsync($"Data has been updated", "/admin/users");
             return RedirectToAction("Index", "Users");
         }
         [HttpGet]
@@ -234,7 +239,7 @@ namespace Smart_Library.Areas.Admin.Controllers
         }
         [HttpGet]
         [Route("Import/Result")]
-        public IActionResult ImportResult(string? importId)
+        public async Task<IActionResult> ImportResult(string? importId)
         {
             var StoredImportId = TempData["ImportId"]?.ToString();
             var JSONData = TempData["Result"]?.ToString();
@@ -253,6 +258,7 @@ namespace Smart_Library.Areas.Admin.Controllers
             {
                 TempData["UsersMessage"] = "Đã thêm " + countSucceeded + " người dùng thành công";
                 TempData["Type"] = "success";
+                await _webSocketHandler.SendMessageAsync($"Data has been updated", "/admin/users");
             }
             return View(ImportedUsers);
         }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Smart_Library.Data;
 using Smart_Library.Entities;
 using Smart_Library.Middleware;
+using Smart_Library.Utils;
 using static Smart_Library.Config.AppRules;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,8 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 });
+// Add services to configure web socket
+builder.Services.AddSingleton<WebSocketHandler>();
 // Add service to compile sass
 #if DEBUG
 builder.Services.AddSassCompiler();
@@ -61,10 +64,12 @@ app.UseStatusCodePages(async context =>
         return;
     }
 });
+app.UseWebSockets();
+app.UseMiddleware<WebSocketMiddleware>();
+app.UseMiddleware<ForceSignOutOnLockout>();
 app.UseStatusCodePagesWithReExecute("/error/{0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseMiddleware<ForceSignOutOnLockout>();
 app.UseRouting();
 app.UseAuthentication(); ;
 app.UseAuthorization();
