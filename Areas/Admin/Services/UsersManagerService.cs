@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Smart_Library.Admin.Models;
 using Smart_Library.Areas.Admin.Models;
 using Smart_Library.Data;
 using Smart_Library.Entities;

@@ -1,5 +1,4 @@
-
-namespace Smart_Library.Admin.Models
+namespace Smart_Library.Areas.Admin.Models
 {
     public class WorkspaceViewModel
     {

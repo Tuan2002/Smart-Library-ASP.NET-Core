@@ -1,7 +1,6 @@
-
 using Microsoft.AspNetCore.Mvc;
 
-namespace Smart_Library.Admin.Models
+namespace Smart_Library.Areas.Admin.Models
 {
     [BindProperties]
     public class CreateUserModel

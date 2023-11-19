@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Smart_Library.Admin.Models;
 
-namespace Smart_Library.Admin.Models
+namespace Smart_Library.Areas.Admin.Models
 {
     [BindProperties]
     public class ImportUserModel

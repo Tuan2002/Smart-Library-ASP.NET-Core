@@ -1,7 +1,6 @@
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Smart_Library.Admin.Models;
+using Smart_Library.Areas.Admin.Models;
 using Smart_Library.Data;
 
 namespace Smart_Library.Areas.Admin.Components
