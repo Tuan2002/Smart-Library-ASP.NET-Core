@@ -236,18 +236,18 @@
         </div>
     </div>
 </div>
-@* Confirm delete modal *@
 @if (Model?.Count() > 0)
 {
+    @* Confirm delete modal *@
     <partial name="./ConfirmDeleteUser.cshtml" />
+    @* Confirm unlock modal *@
+    <partial name="./ConfirmLockUser.cshtml" />
 }
 @* Confirm lockout modal *@
 @if (Model?.Count(user => user.IsLocked == true) > 0)
 {
     <partial name="./ConfirmUnlockUser.cshtml" />
 }
-@* Confirm unlock modal *@
-<partial name="./ConfirmLockUser.cshtml" />
 
 @if (TempData["UsersMessage"] != null)
 {
