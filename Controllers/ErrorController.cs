@@ -25,6 +25,7 @@ namespace Smart_Library.Controllers
         {
             return code switch
             {
+                401 => RedirectToAction("Login", "Account"),
                 403 => View("Forbidden"),
                 404 => View("NotFound"),
                 500 => View("InternalServerError"),

@@ -2,10 +2,10 @@ using Castle.Core.Internal;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Smart_Library.Admin.Models;
 using Smart_Library.Areas.Admin.Models;
+using Smart_Library.Areas.Admin.Services;
 using Smart_Library.Data;
 using Smart_Library.Entities;
 using Smart_Library.Utils;
@@ -17,39 +17,24 @@ namespace Smart_Library.Areas.Admin.Controllers
     [Authorize(Roles = "Quản trị viên")]
     public class UsersController : Controller
     {
+        public readonly IUsersManagerService _usersManagerService;
         private readonly ILogger<UsersController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDBContext _context;
         private readonly WebSocketHandler _webSocketHandler;
-        public UsersController(ILogger<UsersController> logger, UserManager<ApplicationUser> userManager, ApplicationDBContext context, WebSocketHandler webSocketHandler)
+        public UsersController(ILogger<UsersController> logger, UserManager<ApplicationUser> userManager, ApplicationDBContext context, WebSocketHandler webSocketHandler, IUsersManagerService usersManagerService)
         {
             _logger = logger;
             _userManager = userManager;
             _context = context;
             _webSocketHandler = webSocketHandler;
+            _usersManagerService = usersManagerService;
+            _usersManagerService = usersManagerService;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var users = await _userManager.Users.ToListAsync();
-            var UserList = new List<UserViewModel>();
-            foreach (var user in users)
-            {
-                var UserInfo = new UserViewModel
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    ProfileImage = user.ProfileImage,
-                    Address = user.Address,
-                    WorkspaceName = user.Workspace?.WorkspaceName,
-                    Role = _userManager.GetRolesAsync(user).Result.FirstOrDefault(),
-                    CreatedAt = user.CreatedAt,
-                    IsLocked = _userManager.IsLockedOutAsync(user).Result
-                };
-                UserList.Add(UserInfo);
-            }
+            var UserList = await _usersManagerService.GetUsersListAsync();
             return View(UserList);
         }
         [HttpGet]
@@ -68,36 +53,11 @@ namespace Smart_Library.Areas.Admin.Controllers
             {
                 return View();
             }
-            var IsEmailUsed = await _userManager.FindByEmailAsync(model.Email);
-            if (IsEmailUsed != null)
+            var Result = await _usersManagerService.CreateUserAsync(model);
+            if (!Result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, "Email này đã được sử dụng cho một tài khoản khác");
+                ModelState.AddModelError(string.Empty, Result.Message);
                 return View(model);
-            }
-            var NewUser = new ApplicationUser
-            {
-                Email = model.Email,
-                UserName = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Address = model.GetAddress(),
-                DateOfBirth = model.DateOfBirth,
-                ProfileImage = UploadImage.UploadSingleImage(model.ProfileImage) ?? "/img/default-user.webp",
-                CreatedAt = DateTime.Now,
-                WorkspaceId = model.WorkspaceId,
-            };
-            var CreateNewUser = await _userManager.CreateAsync(NewUser, model.GeneratePassword());
-            if (!CreateNewUser.Succeeded)
-            {
-                ModelState.AddModelError(string.Empty, "Không thể tạo người dùng, vui lòng thử lại sau");
-                return View();
-            }
-            var AddRole = await _userManager.AddToRoleAsync(NewUser, model.RoleName);
-            if (!AddRole.Succeeded)
-            {
-                await _userManager.DeleteAsync(NewUser);
-                ModelState.AddModelError(string.Empty, "Không thể tạo người dùng, lỗi phân quyền");
-                return View();
             }
             TempData["UsersMessage"] = "Thêm người dùng thành công";
             TempData["Type"] = "success";
@@ -109,35 +69,14 @@ namespace Smart_Library.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Lockout(string id)
         {
-            if (id == _userManager.GetUserId(User))
+            var Result = await _usersManagerService.LockoutUserAsync(id);
+            if (!Result.IsSuccess)
             {
-                TempData["UsersMessage"] = "Không thể khoá tài khoản của chính mình";
+                TempData["UsersMessage"] = Result.Message;
                 TempData["Type"] = "error";
                 return RedirectToAction("Index", "Users");
             }
-            var user = await _userManager.FindByIdAsync(id);
-            var checkUserLock = await _userManager.IsLockedOutAsync(user);
-            if (checkUserLock)
-            {
-                TempData["UsersMessage"] = "Tài khoản này đã bị khóa từ trước";
-                TempData["Type"] = "warning";
-                return RedirectToAction("Index", "Users");
-            }
-            if (user == null)
-            {
-                TempData["UsersMessage"] = "Người dùng không tồn tại";
-                TempData["Type"] = "warning";
-                return RedirectToAction("Index", "Users");
-            }
-            var setLocked = await _userManager.SetLockoutEnabledAsync(user, true);
-            var lockUntil = await _userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddYears(100));
-            if (!setLocked.Succeeded || !lockUntil.Succeeded)
-            {
-                TempData["UsersMessage"] = "Không thể khóa tài khoản này";
-                TempData["Type"] = "warning";
-                return RedirectToAction("Index", "Users");
-            }
-            TempData["UsersMessage"] = "Đã khóa tài khoản người dùng";
+            TempData["UsersMessage"] = Result.Message;
             TempData["Type"] = "success";
             await _webSocketHandler.SendMessageAsync($"Data has been updated", "/admin/users");
             return RedirectToAction("Index", "Users");
@@ -147,28 +86,14 @@ namespace Smart_Library.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Unlock(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null)
+            var Result = await _usersManagerService.UnlockUserAsync(id);
+            if (!Result.IsSuccess)
             {
-                TempData["UsersMessage"] = "Người dùng không tồn tại";
-                TempData["Type"] = "warning";
+                TempData["UsersMessage"] = Result.Message;
+                TempData["Type"] = "error";
                 return RedirectToAction("Index", "Users");
             }
-            var checkUserLock = await _userManager.IsLockedOutAsync(user);
-            if (!checkUserLock)
-            {
-                TempData["UsersMessage"] = "Tài khoản này không bị khóa";
-                TempData["Type"] = "warning";
-                return RedirectToAction("Index", "Users");
-            }
-            var lockUntil = await _userManager.SetLockoutEndDateAsync(user, null);
-            if (!lockUntil.Succeeded)
-            {
-                TempData["UsersMessage"] = "Không thể mở khóa tài khoản này";
-                TempData["Type"] = "warning";
-                return RedirectToAction("Index", "Users");
-            }
-            TempData["UsersMessage"] = "Đã mở khóa tài khoản người dùng";
+            TempData["UsersMessage"] = Result.Message;
             TempData["Type"] = "success";
             await _webSocketHandler.SendMessageAsync($"Data has been updated", "/admin/users");
             return RedirectToAction("Index", "Users");
@@ -179,27 +104,14 @@ namespace Smart_Library.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == _userManager.GetUserId(User))
+            var Result = await _usersManagerService.DeleteUserAsync(id);
+            if (!Result.IsSuccess)
             {
-                TempData["UsersMessage"] = "Không thể xoá tài khoản của chính mình";
+                TempData["UsersMessage"] = Result.Message;
                 TempData["Type"] = "error";
                 return RedirectToAction("Index", "Users");
             }
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null)
-            {
-                TempData["UsersMessage"] = "Người dùng không tồn tại";
-                TempData["Type"] = "warning";
-                return RedirectToAction("Index", "Users");
-            }
-            var Result = await _userManager.DeleteAsync(user);
-            if (!Result.Succeeded)
-            {
-                TempData["UsersMessage"] = "Không thể xoá người dùng này";
-                TempData["Type"] = "warning";
-                return RedirectToAction("Index", "Users");
-            }
-            TempData["UsersMessage"] = "Xoá người dùng thành công";
+            TempData["UsersMessage"] = Result.Message;
             TempData["Type"] = "success";
             await _webSocketHandler.SendMessageAsync($"Data has been updated", "/admin/users");
             return RedirectToAction("Index", "Users");
@@ -225,8 +137,7 @@ namespace Smart_Library.Areas.Admin.Controllers
         {
             var ValidUsers = JsonConvert.DeserializeObject<List<ImportUserModel>>(UserList);
             var ImportId = Guid.NewGuid().ToString();
-            ImportUsers Import = new ImportUsers(_userManager, _context, _logger);
-            var Result = await Import.ImportMultiUserAsync(ValidUsers);
+            var Result = await _usersManagerService.ImportMultiUserAsync(ValidUsers);
             if (Result.IsNullOrEmpty())
             {
                 TempData["UsersMessage"] = "Không có người dùng nào được thêm";
@@ -253,13 +164,11 @@ namespace Smart_Library.Areas.Admin.Controllers
             {
                 TempData["UsersMessage"] = "Không có người dùng nào được thêm";
                 TempData["Type"] = "warning";
+                return RedirectToAction("Index", "Users");
             }
-            else
-            {
-                TempData["UsersMessage"] = $"Đã thêm {countSucceeded} người dùng thành công";
-                TempData["Type"] = "success";
-                await _webSocketHandler.SendMessageAsync($"Data has been updated", "/admin/users");
-            }
+            TempData["UsersMessage"] = $"Đã thêm {countSucceeded} người dùng thành công";
+            TempData["Type"] = "success";
+            await _webSocketHandler.SendMessageAsync($"Data has been updated", "/admin/users");
             return View(ImportedUsers);
         }
         [HttpGet]

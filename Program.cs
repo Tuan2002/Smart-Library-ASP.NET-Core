@@ -2,9 +2,11 @@ using System.Net;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Smart_Library.Areas.Admin.Services;
 using Smart_Library.Data;
 using Smart_Library.Entities;
 using Smart_Library.Middleware;
+using Smart_Library.Services;
 using Smart_Library.Utils;
 using static Smart_Library.Config.AppRules;
 
@@ -41,6 +43,11 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDateOnlyTimeOnlyStringConverters();
+// Add services to access HttpContext from custom service
+builder.Services.AddHttpContextAccessor();
+// Add custom application services.
+builder.Services.AddScoped<IUsersManagerService, UsersManagerService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 var app = builder.Build();
 var options = new RewriteOptions().Add(new RedirectLowerCaseRule());
@@ -52,18 +59,6 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-// Redirect to login page if user is not authenticated
-app.UseStatusCodePages(async context =>
-{
-    var request = context.HttpContext.Request;
-    var response = context.HttpContext.Response;
-    if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
-    {
-        response.Redirect("/account/login");
-        await Task.CompletedTask;
-        return;
-    }
-});
 app.UseStatusCodePagesWithReExecute("/error/{0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -81,4 +76,3 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
-
