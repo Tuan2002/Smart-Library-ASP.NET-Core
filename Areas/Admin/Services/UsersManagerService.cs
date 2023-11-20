@@ -11,6 +11,8 @@ namespace Smart_Library.Areas.Admin.Services
     {
         Task<IEnumerable<UserViewModel>> GetUsersListAsync();
         Task<ActionMessage> CreateUserAsync(CreateUserModel user);
+        Task<ActionMessage> UpdateUserAsync(string id, EditUserModel user);
+        Task<UserViewModel> GetUserByIdAsync(string userId);
         Task<ActionMessage> LockoutUserAsync(string userId);
         Task<ActionMessage> UnlockUserAsync(string userId);
         Task<ActionMessage> DeleteUserAsync(string userId);
@@ -43,7 +45,7 @@ namespace Smart_Library.Areas.Admin.Services
                     LastName = user.LastName,
                     ProfileImage = user.ProfileImage,
                     Address = user.Address,
-                    WorkspaceName = user.Workspace?.WorkspaceName,
+                    WorkspaceName = user.Workspace.WorkspaceName,
                     Role = _userManager.GetRolesAsync(user).Result.FirstOrDefault(),
                     CreatedAt = user.CreatedAt,
                     IsLocked = _userManager.IsLockedOutAsync(user).Result
@@ -51,6 +53,101 @@ namespace Smart_Library.Areas.Admin.Services
                 UserList.Add(UserInfo);
             }
             return UserList;
+        }
+        public async Task<UserViewModel> GetUserByIdAsync(string userId)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                    throw new Exception("Người dùng không tồn tại");
+                var UserInfo = new UserViewModel
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    ProfileImage = user.ProfileImage,
+                    Address = user.Address,
+                    Phone = user.PhoneNumber,
+                    DateOfBirth = user.DateOfBirth,
+                    WorkspaceId = user.WorkspaceId,
+                    WorkspaceName = user.Workspace?.WorkspaceName,
+                    Role = _userManager.GetRolesAsync(user).Result.FirstOrDefault(),
+                    CreatedAt = user.CreatedAt,
+                    IsLocked = _userManager.IsLockedOutAsync(user).Result
+                };
+                return UserInfo;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return null!;
+            }
+        }
+        public async Task<ActionMessage> UpdateUserAsync(string id, EditUserModel user)
+        {
+            try
+            {
+                var CurrentUser = await _userManager.FindByIdAsync(id);
+                if (CurrentUser is null)
+                {
+                    return new ActionMessage
+                    {
+                        IsSuccess = false,
+                        Message = "Người dùng không tồn tại"
+                    };
+                }
+                CurrentUser.Email = user.Email ?? CurrentUser.Email;
+                CurrentUser.FirstName = user.FirstName ?? CurrentUser.FirstName;
+                CurrentUser.LastName = user.LastName ?? CurrentUser.LastName;
+                CurrentUser.Address = user.Address ?? CurrentUser.Address;
+                CurrentUser.PhoneNumber = user.Phone ?? CurrentUser.PhoneNumber;
+                CurrentUser.DateOfBirth = user.DateOfBirth ?? CurrentUser.DateOfBirth;
+                CurrentUser.WorkspaceId = user.WorkspaceId ?? CurrentUser.WorkspaceId;
+                if (user.ImageFile != null)
+                {
+                    CurrentUser.ProfileImage = UploadImage.UploadSingleImage(user.ImageFile) ?? CurrentUser.ProfileImage;
+                }
+                var CurrentRole = await _userManager.GetRolesAsync(CurrentUser);
+                if (!CurrentRole.Contains(user.RoleName) && user.RoleName != null)
+                {
+                    var RemoveRole = await _userManager.RemoveFromRolesAsync(CurrentUser, CurrentRole);
+                    var AddRole = await _userManager.AddToRoleAsync(CurrentUser, user.RoleName);
+                    if (!AddRole.Succeeded)
+                    {
+                        return new ActionMessage
+                        {
+                            IsSuccess = false,
+                            Message = "Không thể cập nhật thông tin người dùng"
+                        };
+                    }
+                }
+                var Result = await _userManager.UpdateAsync(CurrentUser);
+                if (!Result.Succeeded)
+                {
+                    return new ActionMessage
+                    {
+                        IsSuccess = false,
+                        Message = "Không thể cập nhật thông tin người dùng"
+                    };
+                }
+                return new ActionMessage
+                {
+                    IsSuccess = true,
+                    Message = "Cập nhật thông tin người dùng thành công"
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new ActionMessage
+                {
+                    IsSuccess = false,
+                    Message = "Không thể cập nhật thông tin người dùng"
+                };
+            }
         }
         public async Task<ActionMessage> CreateUserAsync(CreateUserModel user)
         {

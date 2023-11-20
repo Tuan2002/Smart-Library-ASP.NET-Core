@@ -1,6 +1,7 @@
 @using Microsoft.AspNetCore.Identity;
-@model IList<IdentityRole>
-@foreach (var role in Model.ToList())
+@model (List<IdentityRole> Roles, string? SelectedRole)
+@foreach (var role in Model.Roles)
 {
-    <option value="@role.Name">@role.Name</option>
+    bool IsSelected = role.Name == Model.SelectedRole;
+    <option value="@role.Name" selected="@IsSelected">@role.Name</option>
 }

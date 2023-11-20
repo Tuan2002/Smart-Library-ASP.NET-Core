@@ -45,7 +45,6 @@
 
 body {
   margin: 0; // 1
-  font-family: $font-family-base;
   @include font-size($font-size-base);
   font-weight: $font-weight-base;
   line-height: $line-height-base;
@@ -84,7 +83,6 @@ hr:not([size]) {
 %heading {
   margin-top: 0; // 1
   margin-bottom: $headings-margin-bottom;
-  font-family: $headings-font-family;
   font-style: $headings-font-style;
   font-weight: $headings-font-weight;
   line-height: $headings-line-height;

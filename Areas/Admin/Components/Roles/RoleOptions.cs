@@ -13,10 +13,10 @@ namespace Smart_Library.Areas.Admin.Components
         {
             _roleManager = roleManager;
         }
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(string? selectedRole)
         {
             var roles = await _roleManager.Roles.ToListAsync();
-            return await Task.FromResult((IViewComponentResult)View("RoleOptions", roles));
+            return await Task.FromResult((IViewComponentResult)View("RoleOptions", (Roles: roles, SelectedRole: selectedRole)));
         }
 
     }

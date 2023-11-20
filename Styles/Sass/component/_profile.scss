@@ -1147,7 +1147,6 @@
 .ps-tab .nav-link {
   @include ofs(14px, lh(14px, 20px), 500);
   border-radius: 6px;
-  text-transform: capitalize;
   padding: 15px 10px;
   color: var(--color-light);
   height: 46px;

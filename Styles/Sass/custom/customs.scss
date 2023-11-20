@@ -171,3 +171,9 @@ body {
     position: sticky; /* make the table heads sticky */
     top: 0px; /* table head will be placed from the top of the table and sticks to it */
   }
+
+.profile-cover-photo {
+    height: 220px;
+    object-fit: cover;
+    overflow: hidden;
+}

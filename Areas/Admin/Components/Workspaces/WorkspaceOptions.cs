@@ -14,7 +14,7 @@ namespace Smart_Library.Areas.Admin.Components
         {
             _context = context;
         }
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(int? selected)
         {
             var workspaces = await (
                 from workspace in _context.Workspace
@@ -24,7 +24,7 @@ namespace Smart_Library.Areas.Admin.Components
                     WorkspaceName = workspace.WorkspaceName,
                     CreatedAt = workspace.CreatedAt
                 }).ToListAsync();
-            return await Task.FromResult((IViewComponentResult)View("WorkspaceOptions", workspaces));
+            return await Task.FromResult((IViewComponentResult)View("WorkspaceOptions", (Workspaces: workspaces, SelectedWorkSpace: selected)));
         }
 
     }

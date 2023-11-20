@@ -2,6 +2,7 @@ using Castle.Core.Internal;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Differencing;
 using Newtonsoft.Json;
 using Smart_Library.Areas.Admin.Models;
 using Smart_Library.Areas.Admin.Services;
@@ -62,6 +63,49 @@ namespace Smart_Library.Areas.Admin.Controllers
             TempData["Type"] = "success";
             await _webSocketHandler.SendMessageAsync($"Data has been updated", "/admin/users");
             return RedirectToAction("Index", "Users");
+        }
+        [HttpGet]
+        [Route("{id}/View")]
+        public async Task<IActionResult> ViewUser(string id)
+        {
+            UserViewModel UserInfo = await _usersManagerService.GetUserByIdAsync(id);
+            if (UserInfo == null)
+            {
+                return NotFound();
+            }
+            return View(UserInfo);
+        }
+        [HttpGet]
+        [Route("{id}/Edit")]
+        public async Task<IActionResult> EditUser(string id)
+        {
+            UserViewModel UserInfo = await _usersManagerService.GetUserByIdAsync(id);
+            if (UserInfo == null)
+            {
+                return NotFound();
+            }
+            return View((UserInfo, new EditUserModel()));
+        }
+        [HttpPost]
+        [Route("{id}/Edit")]
+        public async Task<IActionResult> UpdateUser([Bind(Prefix = "Item2")] EditUserModel userModel, string id)
+        {
+            if (ModelState.IsNullOrEmpty())
+            {
+                TempData["UsersMessage"] = "Không có dữ liệu nào được gửi";
+                TempData["Type"] = "error";
+                return RedirectToAction("Index", "Users");
+            }
+            var Result = await _usersManagerService.UpdateUserAsync(id, userModel);
+            if (!Result.IsSuccess)
+            {
+                TempData["UsersMessage"] = Result.Message;
+                TempData["Type"] = "error";
+                return RedirectToAction("Index", "Users");
+            }
+            TempData["UsersMessage"] = Result.Message;
+            TempData["Type"] = "success";
+            return RedirectToAction("ViewUser", "Users", new { id = id });
         }
         [HttpPost]
         [Route("Lockout")]
