@@ -59,7 +59,7 @@ namespace Smart_Library.Areas.Admin.Services
             try
             {
                 var user = await _userManager.FindByIdAsync(userId);
-                if (user == null)
+                if (user is null)
                     throw new Exception("Người dùng không tồn tại");
                 var UserInfo = new UserViewModel
                 {
@@ -151,7 +151,6 @@ namespace Smart_Library.Areas.Admin.Services
         }
         public async Task<ActionMessage> CreateUserAsync(CreateUserModel user)
         {
-
             var IsEmailUsed = await _userManager.FindByEmailAsync(user.Email);
             if (IsEmailUsed != null)
             {

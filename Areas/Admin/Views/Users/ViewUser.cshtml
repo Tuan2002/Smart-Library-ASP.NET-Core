@@ -42,13 +42,7 @@
                 <div class="as-cover">
                     <div class="as-cover__imgWrapper">
                         <input id="file-upload1" type="file" name="fileUpload" class="d-none">
-                        <label for="file-upload1">
                             <img src="/img/cover-photo.webp" alt="image" class="w-100 profile-cover-photo">
-                            <span class="ap-cover__changeImgBtn">
-                                <span class="btn btn-outline-primary cover-btn">
-                                    <img src="/img/svg/camera.svg" alt="camera" class="svg">Thay ảnh bìa</span>
-                            </span>
-                        </label>
                     </div>
                 </div>
                 <div class="mb-50">
@@ -60,12 +54,14 @@
                                 <div class="card">
                                     <div class="card-header px-sm-25 px-3">
                                         <div class="edit-profile__title">
-                                            <h6>Chỉnh sửa hồ sơ người dùng</h6>
-                                            <span class="fs-13 color-light fw-400">Thiết lập các thông tin cá nhân cơ
+                                            <h6>Hồ sơ người dùng</h6>
+                                            <span class="fs-13 color-light fw-400">Trang này chỉ các thông tin cá nhân cơ
                                                 bản của người dùng</span>
                                         </div>
                                     </div>
                                     <div class="card-body">
+                                        <div class="row justify-content-center">
+                                            
                                             <div class="col-6">
                                                 <div class="edit-profile__body mx-xl-20">
                                                     <div class="form-group mb-20">
@@ -126,6 +122,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
                                             <div class="button-group d-flex justify-content-end flex-wrap pt-30 mb-15">
                                                 <a asp-action="EditUser" asp-controller="Users" asp-area="Admin" asp-route-id="@Model.Id"
                                                     class="btn btn-primary btn-default rounded-pill">Cập nhật thông tin

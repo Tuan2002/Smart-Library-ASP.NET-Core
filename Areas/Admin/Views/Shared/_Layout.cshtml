@@ -198,7 +198,7 @@
   <script src="/assets/js/select2-searchInputPlaceholder.js"></script>
   <script src="/assets/js/message.js"></script>
   <script src="/assets/js/script.js"></script>
-  @if (TempData["AuthMessage"] != null)
+  @if (TempData["AuthMessage"] != null || TempData["UsersMessage"] != null)
   {
     <script>
       const messageType = '@TempData["Type"]'
@@ -216,7 +216,7 @@
         default:
           icon = 'circle-info'
       }
-      showMessage(messageType, icon, '@TempData["AuthMessage"]?.ToString()')
+      showMessage(messageType, icon, '@TempData["AuthMessage"]?.ToString() @TempData["UsersMessage"]?.ToString()')
     </script>
   }
   <!-- endinject-->

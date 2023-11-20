@@ -11,7 +11,6 @@
                     <div class="d-flex align-items-center user-member__title justify-content-center me-sm-25">
                         <h4 class="fw-500 breadcrumb-title">Quản lý người dùng hệ thống</h4>
                     </div>
-
                 </div>
                 <div class="action-btn d-flex gap-4">
                     <div class="dropdown dropleft content-center d-flex">
@@ -112,11 +111,11 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <a href="#" class="profile-image rounded-circle d-block m-0 wh-38"
+                                                    <a asp-action="ViewUser" asp-controller="Users" asp-area="Admin" asp-route-id="@user.Id" class="profile-image rounded-circle d-block m-0 wh-38"
                                                         style="background-image:url('@user.ProfileImage'); background-size: cover;"></a>
                                                 </div>
                                                 <div class="userDatatable-inline-title">
-                                                    <a href="#" class="text-dark fw-500">
+                                                    <a asp-action="ViewUser" asp-controller="Users" asp-area="Admin" asp-route-id="@user.Id" class="text-dark fw-500">
                                                         <h6>@FullName</h6>
                                                     </a>
                                                     <p style="max-width: 200px;" class="d-block mb-0 text-truncate">@user.Address</p>
@@ -249,29 +248,6 @@
     <partial name="./ConfirmUnlockUser.cshtml" />
 }
 
-@if (TempData["UsersMessage"] != null)
-{
-    @section Messages {
-    <script>
-        const messageType = '@TempData["Type"]'
-        let icon = "";
-        switch (messageType) {
-            case 'success':
-                icon = 'check-circle';
-                break;
-            case 'error':
-                icon = 'times-circle';
-                break;
-            case 'warning':
-                icon = 'exclamation-circle';
-                break;
-            default:
-                icon = 'circle-info'
-        }
-        showMessage(messageType, icon, '@TempData["UsersMessage"]?.ToString()')
-    </script>
-}
-}
 @section TableAction {
     <script>
         const socket = new WebSocket('wss://localhost:7289/admin/users');
@@ -343,7 +319,8 @@
                     userId: lockoutModal.querySelector('.user-id'),
                     userName: lockoutModal.querySelector('.user-name'),
                     userImage: lockoutModal.querySelector('.user-image-url'),
-                    userRole: lockoutModal.querySelector('.user-role')
+                    userRole: lockoutModal.querySelector('.user-role'),
+                    userInfoLink: lockoutModal.querySelector('.user-info-link')
                 }
                 // If necessary, you could initiate an Ajax request here
                 // and then do the updating in a callback.
@@ -352,6 +329,7 @@
                 modalData.userName.textContent = userData.name
                 modalData.userImage.src = userData.image
                 modalData.userRole.textContent = userData.role
+                modalData.userInfoLink.href = `/admin/users/${userData.id}/view`
             })
         }
         if (unlockModal) {
@@ -368,7 +346,8 @@
                     userId: unlockModal.querySelector('.user-id'),
                     userName: unlockModal.querySelector('.user-name'),
                     userImage: unlockModal.querySelector('.user-image-url'),
-                    userRole: unlockModal.querySelector('.user-role')
+                    userRole: unlockModal.querySelector('.user-role'),
+                    userInfoLink: unlockModal.querySelector('.user-info-link')
                 }
                 // If necessary, you could initiate an Ajax request here
                 // and then do the updating in a callback.
@@ -377,6 +356,7 @@
                 modalData.userName.textContent = userData.name
                 modalData.userImage.src = userData.image
                 modalData.userRole.textContent = userData.role
+                modalData.userInfoLink.href = `/admin/users/${userData.id}/view`
             })
         }
     </script>
