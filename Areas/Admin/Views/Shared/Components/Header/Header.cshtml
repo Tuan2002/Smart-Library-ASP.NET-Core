@@ -9,7 +9,7 @@
     <nav class="navbar navbar-light">
         <div class="navbar-left">
             <div class="logo-area">
-                <a class="navbar-brand" href="/">
+                <a class="navbar-brand" asp-action="Index" asp-controller="Home" asp-area="">
                     <img class="dark" src="/img/Logo-Hori.png" alt="">
                     <img class="light" src="/img/Logo-Hori-White.png" alt="">
                 </a>
@@ -24,15 +24,13 @@
                 <div class="hexadash-top-menu position-relative">
                     <ul class="d-flex align-items-center flex-wrap">
                         <li>
-                            <a asp-action="Index" asp-controller="Home" asp-area="Admin"
-                                class="@(ViewBag.Active == true ? "active":"")">
+                            <a asp-action="Index" asp-controller="Home" asp-area="Admin" asp-active>
                                 <span class="nav-icon uil uil-create-dashboard"></span>
                                 <span class="menu-text">Trang chủ</span>
                             </a>
                         </li>
                         <li>
-                            <a asp-action="Index" asp-controller="Users" asp-area="Admin"
-                                class="@(ViewBag.Active == true ? "active":"")">
+                            <a asp-action="Index" asp-controller="Users" asp-area="Admin" asp-active>
                                 <span class="nav-icon uil uil-users-alt"></span>
                                 <span class="menu-text">Quản lý người dùng</span>
                             </a>
