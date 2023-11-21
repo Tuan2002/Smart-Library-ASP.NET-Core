@@ -13,6 +13,30 @@
                     <span class="menu-text">Quản lý người dùng</span>
                 </a>
             </li>
+            <li class="has-child user-select-none">
+                <a role="button">
+                    <span class="nav-icon uil uil-book-open"></span>
+                    <span class="menu-text">Quản lý danh mục sách</span>
+                    <span class="toggle-icon"></span>
+                </a>
+                <ul>
+                    <li class="l_sidebar active">
+                        <a asp-action="EcoBooks" asp-controller="Books" asp-area="Admin" class="active">
+                            Sách kinh tế
+                        </a>
+                    </li>
+                    <li class="l_sidebar">
+                        <a asp-action="SienceBooks" asp-controller="Books" asp-area="Admin">
+                            Sách khoa học
+                        </a>
+                    </li>
+                    <li class="l_sidebar">
+                        <a asp-action="EcoBooks" asp-controller="Books" asp-area="Admin">
+                            Sách văn học
+                        </a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
 </div>

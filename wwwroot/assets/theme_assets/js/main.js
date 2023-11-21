@@ -150,15 +150,16 @@
     }
   });
 
-  const sidebarToggle = $(".sidebar-toggle");
-  function sidebarCollapse(e) {
-    e.preventDefault();
-    document.querySelector(".sidebar").classList.toggle("collapsed");
-    document.querySelector(".contents").classList.toggle("expanded");
-  }
-  if (sidebarToggle) {
-    sidebarToggle.on("click", sidebarCollapse);
-  }
+  // const sidebarToggle = $(".sidebar-toggle");
+  // function sidebarCollapse(e) {
+  //   // e.preventDefault();
+  //   console.log("Clicked")
+  //   document.querySelector(".sidebar").classList.toggle("collapsed");
+  //   document.querySelector(".contents").classList.toggle("expanded");
+  // }
+  // if (sidebarToggle) {
+  //   sidebarToggle.on("click", sidebarCollapse);
+  // }
 
   $(window).on('scroll', function (e) {
     let blogContainer = document.querySelector(".blog-details"),
