@@ -17,6 +17,7 @@ namespace Smart_Library.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            ViewBag.Active = true;
             return View();
         }
 

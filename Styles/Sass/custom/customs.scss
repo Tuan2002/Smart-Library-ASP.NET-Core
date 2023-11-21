@@ -177,3 +177,15 @@ body {
     object-fit: cover;
     overflow: hidden;
 }
+
+.sidebar__menu-group .sidebar_nav li a.active {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: rgba(var(--color-primary-rgba), 0.10);
+    >a {
+      color: var(--color-primary);
+      .nav-icon{
+        color: currentColor;
+      }
+    }
+}
