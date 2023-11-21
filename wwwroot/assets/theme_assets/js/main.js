@@ -174,14 +174,14 @@
   $(".sidebar_nav .has-child.open ul").show();
   $(".sidebar_nav .has-child >a").on("click", function (e) {
     e.preventDefault();
-    $(this).parent().next("has-child").slideUp();
-    $(this).parent().parent().children(".has-child").children("ul").slideUp();
+    $(this).parent().next("has-child").slideUp(200, "linear");
+    $(this).parent().parent().children(".has-child").children("ul").slideUp(200, "linear");
     $(this).parent().parent().children(".has-child").removeClass("open");
     if ($(this).next().is(":visible")) {
       $(this).parent().removeClass("open");
     } else {
       $(this).parent().addClass("open");
-      $(this).next().slideDown();
+      $(this).next().slideDown(200, "linear");
     }
   });
 
@@ -719,9 +719,9 @@
     ratedColor: "#FA8B0C",
     activeColor: "#FA8B0C",
     useGradient: false,
-    initialRating: 2,
+    initialRating: 4,
     readOnly: true,
-    starSize: 12,
+    starSize: 14,
     strokeWidth: 6,
   });
 
