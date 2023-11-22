@@ -64,7 +64,9 @@
     <div class="sidebar-wrapper">
       <partial name="~/Views/Shared/Components/Sidebar/Sidebar.cshtml" />
     </div>
-    @RenderBody()
+    <div class="contents">
+      @RenderBody()
+    </div>
   </main>
   <div class="overlay-dark-sidebar"></div>
   <div class="customizer-overlay"></div>
