@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Smart_Library.Entities;
 using Smart_Library.Models;
+using Smart_Library.Services;
 
 namespace Smart_Library.Controllers
 {
@@ -10,18 +9,15 @@ namespace Smart_Library.Controllers
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        public AccountController(ILogger<AccountController> logger, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        private readonly IAccountService _accountService;
+        public AccountController(ILogger<AccountController> logger, IAccountService accountService)
         {
             _logger = logger;
-            _signInManager = signInManager;
-            _userManager = userManager;
+            _accountService = accountService;
         }
         public IActionResult Index()
         {
-            return Redirect("/");
+            return NotFound();
         }
         [Authorize]
         [HttpPost]
@@ -29,7 +25,12 @@ namespace Smart_Library.Controllers
         [Route("Logout")]
         public async Task<IActionResult> Logout(string returnUrl = null!)
         {
-            await _signInManager.SignOutAsync();
+            var LogoutResult = await _accountService.LogoutAsync();
+            if (!LogoutResult.IsSuccess)
+            {
+                TempData["AuthMessage"] = LogoutResult?.ErrorMessage ?? "Đăng xuất thất bại";
+                return RedirectToAction("Index", "Home");
+            }
             return RedirectToAction("Login", "Account", new { returnUrl });
         }
         [HttpGet]
@@ -46,44 +47,25 @@ namespace Smart_Library.Controllers
         }
         [HttpPost]
         [Route("Login")]
-
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
-            try
+            var LoginResult = await _accountService.LoginAsync(loginModel);
+            if (!LoginResult.IsSuccess)
             {
-                var user = await _userManager.FindByEmailAsync(loginModel.Email);
-                if (user == null)
-                {
-                    ModelState.AddModelError(string.Empty, "Thông tin đăng nhập không chính xác");
-                    return View(loginModel);
-                }
-                var result = await _signInManager.PasswordSignInAsync(user, loginModel.Password, loginModel.RememberMe, lockoutOnFailure: true);
-                if (!result.Succeeded)
-                {
-                    if (result.IsLockedOut)
-                    {
-                        ModelState.AddModelError(string.Empty, "Tài khoản của bạn đã bị khóa do đăng nhập sai quá nhiều lần");
-                        return View(loginModel);
-                    }
-                    ModelState.AddModelError(string.Empty, "Thông tin đăng nhập không chính xác");
-                    await _userManager.AccessFailedAsync(user);
-                    return View(loginModel);
-                }
-                TempData["Message"] = "Đăng nhập thành công";
-                TempData["Type"] = "success";
-                if (!string.IsNullOrEmpty(loginModel.ReturnUrl) && Url.IsLocalUrl(loginModel.ReturnUrl))
-                    return Redirect(loginModel.ReturnUrl);
-                var roles = await _userManager.GetRolesAsync(user);
-                if (roles.Contains("Admin"))
-                    return Redirect("/admin");
-                return RedirectToAction("Index", "Home");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Login error at: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"));
-                ModelState.AddModelError(string.Empty, "Lỗi hệ thống, vui lòng thử lại sau!");
+                ModelState.AddModelError(string.Empty, LoginResult?.ErrorMessage ?? "Đăng nhập thất bại");
                 return View(loginModel);
             }
+            TempData["AuthMessage"] = "Đăng nhập thành công";
+            TempData["Type"] = "success";
+            if (LoginResult.Roles != null && LoginResult.Roles.Contains("Quản trị viên") && loginModel.ReturnUrl == "/")
+                return RedirectToAction("Index", "Home", new { area = "Admin" });
+            if (!string.IsNullOrEmpty(loginModel.ReturnUrl) && Url.IsLocalUrl(loginModel.ReturnUrl))
+            {
+                if (LoginResult.Roles != null && !LoginResult.Roles.Contains("Quản trị viên") && loginModel.ReturnUrl.Contains("/admin"))
+                    return RedirectToAction("Index", "Home");
+                return Redirect(loginModel.ReturnUrl);
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }

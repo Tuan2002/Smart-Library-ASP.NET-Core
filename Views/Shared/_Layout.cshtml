@@ -58,7 +58,7 @@
 
 </head>
 
-<body class="layout-dark side-menu">
+<body class="side-menu">
   <partial name="~/Views/Shared/Components/Header/Header.cshtml" />
   <main role="main" class="main-content">
     <div class="sidebar-wrapper">
@@ -120,9 +120,9 @@
           </ul>
         </div>
         <div class="customizer__single">
-          <h4>Kiểu thnah điều hướng</h4>
+          <h4>Kiểu thanh điều hướng</h4>
           <ul class="customizer-list d-flex l_navbar">
-            <li class="customizer-list__item">
+            <li class="customizer-list__item side">
               <a href="#" data-layout="side" class="active">
                 <img src="/img/side.png" alt="" />
                 <i class="fa fa-check-circle"></i>
@@ -141,8 +141,8 @@
     </div>
   </div>
   <footer class="border-top footer text-muted">
-    <div class="container text-center mb-3">
-      &copy; 2023 - Nguyễn Ngọc Anh Tuấn
+    <div class="container p-2 text-center">
+      &copy; 2023 - Tuấn Nguyễn
     </div>
   </footer>
   <!-- inject:js-->
@@ -192,8 +192,28 @@
   <script src="/assets/theme_assets/js/main.js"></script>
   <script src="/assets/js/message.js"></script>
   <script src="/assets/js/script.js"></script>
+  @if (TempData["AuthMessage"] != null)
+  {
+    <script>
+      const messageType = '@TempData["Type"]'
+      let icon = "";
+      switch (messageType) {
+        case 'success':
+          icon = 'check-circle';
+          break;
+        case 'error':
+          icon = 'times-circle';
+          break;
+        case 'warning':
+          icon = 'exclamation-circle';
+          break;
+        default:
+          icon = 'circle-info'
+      }
+      showMessage(messageType, icon, '@TempData["AuthMessage"]?.ToString()')
+    </script>
+  }
   <!-- endinject-->
-  @RenderSection("Scripts", required: false)
 </body>
 
 </html>

@@ -122,9 +122,9 @@
           </ul>
         </div>
         <div class="customizer__single">
-          <h4>Kiểu thnah điều hướng</h4>
+          <h4>Kiểu thanh điều hướng</h4>
           <ul class="customizer-list d-flex l_navbar">
-            <li class="customizer-list__item">
+            <li class="customizer-list__item side">
               <a href="#" data-layout="side" class="active">
                 <img src="/img/side.png" alt="" />
                 <i class="fa fa-check-circle"></i>
@@ -143,8 +143,8 @@
     </div>
   </div>
   <footer class="border-top footer text-muted">
-    <div class="container text-center mb-3">
-      &copy; 2023 - Tuấn Nguyễn - Bùi Phương
+    <div class="container p-2 text-center">
+      &copy; 2023 - Tuấn Nguyễn
     </div>
   </footer>
   <!-- inject:js-->
@@ -178,10 +178,12 @@
   <script src="/assets/vendor_assets/js/muuri.min.js"></script>
   <script src="/assets/vendor_assets/js/notification.js"></script>
   <script src="/assets/vendor_assets/js/popover.js"></script>
-  <script src="/assets/vendor_assets/js/select2.full.min.js"></script>
   <script src="/assets/vendor_assets/js/slick.min.js"></script>
   <script src="/assets/vendor_assets/js/trumbowyg.min.js"></script>
   <script src="/assets/vendor_assets/js/wickedpicker.min.js"></script>
+  <script src="/assets/vendor_assets/js/date-validate.min.js"></script>
+  <script src="/assets/vendor_assets/js/just-validate.min.js"></script>
+  <script src="/assets/vendor_assets/js/xlsx.min.js"></script>
   <script src="/assets/theme_assets/js/apexmain.js"></script>
   <script src="/assets/theme_assets/js/charts.js"></script>
   <script src="/assets/theme_assets/js/drag-drop.js"></script>
@@ -189,14 +191,40 @@
   <script src="/assets/theme_assets/js/full-calendar.js"></script>
   <script src="/assets/theme_assets/js/googlemap-init.js"></script>
   <script src="/assets/theme_assets/js/icon-loader.js"></script>
+  <script src="/assets/vendor_assets/js/select2.full.min.js"></script>
   <script src="/assets/theme_assets/js/jvectormap-init.js"></script>
   <script src="/assets/theme_assets/js/leaflet-init.js"></script>
   <script src="/assets/theme_assets/js/main.js"></script>
+  <script src="/assets/js/select2-searchInputPlaceholder.js"></script>
   <script src="/assets/js/message.js"></script>
   <script src="/assets/js/script.js"></script>
+  @if (TempData["AuthMessage"] != null || TempData["UsersMessage"] != null)
+  {
+    <script>
+      const messageType = '@TempData["Type"]'
+      let icon = "";
+      switch (messageType) {
+        case 'success':
+          icon = 'check-circle';
+          break;
+        case 'error':
+          icon = 'times-circle';
+          break;
+        case 'warning':
+          icon = 'exclamation-circle';
+          break;
+        default:
+          icon = 'circle-info'
+      }
+      showMessage(messageType, icon, '@TempData["AuthMessage"]?.ToString() @TempData["UsersMessage"]?.ToString()')
+    </script>
+  }
   <!-- endinject-->
-  @RenderSection("Scripts", required: false)
-  @RenderSection("Delete", required: false)
+  @RenderSection("Messages", required: false)
+  @RenderSection("TableAction", required: false)
+  @RenderSection("Create", required: false)
+  @RenderSection("EditUser", required: false)
+  @RenderSection("Import", required: false)
 </body>
 
 </html>

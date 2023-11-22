@@ -2,8 +2,12 @@ using System.Net;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Smart_Library.Areas.Admin.Services;
 using Smart_Library.Data;
 using Smart_Library.Entities;
+using Smart_Library.Middleware;
+using Smart_Library.Services;
+using Smart_Library.Utils;
 using static Smart_Library.Config.AppRules;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +19,11 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 // Add services to authentication
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => { options.SignIn.RequireConfirmedAccount = false; })
     .AddEntityFrameworkStores<ApplicationDBContext>();
+// Add services to configure cookie 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.AccessDeniedPath = "/error/403";
+});
 // Add services to configure lockout settings
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -23,6 +32,8 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 });
+// Add services to configure web socket
+builder.Services.AddSingleton<WebSocketHandler>();
 // Add service to compile sass
 #if DEBUG
 builder.Services.AddSassCompiler();
@@ -31,6 +42,14 @@ builder.Services.AddSassCompiler();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDateOnlyTimeOnlyStringConverters();
+// Add services to access HttpContext from custom service
+builder.Services.AddHttpContextAccessor();
+// Add custom application services.
+builder.Services.AddScoped<IUsersManagerService, UsersManagerService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IBooksManagerService, BooksManagerService>();
+builder.Services.AddScoped<IBooksService, BooksService>();
 
 var app = builder.Build();
 var options = new RewriteOptions().Add(new RedirectLowerCaseRule());
@@ -42,35 +61,15 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-// Redirect to login page if user is not authenticated
-app.UseStatusCodePages(async context =>
-{
-    var request = context.HttpContext.Request;
-    var response = context.HttpContext.Response;
-    if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
-    {
-        response.Redirect("/account/login");
-        await Task.CompletedTask;
-        return;
-    }
-    // if (response.StatusCode == (int)HttpStatusCode.NotFound)
-    // {
-    //     response.Redirect("/error/notfound");
-    //     await Task.CompletedTask;
-    // }
-    // if (response.StatusCode == (int)HttpStatusCode.InternalServerError)
-    // {
-    //     response.Redirect("/error/internalservererror");
-    //     await Task.CompletedTask;
-    // }
-});
 app.UseStatusCodePagesWithReExecute("/error/{0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 app.UseAuthentication(); ;
 app.UseAuthorization();
+app.UseMiddleware<ForceSignOutOnLockout>();
+app.UseWebSockets();
+app.UseMiddleware<WebSocketMiddleware>();
 app.MapControllerRoute(
     name: "areas",
     pattern: "{Area:exists}/{controller=Home}/{action=Index}/{id?}"
@@ -79,4 +78,3 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
-

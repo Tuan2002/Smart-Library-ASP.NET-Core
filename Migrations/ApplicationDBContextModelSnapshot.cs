@@ -47,15 +47,6 @@ namespace Smart_Library.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "3055acee-8623-4adb-bcb2-e87716b0df93",
-                            ConcurrencyStamp = "8052d6a6-fe8e-48a1-970a-21a3753b26eb",
-                            Name = "Quản trị viên",
-                            NormalizedName = "QUẢN TRỊ VIÊN"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -143,13 +134,6 @@ namespace Smart_Library.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "b5125355-44e0-4cbf-9a9c-5ea9711afd47",
-                            RoleId = "3055acee-8623-4adb-bcb2-e87716b0df93"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -178,6 +162,9 @@ namespace Smart_Library.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -239,6 +226,9 @@ namespace Smart_Library.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<int>("WorkspaceId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -249,31 +239,57 @@ namespace Smart_Library.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.HasIndex("WorkspaceId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = "b5125355-44e0-4cbf-9a9c-5ea9711afd47",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "1f359da2-4e46-49eb-88fd-45d9ac662d76",
-                            CreatedAt = new DateTime(2023, 10, 29, 13, 0, 51, 348, DateTimeKind.Local).AddTicks(1050),
-                            DateOfBirth = new DateOnly(2002, 7, 2),
-                            Email = "admin@admin.com",
-                            EmailConfirmed = true,
-                            FirstName = "Nguyễn Ngọc Anh",
-                            LastName = "Tuấn",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@ADMIN.COM",
-                            NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGCnY51kORtdXtTOCtgGiXpobahp6eR+Z2yWUkJ1aUW2naspzTZXFbGpF0hkjuMdWg==",
-                            PhoneNumber = "0123456789",
-                            PhoneNumberConfirmed = false,
-                            ProfileImage = "/upload/user-upload/admin.webp",
-                            SecurityStamp = "d7ea7ee0-a436-418c-afa6-7e32054e7fd5",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@admin.com"
-                        });
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Smart_Library.Entities.Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("CategoryId");
+
+                    b.HasIndex("CreatedById");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Smart_Library.Entities.Workspace", b =>
+                {
+                    b.Property<int>("WorkspaceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WorkspaceId"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("WorkspaceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("WorkspaceId");
+
+                    b.ToTable("Workspaces");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -325,6 +341,28 @@ namespace Smart_Library.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Smart_Library.Entities.ApplicationUser", b =>
+                {
+                    b.HasOne("Smart_Library.Entities.Workspace", "Workspace")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Workspace");
+                });
+
+            modelBuilder.Entity("Smart_Library.Entities.Category", b =>
+                {
+                    b.HasOne("Smart_Library.Entities.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
                 });
 #pragma warning restore 612, 618
         }

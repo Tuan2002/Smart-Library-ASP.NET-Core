@@ -1,0 +1,240 @@
+@using Smart_Library.Areas.Admin.Models
+@model IList<ImportUserModel>
+@{
+    ViewData["Title"] = "Kết quả nhập dữ liệu người dùng từ Excel";
+    var totalRecord = Model.Count();
+    var successRecord = Model.Count(user => user.Status == "succeeded");
+    var failRecord = Model.Count(user => user.Status == "failed");
+    var pendingRecord = Model.Count(user => user.Status == "pending");
+}
+<div class="support-ticket mt-1">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-main">
+                    <h4 class="breadcrumb-title">Thống kê kết quả xử lý</h4>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-sm-6  col-ssm-12 mb-30">
+                <!-- Card 1 -->
+                <div class="ap-po-details ap-po-details--ticket radius-xl d-flex justify-content-between">
+                    <div class="overview-content w-100">
+                        <div class="ap-po-details-content d-flex flex-wrap justify-content-between">
+                            <div class="ap-po-details__titlebar total">
+                                <p>Tổng số cần xử lý</p>
+                                <h1>@totalRecord</h1>
+                            </div>
+                            <div class="ap-po-details__icon-area">
+                                <div class="svg-icon order-bg-opacity-primary">
+                                    <img class="svg" src="/img/svg/record.svg" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 1 End  -->
+            </div>
+            <div class="col-xxl-3 col-sm-6  col-ssm-12 mb-30">
+                <!-- Card 2 -->
+                <div class="ap-po-details ap-po-details--ticket radius-xl d-flex justify-content-between">
+                    <div class="overview-content w-100">
+                        <div class=" ap-po-details-content d-flex flex-wrap justify-content-between">
+                            <div class="ap-po-details__titlebar success">
+                                <p>Xử lý thành công</p>
+                                <h1>@successRecord</h1>
+                            </div>
+                            <div class="ap-po-details__icon-area">
+                                <div class="svg-icon order-bg-opacity-success">
+                                    <img class="svg" src="/img/svg/check-circle1.svg" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2 End  -->
+            </div>
+            <div class="col-xxl-3 col-sm-6  col-ssm-12 mb-30">
+                <!-- Card 3 -->
+                <div class="ap-po-details ap-po-details--ticket radius-xl d-flex justify-content-between">
+                    <div class="overview-content w-100">
+                        <div class=" ap-po-details-content d-flex flex-wrap justify-content-between">
+                            <div class="ap-po-details__titlebar error">
+                                <p>Xử lý thất bại</p>
+                                <h1>@failRecord</h1>
+                            </div>
+                            <div class="ap-po-details__icon-area">
+                                <div class="svg-icon order-bg-opacity-danger">
+                                    <img class="svg" src="/img/svg/cancel.svg" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Card 3 End  -->
+            </div>
+            <div class="col-xxl-3 col-sm-6  col-ssm-12 mb-30">
+                <!-- Card 4 -->
+                <div class="ap-po-details ap-po-details--ticket radius-xl d-flex justify-content-between">
+                    <div class="overview-content w-100">
+                        <div class="ap-po-details-content d-flex flex-wrap justify-content-between">
+                            <div class="ap-po-details__titlebar warning">
+                                <p>Đang chờ xử lý</p>
+                                <h1>@pendingRecord</h1>
+                            </div>
+                            <div class="ap-po-details__icon-area">
+                                <div class="svg-icon order-bg-opacity-warning">
+                                    <img class="svg" src="/img/svg/clock-ticket1.svg" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 4 End  -->
+            </div>
+            <div class="col-12">
+                <div class="support-ticket-system">
+                    <div class="breadcrumb-main breadcrumb-main--ticket justify-content-sm-between ">
+                        <div class=" d-flex flex-wrap justify-content-center breadcrumb-main__wrapper">
+                            <div
+                                class="d-flex align-items-center ticket__title justify-content-center me-md-25 mb-md-0 mb-20">
+                                <h4 class="fw-600 breadcrumb-title">Danh sách chi tiết</h4>
+                            </div>
+                        </div>
+                        <div class="action-btn">
+                            <a asp-action="Index" asp-area="Admin" asp-controller="Users"
+                                class="btn btn-primary rounded-pill">
+                                <i class="fa fa-arrow-right"></i>Về trang
+                                quản lý</a>
+                        </div>
+                    </div>
+                    <div class="support-form d-flex justify-content-between align-items-center flex-wrap">
+                        <div class="support-form__input">
+                            <div class="d-flex flex-wrap">
+                                <div class="support-form__input-status">
+                                    <label>Trạng thái:</label>
+                                    <div class="dm-select ">
+                                        <select name="select-search" class="select-search form-control ">
+                                            <option value="all">Tất cả</option>
+                                            <option value="02">Thành công</option>
+                                            <option value="03">Thất bại</option>
+                                            <option value="04">Đang xử lý</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="userDatatable">
+                        <div class="table-responsive">
+                            <table class="table mb-0 table-borderless">
+                                <thead>
+                                    <tr class="userDatatable-header">
+                                        <th>
+                                            <div class="d-flex align-items-center">
+                                                <span class="d-block userDatatable-title">Người dùng</span>
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <span class="d-block userDatatable-title">Email</span>
+                                        </th>
+                                        <th>
+                                            <span class="d-block userDatatable-title">Ngày sinh</span>
+                                        </th>
+                                        <th>
+                                            <span class="d-block userDatatable-title">Nơi làm việc</span>
+                                        </th>
+                                        <th>
+                                            <span class="d-block userDatatable-title">Vai trò</span>
+                                        </th>
+                                        <th>
+                                            <span class="d-block userDatatable-title">Số điện thoại</span>
+                                        </th>
+                                        <th>
+                                            <span class="d-block userDatatable-title text-center">Trạng thái</span>
+                                        </th>
+                                        <th>
+                                            <span class="d-block userDatatable-title text-center">Thông báo</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="userTable-body">
+                                    @foreach (var user in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex">
+                                                    <div class="userDatatable-inline-title">
+                                                        <a href="#" class="text-dark fw-500">
+                                                            <h6>@user?.FirstName?.Trim() @user?.LastName?.Trim()</h6>
+                                                        </a>
+                                                        <p class="d-block mb-0">@user?.GetAddress()</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="userDatatable-content">@user?.Email</div>
+                                            </td>
+                                            <td>
+                                                <div class="userDatatable-content">@user?.DateOfBirth.ToString("dd/MM/yyyy")
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="userDatatable-content">@user?.WorkspaceName</div>
+                                            </td>
+                                            <td>
+                                                <div class="userDatatable-content">@user?.RoleName</div>
+                                            </td>
+                                            <td>
+                                                <div class="userDatatable-content">@user?.Phone</div>
+                                            </td>
+                                            <td>
+                                                <div class="userDatatable-content">
+                                                    @{
+                                                        switch (user?.Status)
+                                                        {
+                                                            case "succeeded":
+                                                                <text>
+                                                                    <span class="bg-opacity-success color-success rounded-pill userDatatable-content-status active px-2 py-3">Thành
+                                                                        công</span>
+                                                                </text>
+                                                                break; // Always break each case
+                                                            case "failed":
+                                                                <text>
+                                                                    <span
+                                                                        class="bg-opacity-danger color-danger rounded-pill userDatatable-content-status active px-2 py-3">Thất
+                                                                        bại
+                                                                    </span>
+                                                                </text>
+                                                                break;
+                                                            default:
+                                                                <text>
+                                                                    <span
+                                                                        class="bg-opacity-warning color-warning rounded-pill userDatatable-content-status active px-2 py-3">Đang chờ
+                                                                    </span>
+                                                                </text>
+                                                                break;
+                                                        }
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @if (user?.Status == "failed") {
+                                                    <span class="d-block text-center userDatatable-content text-danger">@user?.Message</span>
+                                                }
+                                                else {
+                                                    <span class="d-block text-center userDatatable-content ">@user?.Message</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ends: .row -->
+    </div>
+</div>

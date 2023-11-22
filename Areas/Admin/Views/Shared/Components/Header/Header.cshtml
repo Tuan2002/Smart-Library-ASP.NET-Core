@@ -9,7 +9,7 @@
     <nav class="navbar navbar-light">
         <div class="navbar-left">
             <div class="logo-area">
-                <a class="navbar-brand" href="/">
+                <a class="navbar-brand" asp-action="Index" asp-controller="Home" asp-area="">
                     <img class="dark" src="/img/Logo-Hori.png" alt="">
                     <img class="light" src="/img/Logo-Hori-White.png" alt="">
                 </a>
@@ -23,27 +23,17 @@
             <div class="top-menu">
                 <div class="hexadash-top-menu position-relative">
                     <ul class="d-flex align-items-center flex-wrap">
-                        <li class="has-subMenu">
-                            <a href="#" class="active">Trang chủ</a>
-                            <ul class="subMenu">
-                                <li class="active">
-                                    <a href="#">Thống kê</a>
-                                </li>
-                            </ul>
+                        <li>
+                            <a asp-action="Index" asp-controller="Home" asp-area="Admin" asp-active>
+                                <span class="nav-icon uil uil-create-dashboard"></span>
+                                <span class="menu-text">Trang chủ</span>
+                            </a>
                         </li>
-                        <li class="has-subMenu">
-                            <a href="#" class="">Bố cục trang</a>
-                            <ul class="subMenu">
-                                <li class="l_sidebar">
-                                    <a href="#" data-layout="light">Chế độ sáng</a>
-                                </li>
-                                <li class="l_sidebar">
-                                    <a href="#" data-layout="dark">Chế độ tối</a>
-                                </li>
-                                <li class="l_navbar">
-                                    <a href="#" data-layout="side">Giao diện dọc</a>
-                                </li>
-                            </ul>
+                        <li>
+                            <a asp-action="Index" asp-controller="Users" asp-area="Admin" asp-active>
+                                <span class="nav-icon uil uil-users-alt"></span>
+                                <span class="menu-text">Quản lý người dùng</span>
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -58,9 +48,9 @@
                         <i class="uil uil-search"></i>
                         <i class="uil uil-times"></i>
                     </a>
-                    <form action="/" class="search-form-topMenu">
+                    <form action="/" class="search-form-topMenu rounded-pill">
                         <span class="search-icon uil uil-search"></span>
-                        <input class="form-control me-sm-2 box-shadow-none" type="search" placeholder="Search..."
+                        <input class="form-control me-sm-2 box-shadow-none" type="text" placeholder="Tìm kiến..."
                             aria-label="Search">
                     </form>
                 </li>
@@ -71,99 +61,21 @@
                         </a>
                         <div class="dropdown-parent-wrapper">
                             <div class="dropdown-wrapper">
-                                <h2 class="dropdown-wrapper__title">Messages <span
-                                        class="badge-circle badge-success ms-1">2</span></h2>
+                                <h2 class="dropdown-wrapper__title">Tin nhắm</h2>
                                 <ul>
-                                    <li class="author-online has-new-message">
-                                        <div class="user-avater">
-                                            <img src="/img/team-1.png" alt="">
+                                    <div class="card card-default card-md mb-4">
+                                        <div class="card-body">
+                                            <div class="dm-empty text-center">
+                                                <div class="dm-empty__image">
+                                                    <img src="/img/svg/empty.svg" alt="Empty table">
+                                                </div>
+                                                <div class="dm-empty__text">
+                                                    <p class="">Không có tin nhắn nào!</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="user-message">
-                                            <p>
-                                                <a href="" class="subject stretched-link text-truncate"
-                                                    style="max-width: 180px;">Web Design</a>
-                                                <span class="time-posted">3 hrs ago</span>
-                                            </p>
-                                            <p>
-                                                <span class="desc text-truncate" style="max-width: 215px;">Lorem
-                                                    ipsum
-                                                    dolor amet cosec Lorem ipsum</span>
-                                                <span class="msg-count badge-circle badge-success badge-sm">1</span>
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li class="author-offline has-new-message">
-                                        <div class="user-avater">
-                                            <img src="/img/team-1.png" alt="">
-                                        </div>
-                                        <div class="user-message">
-                                            <p>
-                                                <a href="" class="subject stretched-link text-truncate"
-                                                    style="max-width: 180px;">Web Design</a>
-                                                <span class="time-posted">3 hrs ago</span>
-                                            </p>
-                                            <p>
-                                                <span class="desc text-truncate" style="max-width: 215px;">Lorem
-                                                    ipsum
-                                                    dolor amet cosec Lorem ipsum</span>
-                                                <span class="msg-count badge-circle badge-success badge-sm">1</span>
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li class="author-online has-new-message">
-                                        <div class="user-avater">
-                                            <img src="/img/team-1.png" alt="">
-                                        </div>
-                                        <div class="user-message">
-                                            <p>
-                                                <a href="" class="subject stretched-link text-truncate"
-                                                    style="max-width: 180px;">Web Design</a>
-                                                <span class="time-posted">3 hrs ago</span>
-                                            </p>
-                                            <p>
-                                                <span class="desc text-truncate" style="max-width: 215px;">Lorem
-                                                    ipsum
-                                                    dolor amet cosec Lorem ipsum</span>
-                                                <span class="msg-count badge-circle badge-success badge-sm">1</span>
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li class="author-offline">
-                                        <div class="user-avater">
-                                            <img src="/img/team-1.png" alt="">
-                                        </div>
-                                        <div class="user-message">
-                                            <p>
-                                                <a href="" class="subject stretched-link text-truncate"
-                                                    style="max-width: 180px;">Web Design</a>
-                                                <span class="time-posted">3 hrs ago</span>
-                                            </p>
-                                            <p>
-                                                <span class="desc text-truncate" style="max-width: 215px;">Lorem
-                                                    ipsum
-                                                    dolor amet cosec Lorem ipsum</span>
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li class="author-offline">
-                                        <div class="user-avater">
-                                            <img src="/img/team-1.png" alt="">
-                                        </div>
-                                        <div class="user-message">
-                                            <p>
-                                                <a href="" class="subject stretched-link text-truncate"
-                                                    style="max-width: 180px;">Web Design</a>
-                                                <span class="time-posted">3 hrs ago</span>
-                                            </p>
-                                            <p>
-                                                <span class="desc text-truncate" style="max-width: 215px;">Lorem
-                                                    ipsum
-                                                    dolor amet cosec Lorem ipsum</span>
-                                            </p>
-                                        </div>
-                                    </li>
+                                    </div>
                                 </ul>
-                                <a href="" class="dropdown-wrapper__more">See All Message</a>
                             </div>
                         </div>
                     </div>
@@ -176,161 +88,26 @@
                         </a>
                         <div class="dropdown-parent-wrapper">
                             <div class="dropdown-wrapper">
-                                <h2 class="dropdown-wrapper__title">Notifications <span
-                                        class="badge-circle badge-warning ms-1">4</span></h2>
+                                <h2 class="dropdown-wrapper__title">Thông báo</h2>
                                 <ul>
-                                    <li
-                                        class="nav-notification__single nav-notification__single--unread d-flex flex-wrap">
-                                        <div class="nav-notification__type nav-notification__type--primary">
-                                            <img class="svg" src="/img/svg/inbox.svg" alt="inbox">
+                                    <div class="card card-default card-md mb-4">
+                                        <div class="card-body">
+                                            <div class="dm-empty text-center">
+                                                <div class="dm-empty__image">
+                                                    <img src="/img/svg/empty.svg" alt="Empty table">
+                                                </div>
+                                                <div class="dm-empty__text">
+                                                    <p class="">Không có thông báo nào!</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="nav-notification__details">
-                                            <p>
-                                                <a href="" class="subject stretched-link text-truncate"
-                                                    style="max-width: 180px;">James</a>
-                                                <span>sent you a message</span>
-                                            </p>
-                                            <p>
-                                                <span class="time-posted">5 hours ago</span>
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li
-                                        class="nav-notification__single nav-notification__single--unread d-flex flex-wrap">
-                                        <div class="nav-notification__type nav-notification__type--secondary">
-                                            <img class="svg" src="/img/svg/upload.svg" alt="upload">
-                                        </div>
-                                        <div class="nav-notification__details">
-                                            <p>
-                                                <a href="" class="subject stretched-link text-truncate"
-                                                    style="max-width: 180px;">James</a>
-                                                <span>sent you a message</span>
-                                            </p>
-                                            <p>
-                                                <span class="time-posted">5 hours ago</span>
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li
-                                        class="nav-notification__single nav-notification__single--unread d-flex flex-wrap">
-                                        <div class="nav-notification__type nav-notification__type--success">
-                                            <img class="svg" src="/img/svg/log-in.svg" alt="log-in">
-                                        </div>
-                                        <div class="nav-notification__details">
-                                            <p>
-                                                <a href="" class="subject stretched-link text-truncate"
-                                                    style="max-width: 180px;">James</a>
-                                                <span>sent you a message</span>
-                                            </p>
-                                            <p>
-                                                <span class="time-posted">5 hours ago</span>
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li class="nav-notification__single nav-notification__single d-flex flex-wrap">
-                                        <div class="nav-notification__type nav-notification__type--info">
-                                            <img class="svg" src="/img/svg/at-sign.svg" alt="at-sign">
-                                        </div>
-                                        <div class="nav-notification__details">
-                                            <p>
-                                                <a href="" class="subject stretched-link text-truncate"
-                                                    style="max-width: 180px;">James</a>
-                                                <span>sent you a message</span>
-                                            </p>
-                                            <p>
-                                                <span class="time-posted">5 hours ago</span>
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li class="nav-notification__single nav-notification__single d-flex flex-wrap">
-                                        <div class="nav-notification__type nav-notification__type--danger">
-                                            <img src="/img/svg/heart.svg" alt="heart" class="svg">
-                                        </div>
-                                        <div class="nav-notification__details">
-                                            <p>
-                                                <a href="" class="subject stretched-link text-truncate"
-                                                    style="max-width: 180px;">James</a>
-                                                <span>sent you a message</span>
-                                            </p>
-                                            <p>
-                                                <span class="time-posted">5 hours ago</span>
-                                            </p>
-                                        </div>
-                                    </li>
+                                    </div>
                                 </ul>
-                                <a href="" class="dropdown-wrapper__more">See all incoming activity</a>
                             </div>
                         </div>
                     </div>
                 </li>
                 <!-- ends: .nav-notification -->
-                <li class="nav-settings">
-                    <div class="dropdown-custom">
-                        <a href="javascript:;" class="nav-item-toggle">
-                            <img src="/img/setting.png" alt="setting">
-                        </a>
-                        <div class="dropdown-parent-wrapper">
-                            <div class="dropdown-wrapper dropdown-wrapper--large">
-                                <ul class="list-settings">
-                                    <li class="d-flex">
-                                        <div class="me-3"><img src="/img/mail.png" alt=""></div>
-                                        <div class="flex-grow-1">
-                                            <h6>
-                                                <a href="" class="stretched-link">All Features</a>
-                                            </h6>
-                                            <p>Introducing Increment subscriptions </p>
-                                        </div>
-                                    </li>
-                                    <li class="d-flex">
-                                        <div class="me-3"><img src="/img/color-palette.png" alt=""></div>
-                                        <div class="flex-grow-1">
-                                            <h6>
-                                                <a href="" class="stretched-link">Themes</a>
-                                            </h6>
-                                            <p>Third party themes that are compatible</p>
-                                        </div>
-                                    </li>
-                                    <li class="d-flex">
-                                        <div class="me-3"><img src="/img/home.png" alt=""></div>
-                                        <div class="flex-grow-1">
-                                            <h6>
-                                                <a href="" class="stretched-link">Payments</a>
-                                            </h6>
-                                            <p>We handle billions of dollars</p>
-                                        </div>
-                                    </li>
-                                    <li class="d-flex">
-                                        <div class="me-3"><img src="/img/video-camera.png" alt=""></div>
-                                        <div class="flex-grow-1">
-                                            <h6>
-                                                <a href="" class="stretched-link">Design Mockups</a>
-                                            </h6>
-                                            <p>Share planning visuals with clients</p>
-                                        </div>
-                                    </li>
-                                    <li class="d-flex">
-                                        <div class="me-3"><img src="/img/document.png" alt=""></div>
-                                        <div class="flex-grow-1">
-                                            <h6>
-                                                <a href="" class="stretched-link">Content Planner</a>
-                                            </h6>
-                                            <p>Centralize content gethering and editing</p>
-                                        </div>
-                                    </li>
-                                    <li class="d-flex">
-                                        <div class="me-3"><img src="/img/microphone.png" alt=""></div>
-                                        <div class="flex-grow-1">
-                                            <h6>
-                                                <a href="" class="stretched-link">Diagram Maker</a>
-                                            </h6>
-                                            <p>Plan user flows & test scenarios</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </li>
                 <!-- ends: .nav-support -->
                 <li class="nav-flag-select">
                     <div class="dropdown-custom">
@@ -382,7 +159,7 @@
                                             </li>
                                             <li>
                                                 <a href="">
-                                                    <i class="uil uil-setting"></i>Cài đặt ứng dungk</a>
+                                                    <i class="uil uil-setting"></i>Cài đặt ứng dụng</a>
                                             </li>
                                             <li>
                                                 <a href="">

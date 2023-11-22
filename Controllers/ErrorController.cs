@@ -15,13 +15,19 @@ namespace Smart_Library.Controllers
         {
             return Redirect("/");
         }
+        [Route("Locked")]
+        public IActionResult Locked()
+        {
+            return View();
+        }
         [Route("{code}")]
         public IActionResult Error(int code)
         {
             return code switch
             {
-                404 => View("NotFound"),
+                401 => RedirectToAction("Login", "Account"),
                 403 => View("Forbidden"),
+                404 => View("NotFound"),
                 500 => View("InternalServerError"),
                 _ => View("InternalServerError"),
             };

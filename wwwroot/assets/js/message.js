@@ -18,5 +18,5 @@
     let thisMessage = messageCount - 1;
     setTimeout(function(){
       $(document).find(".message-"+thisMessage).remove();
-    },5000);
+    },6000);
   }

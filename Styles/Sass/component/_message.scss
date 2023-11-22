@@ -7,7 +7,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    animation: SlideToBottom ease .5s, HideMessage ease 1s 3s forwards;
+    animation: SlideToBottom ease .7s, HideMessage ease 1s 4s forwards;
 }
 // Pop Message
 .dm-pop-message{
@@ -47,6 +47,15 @@
         }
     }
     &.message-danger{
+        .dm-pop-message__icon{
+            i,
+            svg,
+            span{
+                color:var(--color-danger);
+            }
+        }
+    }
+    &.message-error{
         .dm-pop-message__icon{
             i,
             svg,

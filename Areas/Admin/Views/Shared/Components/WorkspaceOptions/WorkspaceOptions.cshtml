@@ -1,0 +1,8 @@
+@using Smart_Library.Areas.Admin.Models
+@model (List<WorkspaceViewModel> Workspaces, int? selected)
+@foreach (var workspace in Model.Workspaces)
+{
+    bool IsSelected = workspace.WorkspaceId == Model.selected;
+    <option value="@workspace.WorkspaceId" selected="@IsSelected">@workspace.WorkspaceName</option>
+
+}
