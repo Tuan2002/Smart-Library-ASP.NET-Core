@@ -63,6 +63,8 @@ namespace Smart_Library.Controllers
                     return RedirectToAction("Index", "Home");
                 return Redirect(loginModel.ReturnUrl);
             }
+            if (LoginResult.Roles != null && LoginResult.Roles.Contains("Quản trị viên"))
+                return Redirect("/admin");
             return RedirectToAction("Index", "Home");
         }
     }
