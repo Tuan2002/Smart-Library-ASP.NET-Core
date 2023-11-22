@@ -48,6 +48,8 @@ builder.Services.AddHttpContextAccessor();
 // Add custom application services.
 builder.Services.AddScoped<IUsersManagerService, UsersManagerService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IBooksManagerService, BooksManagerService>();
+builder.Services.AddScoped<IBooksService, BooksService>();
 
 var app = builder.Build();
 var options = new RewriteOptions().Add(new RedirectLowerCaseRule());

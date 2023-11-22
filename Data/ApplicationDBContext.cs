@@ -13,7 +13,7 @@ namespace Smart_Library.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            SeedData(modelBuilder);
+            // SeedData(modelBuilder);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -63,5 +63,6 @@ namespace Smart_Library.Data
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(UserRole);
         }
         public DbSet<Workspace> Workspace { get; set; } = null!;
+        public DbSet<Category> Category { get; set; } = null!;
     }
 }

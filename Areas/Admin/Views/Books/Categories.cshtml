@@ -1,0 +1,152 @@
+@using Smart_Library.Models
+@using Smart_Library.Areas.Admin.Models
+@model IList<CategoryViewModel>
+@{
+    ViewData["Title"] = "Quản lý danh mục sách";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="breadcrumb-main user-member justify-content-sm-between ">
+                <div class=" d-flex flex-wrap justify-content-center breadcrumb-main__wrapper">
+                    <div class="d-flex align-items-center user-member__title justify-content-center me-sm-25">
+                        <h4 class="fw-500 breadcrumb-title">Quản lý danh mục sách</h4>
+                    </div>
+                </div>
+                <div class="action-btn d-flex gap-4">
+                    <a class="btn px-15 btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#create-new-category">
+                        <i class="las la-plus fs-16"></i>Thêm danh mục
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="userDatatable global-shadow border-light-0 p-30 bg-white radius-xl w-100 mb-30">
+                <div class="table-responsive">
+                    <table class="table mb-0 table-striped table-hover">
+                        <thead>
+                            <tr class="userDatatable-header radius-xs">
+                                <th>
+                                    <span class="userDatatable-title">ID</span>
+                                </th>
+                                <th>
+                                    <span class="userDatatable-title">TÊN DANH MỤC</span>
+                                </th>
+                                <th>
+                                    <span class="userDatatable-title">NGƯỜI TẠO</span>
+                                </th>
+                                <th>
+                                    <span class="userDatatable-title">THỜI GIAN TẠO</span>
+                                </th>
+                                <th>
+                                    <span class="userDatatable-title">TRẠNG THÁI</span>
+                                </th>
+                                <th class="actions">
+                                    <span class="userDatatable-title float-end">HÀNH ĐỘNG</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var category in Model)
+                            {
+                                <tr class="category-data-container" data-id="@category.CategoryId" data-name="@category.Name" data-visiable="@category.Status">
+                                    <td>@category.CategoryId</td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div class="userDatatable-inline-title">
+                                                <a href="#" class="text-dark fw-500">
+                                                    <h6>@category.Name</h6>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="userDatatable-content--subject">
+                                            @category.CreatedByName
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="userDatatable-content--priority">
+                                            @category.CreatedAt.ToString("HH:mm - dd/MM/yyyy")
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="userDatatable-content d-inline-block">
+                                            @if (!category.Status)
+                                            {
+                                                <span
+                                                    class="bg-opacity-danger color-danger rounded-pill userDatatable-content-status">Tạm ẩn</span>
+                                            }
+                                            else
+                                            {
+                                                <span
+                                                    class="bg-opacity-success color-success rounded-pill userDatatable-content-status active">Hiển
+                                                    thị</span>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <ul class="orderDatatable_actions mb-0 d-flex flex-wrap">
+                                            @if (category.Status)
+                                            {
+                                            <li>
+                                                <a title="Ẩn danh mục" class="view" data-bs-toggle="modal" data-bs-target="#toogle-visiable-category">
+                                                    <i class="uil uil-eye-slash" ></i>
+                                                </a>
+                                            </li>
+                                            }
+                                            else{
+                                            <li>
+                                                <a title="Hiển thị danh mục" class="view" data-bs-toggle="modal" data-bs-target="#toogle-visiable-category">
+                                                    <i class="uil uil-eye"></i>
+                                                </a>
+                                            </li>
+                                            }
+                                            <li>
+                                                <a href="#" class="edit">
+                                                    <i class="uil uil-edit"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="remove">
+                                                    <i class="uil uil-trash-alt"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="./ToogleVisiableCategory.cshtml"/>
+@await Html.PartialAsync("./CreateCategoryModal.cshtml", new CreateCategoryModel())
+ @if (TempData["CategoryMessage"] != null)
+  {
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const messageType = '@TempData["Type"]'
+      let icon = "";
+      switch (messageType) {
+        case 'success':
+          icon = 'check-circle';
+          break;
+        case 'error':
+          icon = 'times-circle';
+          break;
+        case 'warning':
+          icon = 'exclamation-circle';
+          break;
+        default:
+          icon = 'circle-info'
+      }
+      showMessage(messageType, icon, '@TempData["CategoryMessage"]?.ToString()')
+    });
+    </script>
+  }
