@@ -64,5 +64,7 @@ namespace Smart_Library.Data
         }
         public DbSet<Workspace> Workspace { get; set; } = null!;
         public DbSet<Category> Category { get; set; } = null!;
+        public DbSet<SupportType> SupportTypes { get; set; } = null!;
+        public DbSet<SupportTicket> SupportTickets { get; set; } = null!;
     }
 }

@@ -1,0 +1,200 @@
+@using Smart_Library.Areas.Admin.Models
+@model IList<SupportTicketViewModel>
+@{
+    ViewData["Title"] = "Hỗ trợ sinh viên";
+    var total = Model.Count();
+    var success = Model.Where(ticket => ticket.Status).Count();
+    var pending = Model.Where(ticket => !ticket.Status).Count();
+}
+
+<div class="support-ticket mt-1">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-main">
+                    <h4 class="breadcrumb-title">Danh sách yêu cầu hỗ trợ</h4>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-sm-6  col-ssm-12 mb-30">
+                <!-- Card 2 -->
+                <div class="ap-po-details ap-po-details--ticket radius-xl d-flex justify-content-between">
+                    <div class="overview-content w-100">
+                        <div class=" ap-po-details-content d-flex flex-wrap justify-content-between">
+                            <div class="ap-po-details__titlebar total">
+                                <p>Tổng yêu cầu hỗ trợ</p>
+                                <h1>@total</h1>
+                            </div>
+                            <div class="ap-po-details__icon-area">
+                                <div class="svg-icon order-bg-opacity-primary">
+                                    <img class="svg" src="/img/svg/record.svg" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2 End  -->
+            </div>
+            <div class="col-xxl-3 col-sm-6  col-ssm-12 mb-30">
+                <!-- Card 2 -->
+                <div class="ap-po-details ap-po-details--ticket radius-xl d-flex justify-content-between">
+                    <div class="overview-content w-100">
+                        <div class=" ap-po-details-content d-flex flex-wrap justify-content-between">
+                            <div class="ap-po-details__titlebar success">
+                                <p>Yêu cầu đã xử lý</p>
+                                <h1>@success</h1>
+                            </div>
+                            <div class="ap-po-details__icon-area">
+                                <div class="svg-icon order-bg-opacity-success">
+                                    <img class="svg" src="/img/svg/check-circle1.svg" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Card 2 End  -->
+            </div>
+            <div class="col-xxl-3 col-sm-6  col-ssm-12 mb-30">
+                <!-- Card 2 -->
+                <div class="ap-po-details ap-po-details--ticket radius-xl d-flex justify-content-between">
+                    <div class="overview-content w-100">
+                        <div class=" ap-po-details-content d-flex flex-wrap justify-content-between">
+                            <div class="ap-po-details__titlebar warning">
+                                <p>Đang chờ xử lý</p>
+                                <h1>@pending</h1>
+                            </div>
+                            <div class="ap-po-details__icon-area">
+                                <div class="svg-icon order-bg-opacity-warning">
+                                    <img class="svg" src="/img/svg/clock-ticket1.svg" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Card 2 End  -->
+            </div>
+            <div class="col-xxl-3 col-sm-6  col-ssm-12 mb-30">
+                <!-- Card 2 -->
+                <div class="ap-po-details ap-po-details--ticket radius-xl d-flex justify-content-between">
+                    <div class="overview-content w-100">
+                        <div class=" ap-po-details-content d-flex flex-wrap justify-content-between">
+                            <div class="ap-po-details__titlebar error">
+                                <p>Yêu cầu bị từ chối</p>
+                                <h1>0</h1>
+                            </div>
+                            <div class="ap-po-details__icon-area">
+                                <div class="svg-icon order-bg-opacity-danger">
+                                    <img class="svg" src="/img/svg/cancel.svg" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2 End  -->
+            </div>
+            <div class="col-12">
+                <div class="support-ticket-system">
+                    <div class="breadcrumb-main breadcrumb-main--ticket justify-content-sm-between ">
+                        <div class=" d-flex flex-wrap justify-content-center breadcrumb-main__wrapper">
+                            <div class="d-flex align-items-center ticket__title justify-content-center mb-20">
+                                <h4 class="fw-500 breadcrumb-title">Danh sách chi tiết</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="userDatatable userDatatable--ticket mt-1">
+                        <div class="table-responsive">
+                            <table class="table mb-0 table-borderless">
+                                <thead>
+                                    <tr class="userDatatable-header">
+                                        <th>
+                                            <span class="userDatatable-title">ID</span>
+                                        </th>
+                                        <th>
+                                            <span class="userDatatable-title">TÊN NGƯỜI GỬI</span>
+                                        </th>
+                                        <th>
+                                            <span class="userDatatable-title">TIÊU ĐỀ</span>
+                                        </th>
+                                        <th>
+                                            <span class="userDatatable-title">DANH MỤC HỖ TRỢ</span>
+                                        </th>
+                                        <th>
+                                            <span class="userDatatable-title">THỜI GIAN GỬI</span>
+                                        </th>
+                                        <th>
+                                            <span class="userDatatable-title">TÌNH TRẠNG</span>
+                                        </th>
+                                        <th class="actions">
+                                            <span class="userDatatable-title">HÀNH ĐỘNG</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var ticket in Model)
+                                    {
+                                        <tr>
+                                            <td>@ticket.Id</td>
+                                            <td>
+                                                <div class="userDatatable-inline-title">
+                                                    <span class="text-dark fw-500">@ticket.FullName</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="userDatatable-content--subject">
+                                                    @ticket.Title
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="userDatatable-content--priority">
+                                                    <span class="text-dark fw-500">@ticket.FullName</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="userDatatable-content--date">
+                                                    @ticket.CreatedAt.ToString("HH:mm - dd/MM/yyyy")
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="userDatatable-content d-inline-block">
+                                                    @if (ticket.Status)
+                                                    {
+                                                        <span
+                                                            class="bg-opacity-success color-success rounded-pill userDatatable-content-status active">Đã
+                                                            được
+                                                            xử lý</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span
+                                                            class="bg-opacity-warning color-warning rounded-pill userDatatable-content-status active">Đang
+                                                            xử lý</span>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <ul class="orderDatatable_actions mb-0 d-flex flex-wrap">
+                                                    <li>
+                                                        <a href="#" class="view">
+                                                            <i class="uil uil-setting"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="remove">
+                                                            <i class="uil uil-trash-alt"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ends: .row -->
+    </div>
+</div>
