@@ -84,6 +84,36 @@ namespace Smart_Library.Areas.Admin.Controllers
             TempData["Type"] = "error";
             return RedirectToAction("Categories");
         }
+        [HttpPost]
+        [Route("Update/Category")]
+        public async Task<IActionResult> UpdateCategory(string id, string name)
+        {
+            var result = await _booksManagerService.UpdateCategoryAsync(id, name);
+            if (result.IsSuccess)
+            {
+                TempData["CategoryMessage"] = result.Message;
+                TempData["Type"] = "success";
+                return RedirectToAction("Categories");
+            }
+            TempData["CategoryMessage"] = result.Message;
+            TempData["Type"] = "error";
+            return RedirectToAction("Categories");
+        }
+        [HttpPost]
+        [Route("Delete/Category")]
+        public async Task<IActionResult> DeleteCategory(string id)
+        {
+            var result = await _booksManagerService.DeleteCategoryAsync(id);
+            if (result.IsSuccess)
+            {
+                TempData["CategoryMessage"] = result.Message;
+                TempData["Type"] = "success";
+                return RedirectToAction("Categories");
+            }
+            TempData["CategoryMessage"] = result.Message;
+            TempData["Type"] = "error";
+            return RedirectToAction("Categories");
+        }
 
     }
 }

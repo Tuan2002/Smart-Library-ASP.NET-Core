@@ -105,12 +105,12 @@
                                             </li>
                                             }
                                             <li>
-                                                <a href="#" class="edit">
+                                                <a title="Chỉnh sửa danh mục" class="edit" data-bs-toggle="modal" data-bs-target="#update-category">
                                                     <i class="uil uil-edit"></i>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#" class="remove">
+                                                <a title="Xoá danh mục" class="remove" data-bs-toggle="modal" data-bs-target="#delete-category">
                                                     <i class="uil uil-trash-alt"></i>
                                                 </a>
                                             </li>
@@ -126,6 +126,8 @@
     </div>
 </div>
 <partial name="./ToogleVisiableCategory.cshtml"/>
+<partial name="./DeleteCategoryModal.cshtml"/>
+<partial name="./UpdateCategoryModal.cshtml"/>
 @await Html.PartialAsync("./CreateCategoryModal.cshtml", new CreateCategoryModel())
  @if (TempData["CategoryMessage"] != null)
   {
