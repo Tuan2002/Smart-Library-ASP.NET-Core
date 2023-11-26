@@ -60,5 +60,57 @@ namespace Smart_Library.Areas.Admin.Controllers
             }
             return View(TicketInfo);
         }
+        [HttpPost("CompleteTask")]
+        public async Task<IActionResult> CompleteTask(int? id)
+        {
+            var Ticket = await _context.SupportTickets.FindAsync(id);
+            if (Ticket == null)
+            {
+                TempData["SupportMessage"] = "Không tìm thấy yêu cầu hỗ trợ";
+                TempData["Type"] = "error";
+                return RedirectToAction("Index");
+
+            }
+            Ticket.Status = true;
+            _context.Update(Ticket);
+            var IsSuccess = await _context.SaveChangesAsync();
+            if (IsSuccess == 0)
+            {
+                TempData["SupportMessage"] = "Có lỗi xảy ra, vui lòng thử lại sau";
+                TempData["Type"] = "error";
+                return RedirectToAction("Index");
+            }
+            TempData["SupportMessage"] = "Đã hoàn thành yêu cầu hỗ trợ";
+            TempData["Type"] = "success";
+            return RedirectToAction("Index");
+        }
+        [HttpPost("DeleteTask")]
+        public async Task<IActionResult> DeleteTask(int? id)
+        {
+            try
+            {
+
+                var Ticket = await _context.SupportTickets.FindAsync(id);
+                if (Ticket == null)
+                {
+                    TempData["SupportMessage"] = "Không tìm thấy yêu cầu hỗ trợ";
+                    TempData["Type"] = "error";
+                    return RedirectToAction("Index");
+
+                }
+                _context.Remove(Ticket);
+                await _context.SaveChangesAsync();
+                TempData["SupportMessage"] = "Đã xoá yêu cầu hỗ trợ";
+                TempData["Type"] = "success";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                TempData["SupportMessage"] = "Có lỗi xảy ra, vui lòng thử lại sau";
+                TempData["Type"] = "error";
+                return RedirectToAction("Index");
+            }
+        }
     }
 }
