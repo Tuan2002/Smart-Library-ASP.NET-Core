@@ -1,5 +1,6 @@
 .message-wrapper{
     opacity: 1;
+    z-index: 999;
     position: fixed;
     top: 120px;
     left: 50%;
@@ -7,10 +8,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    animation: SlideToBottom ease .7s, HideMessage ease 1s 4s forwards;
 }
 // Pop Message
 .dm-pop-message{
+    animation: SlideToBottom ease .7s, HideMessage ease 1s 4s forwards;
     min-width: 200px;
     margin-bottom: 15px;
     width: fit-content;
@@ -83,19 +84,19 @@
 @keyframes SlideToBottom {
     from {
         opacity: 0;
-        transform: translate(-50%, -120px);
+        transform: translateY(-120px);
     }
     to {
         opacity: 1;
-        transform: translate(-50%, 0);
+        transform: translateY(0);
     }
 }
 @keyframes HideMessage {
     from {
-        transform: translate(-50%, 0);
+        transform: translateY(0);
     }
     to {
         opacity: 0;
-        transform: translate(-50%, -120px);
+        transform: translateY(-120px);
     }
 }

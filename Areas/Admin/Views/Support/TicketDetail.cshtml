@@ -1,0 +1,125 @@
+@using Smart_Library.Areas.Admin.Models
+@model SupportTicketViewModel
+@{
+    ViewData["Title"] = @Model.Title;
+}
+
+<div class="support-details mt-20">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 mb-30">
+                <div class="ticket-details-contact">
+                    <h4>@Model.Title</h4>
+                    <div class="ticket-details-contact__ift justify-content-start hstack gap-50">
+                        <div>
+                            <span class="ticket-details-contact__ift-rule">Người yêu cầu</span>
+                            <div class="ticket-details-contact__ift-namTitle">
+                                <h6>@Model.FullName</h6>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="ticket-details-contact__ift-rule">Ngày gửi</span>
+                            <div class="ticket-details-contact__ift-namTitle">
+                                <h6>@Model.CreatedAt.ToString("dd/MM/yyyy")</h6>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="ticket-details-contact__ift-rule">Số điện thoại</span>
+                            <div class="ticket-details-contact__ift-namTitle">
+                                <h6>@Model.Phone</h6>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="ticket-details-contact__ift-rule">Ngành học hiện tại</span>
+                            <div class="ticket-details-contact__ift-namTitle">
+                                <h6>@Model.StudyMajor</h6>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="ticket-details-contact__ift-rule">Khoá đào tạo</span>
+                            <div class="ticket-details-contact__ift-namTitle">
+                                <h6>@Model.StudyGrade</h6>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="ticket-details-contact__ift-rule">Trình độ tiếng anh</span>
+                            <div class="ticket-details-contact__ift-namTitle">
+                                @{
+                                    var englishLevel = Model.EnglishLevel ?? "Không có";
+                                    <h6>@englishLevel</h6>
+                                }
+                            </div>
+                        </div>
+                        <div>
+                            <span class="ticket-details-contact__ift-rule">Danh mục</span>
+                            <div class="ticket-details-contact__ift-namTitle">
+                                <h6>@Model.SupportType</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex ticket-details-contact__ift mt-3 gap-20 align-content-center">
+                        <p class="ticket-details-contact__ift-rule mb-0 d-block">Trạng thái: </p>
+                        @if (Model.Status)
+                        {
+                            <span class="bg-opacity-success color-success rounded-pill userDatatable-content-status">Đã
+                                xử lý</span>
+                        }
+                        else
+                        {
+                            <span class="bg-opacity-warning color-warning rounded-pill userDatatable-content-status">Đang
+                                chờ
+                                xử lý</span>
+                        }
+
+                    </div>
+                    <div class="ticket-details-contact__overview mt-20">
+                        <h4 class="ticket-details-contact__overview-title">Mô tả yêu cầu</h4>
+                        <p>@Model.RequestDescription</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mb-50">
+                <div class="ticket-chat-wrapper pt-25 pb-30">
+                    <h4>Thảo luận</h4>
+                    <div class="ticket-search-body">
+                        <ul class="ticket-user-list pe-15">
+                            <div class="card card-default card-md mb-4">
+                                <div class="card-body">
+                                    <div class="dm-empty text-center">
+                                        <div class="dm-empty__image">
+                                            <img src="/img/svg/empty.svg" alt="Empty table">
+                                        </div>
+                                        <div class="dm-empty__text">
+                                            <p class="">Không có bình luận nào!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ul>
+                    </div><!-- Ends: .search-body -->
+                    <div class="ticket-search-header">
+                        <form action="/" class="d-flex align-items-center">
+                            <img class="svg" src="/img/svg/smile.svg" alt="smile">
+                            <input class="form-control me-sm-2 border-0 box-shadow-none" type="search"
+                                placeholder="Viết gì đó về yêu cầu này..." aria-label="Search">
+                        </form>
+                        <button type="button" class="border-0 btn-primary wh-50 p-10 rounded-circle" id="commnent-btn">
+                            <img class="svg" src="/img/svg/send.svg" alt="send">
+                        </button>
+                    </div>
+                    <!-- Ends: .search-tab -->
+                </div>
+            </div>
+        </div>
+        <!-- ends: .row -->
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const commentBtn = document.getElementById("commnent-btn");
+        commentBtn.addEventListener("click", function () {
+            console.log("click");
+            showMessage('warning', 'exclamation-circle', 'Chức năng đang trong quá trình phát triển')
+        });
+    });
+</script>

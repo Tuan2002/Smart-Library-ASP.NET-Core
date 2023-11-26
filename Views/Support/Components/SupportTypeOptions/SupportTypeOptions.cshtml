@@ -1,0 +1,7 @@
+@using Smart_Library.Entities
+@model IList<SupportType>
+
+@foreach (var item in Model)
+{
+    <option value="@item.Id">@item.Name</option>
+}

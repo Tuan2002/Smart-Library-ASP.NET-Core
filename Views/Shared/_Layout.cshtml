@@ -171,6 +171,7 @@
   <script src="/assets/vendor_assets/js/jquery.magnific-popup.min.js"></script>
   <script src="/assets/vendor_assets/js/jquery.peity.min.js"></script>
   <script src="/assets/vendor_assets/js/jquery.star-rating-svg.min.js"></script>
+  <script src="/assets/vendor_assets/js/just-validate.min.js"></script>
   <script src="/assets/vendor_assets/js/leaflet.js"></script>
   <script src="/assets/vendor_assets/js/leaflet.markercluster.js"></script>
   <script src="/assets/vendor_assets/js/loader.js"></script>
@@ -192,8 +193,10 @@
   <script src="/assets/theme_assets/js/jvectormap-init.js"></script>
   <script src="/assets/theme_assets/js/leaflet-init.js"></script>
   <script src="/assets/theme_assets/js/main.js"></script>
+  <script src="/assets/js/select2-searchInputPlaceholder.js"></script>
   <script src="/assets/js/message.js"></script>
   <script src="/assets/js/script.js"></script>
+  @RenderSection("Create", required: false)
   @if (TempData["AuthMessage"] != null)
   {
     <script>

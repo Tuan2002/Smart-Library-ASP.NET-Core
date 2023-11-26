@@ -1,0 +1,80 @@
+@model CreateTicketModel
+@{
+    ViewData["Title"] = "Thông báo kết quả";
+    string? status = TempData["Status"]?.ToString();
+}
+
+<div class="dm-page-content mt-20">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="dm-notice">
+                    <div class="card card-default card-md mb-4">
+                        <div class="card-header d-flex justify-content-center">
+                            <h6 class="text-center">Thông báo kết quả</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="dm-notice__content">
+                                <div class="dm-notice__top text-center">
+                                    @if (status == "success")
+                                    {
+                                        <div class="dm-notice__icon bg-success">
+                                            <i class="fas fa-check color-white"></i>
+                                        </div>
+                                        <div class="dm-notice__text">
+                                            <h4>Hệ thống đã tiếp nhận yêu cầu của bạn!</h4>
+                                            <ul>
+                                                <li>Chúng tôi sẽ xử lý yêu cầu của bạn trong thời gian sớm nhất.</li>
+                                                <li>Chúng tôi sẽ thông báo kết quả qua email hoặc điện thoại cho bạn.</li>
+                                                <li>
+                                                    <div class="mt-2">
+                                                        <span class="fs-14 fw-600 color-dark">Tiêu đề</span>
+                                                        <p class="mt-0">@Model.Title</p>
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <span class="fs-14 fw-600 color-dark">Họ và tên</span>
+                                                        <p class="mt-0">@Model.FullName</p>
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <span class="fs-14 fw-600 color-dark">Số điện thoại</span>
+                                                        <p class="mt-0">@Model.Phone</p>
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <span class="fs-14 fw-600 color-dark">Ngành học</span>
+                                                        <p class="mt-0">@Model.StudyMajor</p>
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <span class="fs-14 fw-600 color-dark">Khoá học</span>
+                                                        <p class="mt-0">@Model.StudyGrade</p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="dm-notice__icon bg-danger">
+                                            <i class="fas fa-times color-white"></i>
+                                        </div>
+                                        <div class="dm-notice__text">
+                                            <h4>Yêu cầu của bạn đã bị từ chối!</h4>
+                                            <ul>
+                                                <li>Vui lòng kiểm tra lại thông tin và thử lại</li>
+                                                <li>Nếu vẫn tiếp tục gặp sự cố, liên hệ với chúng tôi để được hỗ trợ</li>
+                                            </ul>
+                                        </div>
+                                    }
+                                    <div class="mt-3 text-center d-flex justify-content-center">
+                                        <a href="/" class="btn btn-default btn-primary rounded-pill">Quay về trang
+                                            chủ</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- ends: .card -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

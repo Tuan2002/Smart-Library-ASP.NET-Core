@@ -147,7 +147,7 @@
                                             </td>
                                             <td>
                                                 <div class="userDatatable-content--priority">
-                                                    <span class="text-dark fw-500">@ticket.FullName</span>
+                                                    <span class="text-dark fw-500">@ticket.SupportType</span>
                                                 </div>
                                             </td>
                                             <td>
@@ -168,6 +168,7 @@
                                                     {
                                                         <span
                                                             class="bg-opacity-warning color-warning rounded-pill userDatatable-content-status active">Đang
+                                                            chờ
                                                             xử lý</span>
                                                     }
                                                 </div>
@@ -175,10 +176,20 @@
                                             <td>
                                                 <ul class="orderDatatable_actions mb-0 d-flex flex-wrap">
                                                     <li>
-                                                        <a href="#" class="view">
-                                                            <i class="uil uil-setting"></i>
+                                                        <a title="Xem chi tiết" asp-action="TicketDetail"
+                                                            asp-controller="Support" asp-area="Admin"
+                                                            asp-route-id="@ticket.Id" class="view">
+                                                            <i class="uil uil-eye"></i>
                                                         </a>
                                                     </li>
+                                                    @if (!ticket.Status)
+                                                    {
+                                                        <li>
+                                                            <a title="Hoàn thành" href="#" class="unlock">
+                                                                <i class="uil uil-check"></i>
+                                                            </a>
+                                                        </li>
+                                                    }
                                                     <li>
                                                         <a href="#" class="remove">
                                                             <i class="uil uil-trash-alt"></i>

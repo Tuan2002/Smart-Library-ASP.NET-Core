@@ -20,7 +20,6 @@ namespace Smart_Library.Entities
         [ForeignKey("SupportTypeId")]
         public int SupportTypeId { get; set; }
         public virtual SupportType SupportType { get; set; } = null!;
-        public int Type { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

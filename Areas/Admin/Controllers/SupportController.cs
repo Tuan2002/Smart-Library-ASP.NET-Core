@@ -18,7 +18,7 @@ namespace Smart_Library.Areas.Admin.Controllers
             _logger = logger;
             _context = context;
         }
-
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var TicketList = await _context.SupportTickets.Select(ticket => new SupportTicketViewModel
@@ -36,6 +36,29 @@ namespace Smart_Library.Areas.Admin.Controllers
                 CreatedAt = ticket.CreatedAt
             }).ToListAsync();
             return View(TicketList);
+        }
+        [HttpGet("{id:int}/view")]
+        public async Task<IActionResult> TicketDetail(int? id)
+        {
+            var TicketInfo = await _context.SupportTickets.Where(ticket => ticket.Id == id).Select(ticket => new SupportTicketViewModel
+            {
+                Id = ticket.Id,
+                Title = ticket.Title,
+                FullName = ticket.FullName,
+                Phone = ticket.Phone,
+                RequestDescription = ticket.RequestDescription,
+                StudyMajor = ticket.StudyMajor,
+                StudyGrade = ticket.StudyGrade,
+                EnglishLevel = ticket.EnglishLevel,
+                SupportType = ticket.SupportType.Name,
+                Status = ticket.Status,
+                CreatedAt = ticket.CreatedAt
+            }).FirstOrDefaultAsync();
+            if (TicketInfo == null)
+            {
+                return NotFound();
+            }
+            return View(TicketInfo);
         }
     }
 }

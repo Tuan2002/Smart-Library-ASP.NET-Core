@@ -1,0 +1,157 @@
+@model Smart_Library.Models.CreateTicketModel
+@{
+    ViewData["Title"] = "Gửi yêu cầu hỗ trợ";
+}
+<div class="container-xl">
+    <div class="row text-center">
+        <div class="col-lg-12">
+            <div class="d-flex align-items-center justify-content-center user-member__title mb-30 mt-30">
+                <h4 class="fw-600">Gửi yêu câu hỗ trợ</h4>
+            </div>
+        </div>
+    </div>
+    <div class="card p-30">
+        <div class="row justify-content-start">
+            <form asp-action="CreateTicket" id="create-ticket-form" asp-controller="Support" method="POST">
+                @Html.AntiForgeryToken()
+                <div class="col-12">
+                    <div class="edit-profile__body">
+                        <div class="row d-flex justify-content-start">
+                            <div class="col-lg-6 col-sm-12 p-20">
+                                <div class="form-group mb-25">
+                                    <label asp-for="Title">Tiêu đề yêu cầu</label>
+                                    <input asp-for="Title" type="email" class="form-control" id="title"
+                                        placeholder="Nhập tiêu đề">
+                                </div>
+                                <div class="form-group mb-25">
+                                    <label asp-for="FullName">Họ và tên</label>
+                                    <input asp-for="FullName" type="email" class="form-control" id="full-name"
+                                        placeholder="Nhập họ và tên">
+                                </div>
+                                <div class="form-group mb-25">
+                                    <label asp-for="Phone">Số điện thoại</label>
+                                    <input asp-for="Phone" type="text" class="form-control" id="phone-number"
+                                        placeholder="Số điện thoại">
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="RequestDescription">Mô tả chi tiết</label>
+                                    <textarea asp-for="RequestDescription"
+                                        placeholder="Viết mô tả chi tiết yêu cầu của bạn" id="description"
+                                        class="form-control" rows="4"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-12 p-20">
+
+                                <div class="form-group mb-25">
+                                    <label asp-for="StudyMajor">Ngành học hiện tại</label>
+                                    <input asp-for="StudyMajor" type="text" class="form-control" id="current-major"
+                                        placeholder="Nhập ngành học hiện tại">
+                                </div>
+                                <div class="form-group mb-25">
+                                    <label asp-for="StudyGrade">Khoá đào tạo</label>
+                                    <input asp-for="StudyGrade" type="text" class="form-control" id="current-course"
+                                        placeholder="Nhập khoá đào tạo hiện tại">
+                                </div>
+                                <div class="form-group mb-25">
+                                    <label asp-for="StudyGrade">Trình độ tiếng anh (nếu có)</label>
+                                    <input asp-for="StudyGrade" type="text" class="form-control" id="current-course"
+                                        placeholder="Nhập trình độ tiếng anh">
+                                </div>
+                                <div class="form-group mb-25">
+                                    <div class="role-option">
+                                        <label asp-for="SupportTypeId">
+                                            <span class="mr-10">Chọn loại yêu cầu</span>
+                                        </label>
+                                        <select role="select" id="support-type" asp-for="SupportTypeId"
+                                            class="js-example-basic-single js-states form-control select2-results__option"
+                                            data-select2-id="support-type" tabindex="-1" aria-hidden="true">
+                                            @await Component.InvokeAsync("SupportTypeOptions")
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div asp-validation-summary="ModelOnly" id="form-message"
+                            class="text-center text-danger error-message text-small">
+                        </div>
+                    </div>
+                    <div class="button-group pt-25 gap-3 d-flex justify-content-center">
+                        <a href="/" class="btn btn-lg btn-light rounded-pill">Quay về</a>
+                        <button type="submit" class="btn btn-lg btn-primary rounded-pill shadow2">Gửi yêu cầu
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Create {
+    <script>
+        const formMessage = document.querySelector('#form-message');
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+
+        // Validate form
+        const validator = new JustValidate('#create-ticket-form', {
+            validateBeforeSubmitting: true,
+        });
+        validator.addField('#title', [
+            {
+                rule: 'required',
+                errorMessage: 'Trường này không được để trống',
+            },
+        ]);
+        validator.addField('#full-name', [
+            {
+                rule: 'required',
+                errorMessage: 'Trường này không được để trống',
+            },
+            {
+                rule: 'minLength',
+                errorMessage: 'Họ tên phải có ít nhất 4 ký tự',
+                value: 4,
+            }
+        ]);
+        validator.addField('#current-major', [
+            {
+                rule: 'required',
+                errorMessage: 'Trường này không được để trống',
+            },
+        ]);
+        validator.addField('#current-course', [
+            {
+                rule: 'required',
+                errorMessage: 'Trường này không được để trống',
+            },
+        ]);
+        validator.addField('#description', [
+            {
+                rule: 'required',
+                errorMessage: 'Trường này không được để trống',
+            },
+        ]);
+        validator.addField('#phone-number', [
+            {
+                rule: 'required',
+                errorMessage: 'Trường này không được để trống',
+            },
+            {
+                rule: 'integer',
+                errorMessage: 'Trường này chỉ được nhập số',
+                value: 2,
+            },
+        ]);
+        validator.onSuccess(function () {
+            $("#create-ticket-form").submit();
+        });
+        validator.onValidate(function () {
+            if (formMessage && formMessage.textContent !== "") {
+                formMessage.textContent = "";
+            }
+        });
+
+    </script>
+}
