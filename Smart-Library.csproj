@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Smart_Library</RootNamespace>
+    <UserSecretsId>4c7d703f-dd5e-4fdc-a693-2a28056b2823</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

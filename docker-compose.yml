@@ -1,0 +1,24 @@
+version: "3.8"
+services:
+    app:
+        image: smart-library
+        ports:
+        - "8000:80"
+        - "8001:443"
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Development
+          - ASPNETCORE_URLS=https://+:443;http://+:80
+          - ASPNETCORE_Kestrel__Certificates__Default__Password=Tuandev2002
+          - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/smart-library.pfx
+        volumes:
+          - ~/.aspnet/https:/https:ro
+        depends_on:
+          - database
+    database:
+        image: "mcr.microsoft.com/mssql/server:latest"
+        container_name: "stage-database"
+        ports:
+          - "1450:1433"
+        environment:
+            SA_PASSWORD: "Tuandev2002"
+            ACCEPT_EULA: "Y"
