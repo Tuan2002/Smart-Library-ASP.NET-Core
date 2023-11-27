@@ -2,6 +2,7 @@ version: "3.8"
 services:
     app:
         image: smart-library
+        container_name: "smart-library-web"
         ports:
         - "8000:80"
         - "8001:443"
