@@ -198,7 +198,7 @@
   <script src="/assets/js/select2-searchInputPlaceholder.js"></script>
   <script src="/assets/js/message.js"></script>
   <script src="/assets/js/script.js"></script>
-  @if (TempData["AuthMessage"] != null || TempData["UsersMessage"] != null)
+  @if (TempData["AuthMessage"] != null)
   {
     <script>
       const messageType = '@TempData["Type"]'
@@ -216,7 +216,49 @@
         default:
           icon = 'circle-info'
       }
-      showMessage(messageType, icon, '@TempData["AuthMessage"]?.ToString() @TempData["UsersMessage"]?.ToString()')
+      showMessage(messageType, icon, '@TempData["AuthMessage"]?.ToString()')
+    </script>
+  }
+  @if (TempData["UsersMessage"] != null)
+  {
+    <script>
+      const messageType = '@TempData["Type"]'
+      let icon = "";
+      switch (messageType) {
+        case 'success':
+          icon = 'check-circle';
+          break;
+        case 'error':
+          icon = 'times-circle';
+          break;
+        case 'warning':
+          icon = 'exclamation-circle';
+          break;
+        default:
+          icon = 'circle-info'
+      }
+      showMessage(messageType, icon, '@TempData["UsersMessage"]?.ToString()')
+    </script>
+  }
+  @if (TempData["SystemMessage"] != null)
+  {
+    <script>
+      const messageType = '@TempData["Type"]'
+      let icon = "";
+      switch (messageType) {
+        case 'success':
+          icon = 'check-circle';
+          break;
+        case 'error':
+          icon = 'times-circle';
+          break;
+        case 'warning':
+          icon = 'exclamation-circle';
+          break;
+        default:
+          icon = 'circle-info'
+      }
+      showMessage(messageType, icon, '@TempData["SystemMessage"]?.ToString()')
     </script>
   }
   <!-- endinject-->

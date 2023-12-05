@@ -2,12 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Smart_Library.Data;
 using Smart_Library.Models;
+using Smart_Library.Utils;
 
 namespace Smart_Library.Services
 {
     public interface IBooksService
     {
-        Task<List<CategoryViewModel>> GetCategoriesAsync();
+        Task<ActionResponse> GetCategoriesAsync();
     }
     internal class ActionStatus
     {
@@ -16,7 +17,6 @@ namespace Smart_Library.Services
     }
     public class BooksService : IBooksService
     {
-
         public readonly ApplicationDBContext _context;
         public readonly ILogger<BooksService> _logger;
         public BooksService(ApplicationDBContext context, ILogger<BooksService> logger)
@@ -24,27 +24,35 @@ namespace Smart_Library.Services
             _context = context;
             _logger = logger;
         }
-        public async Task<List<CategoryViewModel>> GetCategoriesAsync()
+        public async Task<ActionResponse> GetCategoriesAsync()
         {
             try
             {
-                var categories = await (
-                from category in _context.Category
-                select new CategoryViewModel
+                var categories = await _context.Category.AsQueryable()
+                .Where(category => category.Status == true)
+                .Select(category => new CategoryViewModel()
                 {
                     CategoryId = category.CategoryId,
                     Name = category.Name,
                     CreatedAt = category.CreatedAt,
-                    CreatedById = category.CreatedById,
-                    CreatedByName = category.CreatedBy.FirstName + " " + category.CreatedBy.LastName,
+                    CreatedByName = category.CreatedBy.FirstName + " " + category.CreatedBy.FirstName,
                     Status = category.Status
                 }).ToListAsync();
-                return categories;
+                return new ActionResponse()
+                {
+                    IsSuccess = true,
+                    Message = "Lấy danh mục thành công",
+                    Data = categories as List<CategoryViewModel>
+                };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return null!;
+                return new ActionResponse()
+                {
+                    IsSuccess = false,
+                    Message = "Không thể lấy danh mục"
+                };
             }
         }
 

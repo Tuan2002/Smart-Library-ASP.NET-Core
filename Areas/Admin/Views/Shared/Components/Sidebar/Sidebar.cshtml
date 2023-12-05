@@ -13,6 +13,12 @@
                     <span class="menu-text">Quản lý người dùng</span>
                 </a>
             </li>
+            <li>
+                <a asp-action="Index" asp-active asp-controller="Authors" asp-area="Admin">
+                    <span class="nav-icon uil uil-users-alt"></span>
+                    <span class="menu-text">Quản lý tác giả</span>
+                </a>
+            </li>
             <li
                 class="has-child user-select-none  @(ViewContext.RouteData.Values["controller"]?.ToString() == "Books" && ViewContext.RouteData.Values["Area"]?.ToString() == "Admin" ? "open" : "")">
                 <a role="button" asp-action="Index" asp-controller="Books" asp-area="Admin" asp-active>

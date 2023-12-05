@@ -49,6 +49,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUsersManagerService, UsersManagerService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IBooksManagerService, BooksManagerService>();
+builder.Services.AddScoped<IAuthorsManagerService, AuthorsManagerService>();
+builder.Services.AddScoped<ICategoriesManagerService, CategoriesManagerService>();
 builder.Services.AddScoped<IBooksService, BooksService>();
 
 var app = builder.Build();

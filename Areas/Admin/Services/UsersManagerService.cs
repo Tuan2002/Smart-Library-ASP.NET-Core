@@ -9,13 +9,13 @@ namespace Smart_Library.Areas.Admin.Services
 {
     public interface IUsersManagerService
     {
-        Task<IEnumerable<UserViewModel>> GetUsersListAsync();
-        Task<ActionMessage> CreateUserAsync(CreateUserModel user);
-        Task<ActionMessage> UpdateUserAsync(string id, EditUserModel user);
+        Task<ActionResponse> GetUsersListAsync(int? page, int? pageSize);
+        Task<ActionResponse> CreateUserAsync(CreateUserModel user);
+        Task<ActionResponse> UpdateUserAsync(string id, EditUserModel user);
         Task<UserViewModel> GetUserByIdAsync(string userId);
-        Task<ActionMessage> LockoutUserAsync(string userId);
-        Task<ActionMessage> UnlockUserAsync(string userId);
-        Task<ActionMessage> DeleteUserAsync(string userId);
+        Task<ActionResponse> LockoutUserAsync(string userId);
+        Task<ActionResponse> UnlockUserAsync(string userId);
+        Task<ActionResponse> DeleteUserAsync(string userId);
         Task<List<ImportUserModel>?> ImportMultiUserAsync(List<ImportUserModel>? users);
     }
     public class UsersManagerService : IUsersManagerService
@@ -31,13 +31,17 @@ namespace Smart_Library.Areas.Admin.Services
             _context = context;
             _httpContextAccessor = httpContext;
         }
-        public async Task<IEnumerable<UserViewModel>> GetUsersListAsync()
+        public async Task<ActionResponse> GetUsersListAsync(int? page, int? pageSize)
         {
-            var users = await _userManager.Users.ToListAsync();
-            var UserList = new List<UserViewModel>();
-            foreach (var user in users)
+            try
             {
-                var UserInfo = new UserViewModel
+                var currentPage = page ?? 1;
+                var currentPageSize = pageSize ?? 10;
+                var query = _userManager.Users.AsQueryable();
+                var totalUsers = await query.CountAsync();
+                var totalPages = (int)Math.Ceiling((double)totalUsers / currentPageSize);
+                var result = await query.Skip((currentPage - 1) * currentPageSize).Take(currentPageSize).ToListAsync();
+                var users = result.Select(user => new UserViewModel
                 {
                     Id = user.Id,
                     Email = user.Email,
@@ -45,14 +49,38 @@ namespace Smart_Library.Areas.Admin.Services
                     LastName = user.LastName,
                     ProfileImage = user.ProfileImage,
                     Address = user.Address,
+                    Phone = user.PhoneNumber,
+                    DateOfBirth = user.DateOfBirth,
+                    WorkspaceId = user.WorkspaceId,
                     WorkspaceName = user.Workspace.WorkspaceName,
                     Role = _userManager.GetRolesAsync(user).Result.FirstOrDefault(),
                     CreatedAt = user.CreatedAt,
                     IsLocked = _userManager.IsLockedOutAsync(user).Result
+                }).ToList();
+                return new ActionResponse
+                {
+                    IsSuccess = true,
+                    Message = "Lấy danh sách người dùng thành công",
+                    Data = new
+                    {
+                        users,
+                        totalPages,
+                        currentPage,
+                        currentPageSize,
+                        totalUsers
+                    }
                 };
-                UserList.Add(UserInfo);
             }
-            return UserList;
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new ActionResponse
+                {
+                    IsSuccess = false,
+                    Message = "Không thể lấy danh sách người dùng"
+                };
+            }
+
         }
         public async Task<UserViewModel> GetUserByIdAsync(string userId)
         {
@@ -86,14 +114,14 @@ namespace Smart_Library.Areas.Admin.Services
                 return null!;
             }
         }
-        public async Task<ActionMessage> UpdateUserAsync(string id, EditUserModel user)
+        public async Task<ActionResponse> UpdateUserAsync(string id, EditUserModel user)
         {
             try
             {
                 var CurrentUser = await _userManager.FindByIdAsync(id);
                 if (CurrentUser is null)
                 {
-                    return new ActionMessage
+                    return new ActionResponse
                     {
                         IsSuccess = false,
                         Message = "Người dùng không tồn tại"
@@ -117,7 +145,7 @@ namespace Smart_Library.Areas.Admin.Services
                     var AddRole = await _userManager.AddToRoleAsync(CurrentUser, user.RoleName);
                     if (!AddRole.Succeeded)
                     {
-                        return new ActionMessage
+                        return new ActionResponse
                         {
                             IsSuccess = false,
                             Message = "Không thể cập nhật thông tin người dùng"
@@ -127,13 +155,13 @@ namespace Smart_Library.Areas.Admin.Services
                 var Result = await _userManager.UpdateAsync(CurrentUser);
                 if (!Result.Succeeded)
                 {
-                    return new ActionMessage
+                    return new ActionResponse
                     {
                         IsSuccess = false,
                         Message = "Không thể cập nhật thông tin người dùng"
                     };
                 }
-                return new ActionMessage
+                return new ActionResponse
                 {
                     IsSuccess = true,
                     Message = "Cập nhật thông tin người dùng thành công"
@@ -142,19 +170,19 @@ namespace Smart_Library.Areas.Admin.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return new ActionMessage
+                return new ActionResponse
                 {
                     IsSuccess = false,
                     Message = "Không thể cập nhật thông tin người dùng"
                 };
             }
         }
-        public async Task<ActionMessage> CreateUserAsync(CreateUserModel user)
+        public async Task<ActionResponse> CreateUserAsync(CreateUserModel user)
         {
             var IsEmailUsed = await _userManager.FindByEmailAsync(user.Email);
             if (IsEmailUsed != null)
             {
-                return new ActionMessage
+                return new ActionResponse
                 {
                     IsSuccess = false,
                     Message = "Email đã được sử dụng"
@@ -169,13 +197,13 @@ namespace Smart_Library.Areas.Admin.Services
                 Address = user.GetAddress(),
                 DateOfBirth = user.DateOfBirth,
                 ProfileImage = UploadImage.UploadSingleImage(user.ProfileImage) ?? "/img/default-user.webp",
-                CreatedAt = DateTime.Now,
+                CreatedAt = DateTime.UtcNow,
                 WorkspaceId = user.WorkspaceId,
             };
             var CreateNewUser = await _userManager.CreateAsync(NewUser, user.GeneratePassword());
             if (!CreateNewUser.Succeeded)
             {
-                return new ActionMessage
+                return new ActionResponse
                 {
                     IsSuccess = false,
                     Message = "Không thể tạo người dùng, vui lòng thử lại sau!"
@@ -185,23 +213,23 @@ namespace Smart_Library.Areas.Admin.Services
             if (!AddRole.Succeeded)
             {
                 await _userManager.DeleteAsync(NewUser);
-                return new ActionMessage
+                return new ActionResponse
                 {
                     IsSuccess = false,
                     Message = "Không thể tạo người dùng, lỗi phân quyền!"
                 };
             }
-            return new ActionMessage
+            return new ActionResponse
             {
                 IsSuccess = true,
                 Message = "Tạo người dùng thành công!"
             };
         }
-        public async Task<ActionMessage> LockoutUserAsync(string userId)
+        public async Task<ActionResponse> LockoutUserAsync(string userId)
         {
             if (userId == _userManager.GetUserId(_httpContextAccessor?.HttpContext?.User))
             {
-                return new ActionMessage
+                return new ActionResponse
                 {
                     IsSuccess = false,
                     Message = "Không thể khóa tài khoản của chính mình"
@@ -211,7 +239,7 @@ namespace Smart_Library.Areas.Admin.Services
             var checkUserLock = await _userManager.IsLockedOutAsync(user);
             if (user == null)
             {
-                return new ActionMessage
+                return new ActionResponse
                 {
                     IsSuccess = false,
                     Message = "Người dùng không tồn tại"
@@ -219,7 +247,7 @@ namespace Smart_Library.Areas.Admin.Services
             }
             if (checkUserLock)
             {
-                return new ActionMessage
+                return new ActionResponse
                 {
                     IsSuccess = false,
                     Message = "Người dùng này đã bị khóa từ trước"
@@ -229,24 +257,24 @@ namespace Smart_Library.Areas.Admin.Services
             var lockUntil = await _userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddYears(100));
             if (!setLocked.Succeeded || !lockUntil.Succeeded)
             {
-                return new ActionMessage
+                return new ActionResponse
                 {
                     IsSuccess = false,
                     Message = "Không thể khóa tài khoản người dùng"
                 };
             }
-            return new ActionMessage
+            return new ActionResponse
             {
                 IsSuccess = true,
                 Message = "Khóa tài khoản người dùng thành công"
             };
         }
-        public async Task<ActionMessage> UnlockUserAsync(string userId)
+        public async Task<ActionResponse> UnlockUserAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return new ActionMessage
+                return new ActionResponse
                 {
                     IsSuccess = false,
                     Message = "Người dùng không tồn tại"
@@ -255,7 +283,7 @@ namespace Smart_Library.Areas.Admin.Services
             var checkUserLock = await _userManager.IsLockedOutAsync(user);
             if (!checkUserLock)
             {
-                return new ActionMessage
+                return new ActionResponse
                 {
                     IsSuccess = false,
                     Message = "Tài khoản này không bị khóa"
@@ -264,23 +292,23 @@ namespace Smart_Library.Areas.Admin.Services
             var lockUntil = await _userManager.SetLockoutEndDateAsync(user, null);
             if (!lockUntil.Succeeded)
             {
-                return new ActionMessage
+                return new ActionResponse
                 {
                     IsSuccess = false,
                     Message = "Không thể mở khóa tài khoản này"
                 };
             }
-            return new ActionMessage
+            return new ActionResponse
             {
                 IsSuccess = true,
                 Message = "Đã mở khóa tài khoản người dùng"
             };
         }
-        public async Task<ActionMessage> DeleteUserAsync(string userId)
+        public async Task<ActionResponse> DeleteUserAsync(string userId)
         {
             if (userId == _userManager.GetUserId(_httpContextAccessor?.HttpContext?.User))
             {
-                return new ActionMessage
+                return new ActionResponse
                 {
                     IsSuccess = false,
                     Message = "Không thể xoá tài khoản của chính mình"
@@ -289,7 +317,7 @@ namespace Smart_Library.Areas.Admin.Services
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return new ActionMessage
+                return new ActionResponse
                 {
                     IsSuccess = false,
                     Message = "Người dùng không tồn tại"
@@ -298,13 +326,13 @@ namespace Smart_Library.Areas.Admin.Services
             var Result = await _userManager.DeleteAsync(user);
             if (!Result.Succeeded)
             {
-                return new ActionMessage
+                return new ActionResponse
                 {
                     IsSuccess = false,
                     Message = "Không thể xoá người dùng này"
                 };
             }
-            return new ActionMessage
+            return new ActionResponse
             {
                 IsSuccess = true,
                 Message = "Đã xoá người dùng thành công"
@@ -335,7 +363,7 @@ namespace Smart_Library.Areas.Admin.Services
                         PhoneNumber = user.Phone,
                         DateOfBirth = user.DateOfBirth,
                         Address = user.GetAddress(),
-                        CreatedAt = DateTime.Now,
+                        CreatedAt = DateTime.UtcNow,
                         ProfileImage = "/img/default-user.webp",
                         WorkspaceId = user.WorkspaceId
                     };

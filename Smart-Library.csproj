@@ -28,5 +28,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.23" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="ErikEJ.EntityFrameworkCore.SqlServer.DateOnlyTimeOnly" Version="6.0.5" />
+    <PackageReference Include="Slugify.Core" Version="4.0.1" />
   </ItemGroup>
 </Project>

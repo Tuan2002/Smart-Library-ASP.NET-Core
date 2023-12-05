@@ -31,10 +31,20 @@ namespace Smart_Library.Areas.Admin.Controllers
             _usersManagerService = usersManagerService;
         }
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page, int? pageSize)
         {
-            var UserList = await _usersManagerService.GetUsersListAsync();
-            return View(UserList);
+            var response = await _usersManagerService.GetUsersListAsync(page, pageSize);
+            if (response.IsSuccess)
+            {
+                var data = response.Data as dynamic;
+                ViewBag.TotalUser = data?.totalUsers;
+                ViewBag.TotalPage = data?.totalPages;
+                ViewBag.currentPageSize = data?.currentPageSize;
+                ViewBag.CurrentPage = data?.currentPage;
+                var users = data?.users as List<UserViewModel>;
+                return View(users);
+            }
+            return NotFound();
         }
         [HttpGet]
         [Route("Create")]
