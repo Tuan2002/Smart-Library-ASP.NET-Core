@@ -37,7 +37,7 @@ namespace Smart_Library.Areas.Admin.Controllers
             if (response.IsSuccess)
             {
                 var data = response.Data as dynamic;
-                ViewBag.TotalUser = data?.totalUsers;
+                ViewBag.TotalUsers = data?.totalUsers;
                 ViewBag.TotalPage = data?.totalPages;
                 ViewBag.currentPageSize = data?.currentPageSize;
                 ViewBag.CurrentPage = data?.currentPage;

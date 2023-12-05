@@ -11,7 +11,7 @@ namespace Smart_Library.Entities
         public int PublisherId { get; set; }
         public string Name { get; set; } = null!;
         public string? Slug { get; set; }
-        public string Address { get; set; } = null!;
+        public string? Address { get; set; } = null!;
         public DateTime AddedAt { get; set; }
         [Required]
         [ForeignKey("User")]

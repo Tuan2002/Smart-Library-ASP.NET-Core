@@ -2,6 +2,7 @@
 @model IList<UserViewModel>
 @{
     ViewData["Title"] = "Quản lý người dùng";
+    var totalUsers = ViewBag.TotalUsers;
     var currentPage = ViewBag.CurrentPage;
     var currentPageSize = ViewBag.CurrentPageSize;
     var totalPage = ViewBag.TotalPage;
@@ -75,7 +76,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.ToList().Count == 0 || Model == null)
+                            @if (@totalUsers == 0)
                             {
                                 <tr>
                                     <td colspan="7">

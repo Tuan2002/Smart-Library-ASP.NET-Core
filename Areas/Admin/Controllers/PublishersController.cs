@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Smart_Library.Areas.Admin.Models;
@@ -8,87 +13,79 @@ namespace Smart_Library.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
-    public class AuthorsController : Controller
+    public class PublishersController : Controller
     {
-        private readonly ILogger<AuthorsController> _logger;
-        private readonly IAuthorsManagerService _authorsManagerService;
+        private readonly ILogger<PublishersController> _logger;
+        private readonly IPublishManagerService _publishManagerService;
 
-        public AuthorsController(ILogger<AuthorsController> logger, IAuthorsManagerService authorsManagerService)
+        public PublishersController(ILogger<PublishersController> logger, IPublishManagerService publishManagerService)
         {
             _logger = logger;
-            _authorsManagerService = authorsManagerService;
+            _publishManagerService = publishManagerService;
         }
 
         public async Task<IActionResult> Index(int? page, int? pageSize)
         {
-            var response = await _authorsManagerService.GetAuthorsAsync(page, pageSize);
+            var response = await _publishManagerService.GetPublishersAsync(page, pageSize);
             if (!response.IsSuccess)
             {
                 return StatusCode(500);
             }
             var data = response.Data as dynamic;
-            ViewBag.totalAuthors = data?.totalAuthors;
+            ViewBag.TotalPublishers = data?.totalPublishers;
             ViewBag.TotalPages = data?.totalPages;
             ViewBag.CurrentPage = data?.currentPage;
             ViewBag.CurrentPageSize = data?.currentPageSize;
-            var authors = data?.authors as List<AuthorViewModel>;
-            return View(authors);
+            return View(data?.publishers as List<PublisherViewModel>);
 
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Author/Add")]
-        public async Task<IActionResult> AddAuthor(CreateAuthorModel author)
+        [Route("Create/Publisher")]
+        public async Task<IActionResult> CreatePublisher(CreatePublisherModel newPublisher)
         {
-            var response = await _authorsManagerService.CreateAuthorAsync(author);
+            var response = await _publishManagerService.CreatePublisherAsync(newPublisher);
             if (!response.IsSuccess)
             {
                 TempData["SystemMessage"] = response.Message;
                 TempData["Type"] = "error";
-                return RedirectToAction("Index", "Authors");
+                return RedirectToAction("Index");
             }
             TempData["SystemMessage"] = response.Message;
             TempData["Type"] = "success";
-            return RedirectToAction("Index", "Authors");
+            return RedirectToAction("Index");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Author/Update")]
-        public async Task<IActionResult> UpdateAuthor(UpdateAuthorModel author)
+        [Route("Update/Publisher")]
+        public async Task<IActionResult> UpdatePublisher(UpdatePublisherModel updatePublisher)
         {
-            var response = await _authorsManagerService.UpdateAuthorAsync(author);
+            var response = await _publishManagerService.UpdatePublisherAsync(updatePublisher);
             if (!response.IsSuccess)
             {
                 TempData["SystemMessage"] = response.Message;
                 TempData["Type"] = "error";
-                return RedirectToAction("Index", "Authors");
+                return RedirectToAction("Index");
             }
             TempData["SystemMessage"] = response.Message;
             TempData["Type"] = "success";
-            return RedirectToAction("Index", "Authors");
+            return RedirectToAction("Index");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Author/Delete")]
-        public async Task<IActionResult> DeleteAuthor(int authorId)
+        [Route("Delete/Publisher")]
+        public async Task<IActionResult> DeletePublisher(int publisherId)
         {
-            var response = await _authorsManagerService.DeleteAuthorAsync(authorId);
+            var response = await _publishManagerService.DeletePublisherAsync(publisherId);
             if (!response.IsSuccess)
             {
                 TempData["SystemMessage"] = response.Message;
                 TempData["Type"] = "error";
-                return RedirectToAction("Index", "Authors");
+                return RedirectToAction("Index");
             }
             TempData["SystemMessage"] = response.Message;
             TempData["Type"] = "success";
-            return RedirectToAction("Index", "Authors");
-        }
-        [HttpGet]
-        [Route("Search")]
-        public async Task<IActionResult> Search(string? query)
-        {
-            var response = await _authorsManagerService.SearchAuthorsAsync(query);
-            return Ok(response);
+            return RedirectToAction("Index");
         }
     }
 }

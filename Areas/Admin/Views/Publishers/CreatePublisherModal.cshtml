@@ -1,64 +1,32 @@
 @using Smart_Library.Areas.Admin.Models
-@model CreateAuthorModel
-<!-- Modal -->
-<div class="modal fade add-contact new-member" id="add-contact" data-bs-backdrop="static" role="dialog" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+@model CreatePublisherModel
+<div class="modal fade new-member" id="create-new-publisher" data-bs-backdrop="static" role="dialog" tabindex="-1"
+    aria-labelledby="staticBackdropLabel">
+    <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content radius-xl">
             <div class="modal-header">
-                <h6 class="modal-title fw-500" id="staticBackdropLabel">Thông tin tác giá</h6>
+                <h6 class="modal-title fs-5 fw-500" id="staticBackdropLabel">Thêm nhà xuất bản</h6>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <img src="/img/svg/x.svg" alt="x" class="svg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="svg replaced-svg">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="add-new-contact">
-                    <form enctype="multipart/form-data" id="add-author-form" asp-action="AddAuthor"
-                        asp-controller="Authors" asp-area="Admin">
+                <div class="new-member-modal">
+                    <form asp-action="CreatePublisher" asp-controller="Publishers" asp-area="Admin" method="POST"
+                        id="new-publisher-form">
                         @Html.AntiForgeryToken()
-                        <div class="d-flex justify-content-center">
-                            <div class="account-profile d-flex align-items-center mb-4 ">
-                                <div class="ap-img pro_img_wrapper">
-                                    <input id="file-upload" type="file" asp-for="Image"
-                                        accept="image/png, image/jpeg, image/jpg, image/webp, image/heic"
-                                        class="d-none upload-avatar-input">
-                                    <label for="file-upload">
-                                        <img class="dm-upload-avatar avatrSrc ap-img__main rounded-circle wh-120 bg-lighter d-flex"
-                                            src="/img/svg/upload-image.svg" alt="profile">
-                                        <span id="remove_pro_pic">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round" class="svg replaced-svg">
-                                                <path
-                                                    d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
-                                                </path>
-                                                <circle cx="12" cy="13" r="4"></circle>
-                                            </svg>
-                                        </span>
-                                    </label>
-                                </div>
-                                <div class="account-profile__title">
-                                    <h6 class="fs-18 ms-20 fw-500">Ảnh tác giả</h6>
-                                </div>
-                            </div>
+                        <div class="form-group mb-20">
+                            <label asp-for="Name">Tên nhà xuẩt bản</label>
+                            <input type="text" class="form-control" asp-for="Name" id="publisher-name"
+                                placeholder="Vui lòng nhập tên nhà xuất bản">
                         </div>
                         <div class="form-group mb-20">
-                            <label>Tên tác giả</label>
-                            <input type="text" class="form-control form-control-lg" id="author-name" asp-for="Name"
-                                placeholder="Nhập tên tác giả">
-                        </div>
-                        <div class="form-group mb-20">
-                            <label>Email tác giả</label>
-                            <input type="text" class="form-control form-control-lg" id="author-email" asp-for="Email"
-                                placeholder="Nhập email tác giả">
-                        </div>
-                        <div class="form-group mb-20">
-                            <label>Chức vụ hiện tại</label>
-                            <input type="text" class="form-control form-control-lg" id="author-title" asp-for="Title"
-                                placeholder="Nhập chức vụ hiện tại">
-                        </div>
-                        <div class="form-group mb-20">
-                            <label>Địa chỉ tác giả</label>
+                            <label>Địa chỉ nhà xuất bản</label>
                             <div class="d-flex justify-content-start gap-20">
                                 <div class="countryOption flex-1">
                                     <label for="countryOption">
@@ -105,7 +73,6 @@
         </div>
     </div>
 </div>
-<!-- Modal -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const baseURL = "https://provinces.open-api.vn/api";
@@ -174,33 +141,17 @@
             loadDistricts(provinceCode);
         });
         loadProvinces();
-        const validator = new JustValidate('#add-author-form', {
+        const validator = new JustValidate('#add-publisher-form', {
             validateBeforeSubmitting: true,
         });
-        validator.addField('#author-name', [
-            {
-                rule: 'required',
-                errorMessage: 'Trường này không được để trống',
-            },
-        ]);
-        validator.addField('#author-email', [
-            {
-                rule: 'required',
-                errorMessage: 'Trường này không được để trống',
-            },
-            {
-                rule: 'email',
-                errorMessage: 'Trường này phải là email',
-            }
-        ]);
-        validator.addField('#author-title', [
+        validator.addField('#publisher-name', [
             {
                 rule: 'required',
                 errorMessage: 'Trường này không được để trống',
             },
         ]);
         validator.onSuccess(function () {
-            $('#add-author-form').submit();
+            $('#add-publisher-form').submit();
         });
     });
 </script>
