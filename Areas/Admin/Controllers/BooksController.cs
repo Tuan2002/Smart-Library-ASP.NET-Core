@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Smart_Library.Areas.Admin.Models;
 using Smart_Library.Areas.Admin.Services;
+using Smart_Library.Config;
 using Smart_Library.Models;
 using Smart_Library.Services;
 
@@ -9,7 +10,7 @@ namespace Smart_Library.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
-    [Authorize(Roles = "Quản trị viên")]
+    [Authorize(Roles = AppRoles.Admin)]
     public class BooksController : Controller
     {
         private readonly ILogger<BooksController> _logger;

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Smart_Library.Areas.Admin.Models;
 using Smart_Library.Areas.Admin.Services;
+using Smart_Library.Config;
 using Smart_Library.Data;
 using Smart_Library.Entities;
 using Smart_Library.Utils;
@@ -13,7 +14,7 @@ namespace Smart_Library.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
-    [Authorize(Roles = "Quản trị viên")]
+    [Authorize(Roles = AppRoles.Admin)]
     public class UsersController : Controller
     {
         public readonly IUsersManagerService _usersManagerService;

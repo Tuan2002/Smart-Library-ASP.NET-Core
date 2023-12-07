@@ -1,17 +1,15 @@
-using System.Net;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using static Smart_Library.Config.SystemRules;
 using Smart_Library.Areas.Admin.Services;
 using Smart_Library.Data;
 using Smart_Library.Entities;
 using Smart_Library.Middleware;
 using Smart_Library.Services;
 using Smart_Library.Utils;
-using static Smart_Library.Config.AppRules;
 
 var builder = WebApplication.CreateBuilder(args);
-
 var connectionString = builder.Configuration.GetConnectionString("TuanLocal") ?? throw new InvalidOperationException("Connection string not found.");
 // Add services to connect to database
 builder.Services.AddDbContext<ApplicationDBContext>(options =>

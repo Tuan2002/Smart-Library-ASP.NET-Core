@@ -4,7 +4,7 @@ using Microsoft.Net.Http.Headers;
 
 namespace Smart_Library.Config
 {
-    public class AppRules
+    public class SystemRules
     {
         public class RedirectLowerCaseRule : IRule
         {

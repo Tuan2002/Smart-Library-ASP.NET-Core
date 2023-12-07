@@ -1,13 +1,16 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Smart_Library.Areas.Admin.Models;
 using Smart_Library.Areas.Admin.Services;
+using Smart_Library.Config;
 using Smart_Library.Models;
 
 namespace Smart_Library.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
+    [Authorize(Roles = AppRoles.Admin)]
     public class AuthorsController : Controller
     {
         private readonly ILogger<AuthorsController> _logger;

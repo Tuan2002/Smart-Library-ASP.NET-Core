@@ -195,3 +195,6 @@ body {
 .ticket-chat-wrapper .ticket-search-body {
     max-height: 600px;
 }
+.elfinder-container{
+    height: Calc(100vh - 120px) !important;
+}
