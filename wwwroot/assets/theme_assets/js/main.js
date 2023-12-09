@@ -1227,14 +1227,14 @@
     var LiN = $(this).find('li').length;
     if (LiN > 5) {
       $('li', this).eq(4).nextAll().hide().addClass('toggleable');
-      $(this).append('<li class="mt-2 more">See more</li>');
+      $(this).append('<li class="mt-2 more">Xem thêm</li>');
     }
   });
   $('.limit-list-item ul').on('click', '.more', function () {
     if ($(this).hasClass('less')) {
-      $(this).text('See more').removeClass('less');
+      $(this).text('Xem thêm').removeClass('less');
     } else {
-      $(this).text('See less').addClass('less');
+      $(this).text('Thu gọn').addClass('less');
     }
     $(this).siblings('li.toggleable').slideToggle();
   });

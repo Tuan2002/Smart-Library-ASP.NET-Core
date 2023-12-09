@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Smart_Library.Entities
 {
     [Table("Books")]
-    public class Books
+    public class Book
     {
         [Key]
         public int BookId { get; set; }
@@ -31,7 +31,7 @@ namespace Smart_Library.Entities
         public int? Rating { get; set; }
         [ForeignKey("User")]
         public string AddedById { get; set; } = null!;
-        public virtual ApplicationUser? AddedBy { get; set; }
+        public virtual ApplicationUser AddedBy { get; set; } = null!;
         public DateTime AddedAt { get; set; }
         [ForeignKey("User")]
         public string? UpdateById { get; set; } = null!;

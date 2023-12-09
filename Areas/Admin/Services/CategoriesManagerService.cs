@@ -12,6 +12,7 @@ namespace Smart_Library.Areas.Admin.Services
     public interface ICategoriesManagerService
     {
         Task<ActionResponse> GetCategoriesAsync(int? page, int? pageSize);
+        Task<ActionResponse> GetListCategoryAsync();
         Task<ActionResponse> CreateCategoryAsync(CreateCategoryModel newCategory);
         Task<ActionResponse> UpdateCategoryAsync(int categoryId, string name);
         Task<ActionResponse> HideCategoryAsync(int categoryId);
@@ -70,6 +71,32 @@ namespace Smart_Library.Areas.Admin.Services
                 {
                     IsSuccess = false,
                     Message = "Không thể lấy danh mục"
+                };
+            }
+        }
+        public async Task<ActionResponse> GetListCategoryAsync()
+        {
+            try
+            {
+                var categories = await _context.Category.Select(category => new CategoryViewModel()
+                {
+                    CategoryId = category.CategoryId,
+                    Name = category.Name,
+                }).ToListAsync();
+                return new ActionResponse()
+                {
+                    IsSuccess = true,
+                    Message = "Lấy danh sách danh mục thành công",
+                    Data = categories
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new ActionResponse()
+                {
+                    IsSuccess = false,
+                    Message = "Không thể lấy danh sách danh mục"
                 };
             }
         }

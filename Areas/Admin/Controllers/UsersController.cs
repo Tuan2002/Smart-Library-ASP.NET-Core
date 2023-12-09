@@ -228,7 +228,7 @@ namespace Smart_Library.Areas.Admin.Controllers
         [Route("Import/Download")]
         public IActionResult DownloadExcelTemplate()
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "documents", "DULIEUMAU.xlsx");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", "documents", "DULIEUMAU.xlsx");
             if (!System.IO.File.Exists(path))
             {
                 return NotFound();

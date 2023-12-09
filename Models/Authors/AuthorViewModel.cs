@@ -8,6 +8,7 @@ namespace Smart_Library.Models
         public string? Email { get; set; }
         public string? Slug { get; set; }
         public string? ImageURL { get; set; }
+        public int? TotalBooks { get; set; }
         public string? Address { get; set; }
         public string? Title { get; set; }
         public DateTime? AddedAt { get; set; }

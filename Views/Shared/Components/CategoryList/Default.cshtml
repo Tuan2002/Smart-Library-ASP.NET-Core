@@ -1,0 +1,16 @@
+@using Smart_Library.Models
+@model IList<CategoryViewModel>
+
+<div class="product-category limit-list-item">
+    <ul>
+        @foreach (var category in Model)
+        {
+            <li>
+                <div class="w-100">
+                    <span class="fs-14 color-gray">@category.Name<span
+                            class="item-numbers">@category.TotalBooks</span></span>
+                </div>
+            </li>
+        }
+    </ul>
+</div>

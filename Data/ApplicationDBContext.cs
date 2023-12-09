@@ -66,6 +66,6 @@ namespace Smart_Library.Data
         public DbSet<Category> Category { get; set; } = null!;
         public DbSet<Author> Author { get; set; } = null!;
         public DbSet<Publisher> Publisher { get; set; } = null!;
-        public DbSet<Books> Books { get; set; } = null!;
+        public DbSet<Book> Books { get; set; } = null!;
     }
 }

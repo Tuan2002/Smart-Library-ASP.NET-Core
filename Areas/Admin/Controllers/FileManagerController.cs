@@ -25,7 +25,7 @@ namespace Smart_Library.Areas.Admin.Controllers
             return await connector.ProcessAsync(Request);
         }
         [HttpGet]
-        [Route("Thumb/{hash}")]
+        [Route("/Thumb/{hash}")]
         public async Task<IActionResult> Thumbs(string hash)
         {
             var connector = GetConnector();
@@ -34,14 +34,15 @@ namespace Smart_Library.Areas.Admin.Controllers
         private Connector GetConnector()
         {
             // Thư mục gốc lưu trữ là wwwwroot/files (đảm bảo có tạo thư mục này)
-            string pathRoot = "files";
+            string pathRoot = "Uploads";
             var driver = new FileSystemDriver();
             string absoluteUrl = UriHelper.BuildAbsolute(Request.Scheme, Request.Host);
+            string requestUrl = "uploads";
             var uri = new Uri(absoluteUrl);
             // .. ... wwww/files
-            string rootDirectory = Path.Combine(_env.WebRootPath, pathRoot);
+            string rootDirectory = Path.Combine(_env.ContentRootPath, pathRoot);
             // https://localhost:5001/files/
-            string url = $"{uri.Scheme}://{uri.Authority}/{pathRoot}/";
+            string url = $"{uri.Scheme}://{uri.Authority}/{requestUrl}/";
             string urlThumb = $"{uri.Scheme}://{uri.Authority}/Admin/file-manager/Thumb/";
             var root = new RootVolume(rootDirectory, url, urlThumb)
             {

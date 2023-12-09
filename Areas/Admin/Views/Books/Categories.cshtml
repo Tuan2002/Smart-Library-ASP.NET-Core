@@ -72,12 +72,12 @@
                                     </td>
                                     <td>
                                         <div class="userDatatable-content--priority">
-                                            @category.CreatedAt.ToString("HH:mm - dd/MM/yyyy")
+                                            @category.CreatedAt?.ToString("HH:mm - dd/MM/yyyy")
                                         </div>
                                     </td>
                                     <td>
                                         <div class="userDatatable-content d-inline-block">
-                                            @if (!category.Status)
+                                            @if (!category?.Status ?? false)
                                             {
                                                 <span
                                                     class="bg-opacity-danger color-danger rounded-pill userDatatable-content-status">Tạm ẩn</span>
@@ -92,7 +92,7 @@
                                     </td>
                                     <td>
                                         <ul class="orderDatatable_actions mb-0 d-flex flex-wrap">
-                                            @if (category.Status)
+                                            @if (category?.Status ?? false)
                                             {
                                             <li>
                                                 <a title="Ẩn danh mục" class="view" data-bs-toggle="modal" data-bs-target="#toogle-visiable-category">

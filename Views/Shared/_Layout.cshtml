@@ -58,13 +58,15 @@
 
 </head>
 
-<body class="side-menu">
+<body>
   <partial name="~/Views/Shared/Components/Header/Header.cshtml" />
   <main role="main" class="main-content">
     <div class="sidebar-wrapper">
       <partial name="~/Views/Shared/Components/Sidebar/Sidebar.cshtml" />
     </div>
-    @RenderBody()
+    <div class="contents">
+      @RenderBody()
+    </div>
   </main>
   <div class="overlay-dark-sidebar"></div>
   <div class="customizer-overlay"></div>

@@ -11,8 +11,9 @@ namespace Smart_Library.Areas.Admin.Services
 {
     public interface IAuthorsManagerService
     {
-        Task<ActionResponse> CreateAuthorAsync(CreateAuthorModel author);
         Task<ActionResponse> GetAuthorsAsync(int? page, int? pageSize);
+        Task<ActionResponse> GetListAuthorAsync();
+        Task<ActionResponse> CreateAuthorAsync(CreateAuthorModel author);
         Task<ActionResponse> UpdateAuthorAsync(UpdateAuthorModel author);
         Task<ActionResponse> DeleteAuthorAsync(int authorId);
         Task<ActionResponse> SearchAuthorsAsync(string? searchQuery);
@@ -113,6 +114,32 @@ namespace Smart_Library.Areas.Admin.Services
             catch (Exception e)
             {
                 _logger.LogError(e.Message, $"AuthorsManagerService.GetAuthorsAsync at: {DateTime.UtcNow}");
+                return new ActionResponse
+                {
+                    IsSuccess = false,
+                    Message = "Không thể lấy danh sách tác giả, vui lòng thử lại sau"
+                };
+            }
+        }
+        public async Task<ActionResponse> GetListAuthorAsync()
+        {
+            try
+            {
+                var authors = await _context.Author.Select(author => new AuthorViewModel()
+                {
+                    AuthorId = author.AuthorId,
+                    Name = author.Name,
+                }).ToListAsync();
+                return new ActionResponse
+                {
+                    IsSuccess = true,
+                    Message = "Lấy danh sách tác giả thành công",
+                    Data = authors
+                };
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, $"AuthorsManagerService.GetListAuthorAsync at: {DateTime.UtcNow}");
                 return new ActionResponse
                 {
                     IsSuccess = false,

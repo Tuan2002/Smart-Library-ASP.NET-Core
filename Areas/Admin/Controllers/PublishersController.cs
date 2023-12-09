@@ -13,9 +13,9 @@ namespace Smart_Library.Areas.Admin.Controllers
     public class PublishersController : Controller
     {
         private readonly ILogger<PublishersController> _logger;
-        private readonly IPublishManagerService _publishManagerService;
+        private readonly IPublisherManagerService _publishManagerService;
 
-        public PublishersController(ILogger<PublishersController> logger, IPublishManagerService publishManagerService)
+        public PublishersController(ILogger<PublishersController> logger, IPublisherManagerService publishManagerService)
         {
             _logger = logger;
             _publishManagerService = publishManagerService;

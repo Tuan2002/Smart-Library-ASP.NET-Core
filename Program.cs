@@ -8,6 +8,7 @@ using Smart_Library.Entities;
 using Smart_Library.Middleware;
 using Smart_Library.Services;
 using Smart_Library.Utils;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("TuanLocal") ?? throw new InvalidOperationException("Connection string not found.");
@@ -48,7 +49,7 @@ builder.Services.AddScoped<IUsersManagerService, UsersManagerService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IBooksManagerService, BooksManagerService>();
 builder.Services.AddScoped<IAuthorsManagerService, AuthorsManagerService>();
-builder.Services.AddScoped<IPublishManagerService, PublishManagerService>();
+builder.Services.AddScoped<IPublisherManagerService, PublishManagerService>();
 builder.Services.AddScoped<ICategoriesManagerService, CategoriesManagerService>();
 builder.Services.AddScoped<IBooksService, BooksService>();
 
@@ -64,6 +65,12 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseStatusCodePagesWithReExecute("/error/{0}");
 app.UseHttpsRedirection();
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Uploads")),
+    RequestPath = new PathString("/uploads")
+}
+);
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication(); ;

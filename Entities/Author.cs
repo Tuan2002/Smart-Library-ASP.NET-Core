@@ -19,6 +19,6 @@ namespace Smart_Library.Entities
         [ForeignKey("User")]
         public string AddedById { get; set; } = null!;
         public virtual ApplicationUser AddedBy { get; set; } = null!;
-        public virtual ICollection<Books> Books { get; set; } = null!;
+        public virtual ICollection<Book> Books { get; set; } = null!;
     }
 }

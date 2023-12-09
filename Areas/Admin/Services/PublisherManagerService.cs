@@ -9,14 +9,15 @@ using Smart_Library.Utils;
 
 namespace Smart_Library.Areas.Admin.Services
 {
-    public interface IPublishManagerService
+    public interface IPublisherManagerService
     {
         Task<ActionResponse> GetPublishersAsync(int? page, int? pageSize);
+        Task<ActionResponse> GetListPublisherAsync();
         Task<ActionResponse> CreatePublisherAsync(CreatePublisherModel newPublisher);
         Task<ActionResponse> UpdatePublisherAsync(UpdatePublisherModel updatePublisher);
         Task<ActionResponse> DeletePublisherAsync(int publisherId);
     }
-    public class PublishManagerService : IPublishManagerService
+    public class PublishManagerService : IPublisherManagerService
     {
         public readonly ApplicationDBContext _context;
         public readonly ILogger<PublishManagerService> _logger;
@@ -68,6 +69,32 @@ namespace Smart_Library.Areas.Admin.Services
                 {
                     IsSuccess = false,
                     Message = "Lỗi khi lấy danh mục"
+                };
+            }
+        }
+        public async Task<ActionResponse> GetListPublisherAsync()
+        {
+            try
+            {
+                var publishers = await _context.Publisher.Select(publisher => new PublisherViewModel()
+                {
+                    PublisherId = publisher.PublisherId,
+                    Name = publisher.Name,
+                }).ToListAsync();
+                return new ActionResponse()
+                {
+                    IsSuccess = true,
+                    Message = "Lấy danh sách nhà xuất bản thành công",
+                    Data = publishers
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new ActionResponse()
+                {
+                    IsSuccess = false,
+                    Message = "Lỗi khi lấy danh sách nhà xuất bản"
                 };
             }
         }

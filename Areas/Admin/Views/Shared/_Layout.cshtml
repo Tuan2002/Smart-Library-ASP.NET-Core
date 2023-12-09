@@ -130,7 +130,7 @@
     </div>
   </footer>
   <!-- inject:js-->
-  @* <script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/super-build/ckeditor.js"></script> *@
+  <script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/super-build/ckeditor.js"></script>
   <script src="~/assets/vendor_assets/js/jquery/jquery-3.7.1.min.js"></script>
   <script src="~/assets/vendor_assets/js/jquery/jquery-ui.min.js"></script>
   <script src="~/assets/vendor_assets/js/bootstrap/bootstrap.min.js"></script>
@@ -246,6 +246,7 @@
     </script>
   }
   <!-- endinject-->
+  @RenderSection("Scripts", required: false)
   @RenderSection("elFinderScript", required: false)
   @RenderSection("Messages", required: false)
   @RenderSection("TableAction", required: false)
