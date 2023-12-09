@@ -13,27 +13,6 @@
                     <span class="menu-text">Quản lý người dùng</span>
                 </a>
             </li>
-            <li
-                class="has-child user-select-none  @(ViewContext.RouteData.Values["controller"]?.ToString() == "Books" && ViewContext.RouteData.Values["Area"]?.ToString() == "Admin" ? "open" : "")">
-                <a role="button" asp-action="Index" asp-controller="Books" asp-area="Admin" asp-active>
-                    <span class="nav-icon uil uil-book-open"></span>
-                    <span class="menu-text">Quản lý sách</span>
-                    <span class="toggle-icon"></span>
-                </a>
-                <ul>
-                    <li class="l_sidebar" asp-action="Index" asp-controller="Books" asp-area="Admin" asp-active-submenu>
-                        <a asp-action="Index" asp-controller="Books" asp-area="Admin">
-                            Quản lý đầu sách
-                        </a>
-                    </li>
-                    <li class="l_sidebar" asp-action="Categories" asp-controller="Books" asp-area="Admin"
-                        asp-active-submenu>
-                        <a asp-action="Categories" asp-controller="Books" asp-area="Admin">
-                            Quản lý danh mục sách
-                        </a>
-                    </li>
-                </ul>
-            </li>
             <li>
                 <a asp-action="Index" asp-active asp-controller="Support" asp-area="Admin" asp-active>
                     <span class="nav-icon uil uil-file-question-alt"></span>
