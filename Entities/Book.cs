@@ -11,6 +11,7 @@ namespace Smart_Library.Entities
         public int BookId { get; set; }
         public string Name { get; set; } = null!;
         public string? Slug { get; set; }
+        public string? ShortDescription { get; set; }
         public string? Description { get; set; }
         public string? ImageURL { get; set; }
         public bool? IsEBook { get; set; }

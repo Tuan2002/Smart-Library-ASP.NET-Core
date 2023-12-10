@@ -104,6 +104,7 @@ namespace Smart_Library.Areas.Admin.Services
                 {
                     BookId = book.BookId,
                     Name = book.Name,
+                    ShortDescription = book.ShortDescription,
                     Description = book.Description,
                     ImageURL = book.ImageURL,
                     AuthorId = book.AuthorId,
@@ -196,6 +197,7 @@ namespace Smart_Library.Areas.Admin.Services
                     };
                 }
                 bookToUpdate.Name = book.Name ?? bookToUpdate.Name;
+                bookToUpdate.ShortDescription = book.ShortDescription ?? bookToUpdate.ShortDescription;
                 bookToUpdate.Description = book.Description ?? bookToUpdate.Description;
                 bookToUpdate.Slug = book.Name != null ? new SlugHelper().GenerateSlug(book.Name) : bookToUpdate.Slug;
                 bookToUpdate.ImageURL = book.Image != null ? UploadImage.UploadSingleImage(book.Image) : bookToUpdate.ImageURL;
@@ -205,6 +207,7 @@ namespace Smart_Library.Areas.Admin.Services
                 bookToUpdate.CategoryId = book.CategoryId ?? bookToUpdate.CategoryId;
                 bookToUpdate.AuthorId = book.AuthorId ?? bookToUpdate.AuthorId;
                 bookToUpdate.PublisherId = book.PublisherId ?? bookToUpdate.PublisherId;
+                bookToUpdate.IsPublish = book.IsPublish;
                 _context.Books.Update(bookToUpdate);
                 await _context.SaveChangesAsync();
                 return new ActionResponse

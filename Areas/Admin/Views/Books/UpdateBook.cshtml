@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Cập nhật thông tin sách";
     Model.UpdateBook.Description = Model.CurrentBook.Description;
+    Model.UpdateBook.ShortDescription = Model.CurrentBook.ShortDescription;
 }
 
 <div class="CreateProduct">
@@ -89,6 +90,16 @@
                                     placeholder="Nhập số trang">
                             </div>
                         </div>
+                                                <div class="col-12 form-group">
+                            <div class="ms-1 checkbox-theme-default custom-checkbox">
+                                <input class="checkbox" type="checkbox" asp-for="@Model.UpdateBook.IsPublish" checked=@(@Model.CurrentBook.IsPublish ?? false)>
+                                <label asp-for="@Model.UpdateBook.IsPublish">
+                                    <span class="checkbox-text">
+                                        Hiển thị với người đọc
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
                         <div class="button-group d-flex justify-content-end flex-wrap pt-30 mb-15">
                             <button type="submit" class="btn btn-primary btn-default rounded-pill me-15 submit-btn">
                                 Cập nhật
@@ -106,8 +117,14 @@
                     <div class="card-body edit-profile__body">
                         <div class="row">
                             <div class="col-12">
+                               <div class="form-group form-element-textarea mb-20">
+                                <label asp-for="@Model.UpdateBook.ShortDescription" class="il-gray fs-14 fw-500 align-center mb-10">Mô tả ngắn cho sách</label>
+                                <textarea class="form-control" asp-for="@Model.UpdateBook.ShortDescription" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-12">
                                 <div class="form-group mb-20 book-description">
-                                    <label asp-for="@Model.UpdateBook.Description">Mô tả sách</label>
+                                    <label asp-for="@Model.UpdateBook.Description">Mô tả chi tiết</label>
                                     <textarea id="editor" asp-for="@Model.UpdateBook.Description">
                                     </textarea>
                                 </div>

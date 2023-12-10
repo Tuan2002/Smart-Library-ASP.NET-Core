@@ -6,6 +6,7 @@ namespace Smart_Library.Areas.Admin.Models
     public class UpdateBookModel
     {
         public string? Name { get; set; }
+        public string? ShortDescription { get; set; }
         public string? Description { get; set; }
         public IFormFile? Image { get; set; }
         public string? Language { get; set; }
@@ -15,7 +16,7 @@ namespace Smart_Library.Areas.Admin.Models
         public int? PublisherId { get; set; }
         public bool? IsEBook { get; set; }
         public IFormFile? Pdf { get; set; }
-        public bool? IsPublish { get; set; }
+        public bool IsPublish { get; set; }
 
     }
 }

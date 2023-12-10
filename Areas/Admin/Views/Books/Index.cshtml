@@ -105,11 +105,11 @@
                                                     <a class="profile-image rounded-circle d-block m-0 wh-38"
                                                         style="background-image:url('@book.ImageURL'); background-size: cover;"></a>
                                                 </div>
-                                                <div class="userDatatable-inline-title">
+                                                <div class="userDatatable-inline-title text-truncate">
                                                     <a class="text-dark fw-500">
-                                                        <h6>@book.Name</h6>
+                                                        <h6 class="d-block text-truncate pe-3" style="max-width: 200px;">@book.Name</h6>
                                                     </a>
-                                                    <p style="max-width: 200px;" class="d-block mb-0 text-truncate">@book.AuthorName</p>
+                                                    <p class="d-block mb-0">@book.AuthorName</p>
                                                 </div>
                                             </div>
                                         </td>
@@ -165,7 +165,7 @@
                                             }
                                                 </li>
                                                 <li>
-                                                    <a title="Chỉnh sửa thông tin sách" class="edit">
+                                                    <a asp-action="UpdateBook" asp-controller="Books" asp-area="Admin" asp-route-id="@book?.BookId" title="Chỉnh sửa thông tin sách" class="edit">
                                                         <i class="uil uil-edit"></i>
                                                     </a>
                                                 </li>

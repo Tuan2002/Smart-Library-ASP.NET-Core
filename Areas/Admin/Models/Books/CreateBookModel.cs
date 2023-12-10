@@ -6,6 +6,7 @@ namespace Smart_Library.Areas.Admin.Models
     public class CreateBookModel
     {
         public string Name { get; set; } = null!;
+        public string? ShortDescription { get; set; }
         public string? Description { get; set; }
         public IFormFile? Image { get; set; }
         public string? Language { get; set; }

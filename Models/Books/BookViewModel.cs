@@ -6,6 +6,7 @@ namespace Smart_Library.Models
         public string? Slug { get; set; }
         public string? Name { get; set; }
         public string? ImageURL { get; set; }
+        public string? ShortDescription { get; set; }
         public string? Description { get; set; }
         public int? AuthorId { get; set; }
         public string? AuthorName { get; set; }

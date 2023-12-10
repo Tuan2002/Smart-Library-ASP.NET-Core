@@ -177,15 +177,15 @@ namespace Smart_Library.Areas.Admin.Controllers
                 return RedirectToAction("CreateBook");
             }
             var result = await _booksManagerService.CreateBookAsync(book);
-            if (result.IsSuccess)
+            if (!result.IsSuccess)
             {
                 TempData["SystemMessage"] = result.Message;
-                TempData["Type"] = "success";
-                return RedirectToAction("CreateBook");
+                TempData["Type"] = "error";
+                return RedirectToAction("Index");
             }
             TempData["SystemMessage"] = result.Message;
-            TempData["Type"] = "error";
-            return RedirectToAction("CreateBook");
+            TempData["Type"] = "success";
+            return RedirectToAction("Index");
         }
         [HttpPost]
         [Route("Show/Book")]
@@ -244,7 +244,7 @@ namespace Smart_Library.Areas.Admin.Controllers
         [HttpPost]
         [Route("Update/Book/{id:int}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateBook(int id, [Bind(Prefix = "Item2")]UpdateBookModel book)
+        public async Task<IActionResult> UpdateBook(int id, [Bind(Prefix = "Item2")] UpdateBookModel book)
         {
             if (!ModelState.IsValid)
             {

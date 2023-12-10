@@ -87,7 +87,6 @@
                             </div>
                         </div>
                         <div class="col-12 form-group">
-
                             <div class="ms-1 checkbox-theme-default custom-checkbox">
                                 <input class="checkbox" type="checkbox" asp-for="IsPublish" checked>
                                 <label asp-for="IsPublish">
@@ -114,8 +113,16 @@
                     <div class="card-body edit-profile__body">
                         <div class="row">
                             <div class="col-12">
+                                <div class="form-group mb-20 form-element-textarea">
+                                    <label class="il-gray fs-14 fw-500 align-center mb-10"
+                                        asp-for="@Model.ShortDescription">Mô tả ngắn của sách</label>
+                                    <textarea class="form-control" rows="3" asp-for="@Model.ShortDescription">
+                                    </textarea>
+                                </div>
+                            </div>
+                            <div class="col-12">
                                 <div class="form-group mb-20 book-description">
-                                    <label asp-for="@Model.Description">Mô tả sách</label>
+                                    <label asp-for="@Model.Description">Mô tả chi tiết</label>
                                     <textarea id="editor" asp-for="@Model.Description">
                                     </textarea>
                                 </div>
@@ -236,7 +243,7 @@
         })
             .then(editor => {
                 editor => {
-                    editor.ui.view.editable.element.style.height = '600px';
+                    editor.ui.view.editable.element.style.height = '400px';
                 }
             })
             .catch(error => {
