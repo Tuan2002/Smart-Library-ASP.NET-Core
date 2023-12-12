@@ -10,6 +10,7 @@ namespace Smart_Library.Models
         public string? Description { get; set; }
         public int? AuthorId { get; set; }
         public string? AuthorName { get; set; }
+        public string? AuthorAddress { get; set; }
         public string? AuthorImageURL { get; set; }
         public int? PublisherId { get; set; }
         public string? PublisherName { get; set; }

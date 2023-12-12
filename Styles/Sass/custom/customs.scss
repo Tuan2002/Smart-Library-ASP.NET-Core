@@ -301,3 +301,25 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
 }
+.text-transform-none{
+    text-transform: none !important;
+}
+.detail-product-box {
+    .product-description {
+        .header-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            margin-left: 20px;
+        }
+
+        .product-desc-content {
+            max-height: 700px;
+            overflow: hidden;
+
+            &.active {
+                max-height: none;
+            }
+        }
+    }
+}

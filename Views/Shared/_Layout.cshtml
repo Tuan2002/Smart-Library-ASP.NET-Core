@@ -194,6 +194,8 @@
   <script src="/assets/theme_assets/js/main.js"></script>
   <script src="/assets/js/message.js"></script>
   <script src="/assets/js/script.js"></script>
+  <!-- endinject-->
+  @RenderSection("Scripts", required: false)
   @if (TempData["AuthMessage"] != null)
   {
     <script>

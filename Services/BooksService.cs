@@ -10,6 +10,7 @@ namespace Smart_Library.Services
         Task<ActionResponse> GetCategoriesAsync();
         Task<ActionResponse> GetAuthorsAsync();
         Task<ActionResponse> GetListBookAsync(int? page, int? pageSize);
+        Task<ActionResponse> GetBookDetailAsync(int id);
     }
     public class BooksService : IBooksService
     {
@@ -106,6 +107,7 @@ namespace Smart_Library.Services
                         Pages = book.Pages,
                         ReaderCount = book.ReaderCount ?? 0,
                     }).ToListAsync();
+                totalBooks = books.Count;
                 return new ActionResponse
                 {
                     IsSuccess = true,
@@ -130,6 +132,58 @@ namespace Smart_Library.Services
                 };
             }
         }
+        public async Task<ActionResponse> GetBookDetailAsync(int id)
+        {
+            try
+            {
+                var book = await _context.Books.AsQueryable()
+                    .Where(book => book.BookId == id)
+                    .Where(book => book.IsPublish == true)
+                    .Where(book => book.Category.Status == true)
+                    .Select(book => new BookViewModel
+                    {
+                        BookId = book.BookId,
+                        Slug = book.Slug,
+                        Name = book.Name,
+                        ImageURL = book.ImageURL,
+                        AuthorId = book.AuthorId,
+                        AuthorName = book.Author.Name,
+                        AuthorAddress = book.Author.Address,
+                        AuthorImageURL = book.Author.ImageURL,
+                        Pages = book.Pages,
+                        ReaderCount = book.ReaderCount ?? 0,
+                        CategoryId = book.CategoryId,
+                        CategoryName = book.Category.Name,
+                        ShortDescription = book.ShortDescription,
+                        Description = book.Description,
+                        IsPublish = book.IsPublish,
+                        AddedAt = book.AddedAt,
+                    }).FirstOrDefaultAsync();
+                if (book == null)
+                {
+                    return new ActionResponse
+                    {
+                        IsSuccess = false,
+                        Message = "Không tìm thấy sách"
+                    };
+                }
+                return new ActionResponse
+                {
+                    IsSuccess = true,
+                    Message = "Lấy thông tin sách thành công",
+                    Data = book
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new ActionResponse
+                {
+                    IsSuccess = false,
+                    Message = "Lấy thông tin sách thất bại"
+                };
+            }
 
+        }
     }
 }

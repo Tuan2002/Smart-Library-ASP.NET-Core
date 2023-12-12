@@ -117,23 +117,28 @@
                   <div class="row mt-2">
                      @foreach (var book in Model)
                      {
-
                         <div class="col-xxl-3 col-xl-4 col-sm-6 col-12 mb-25">
                            <div class="course-card">
-                              <div class="course-card__img-area w-100 h-100">
-                                 <img class="home-book-image" src="@book.ImageURL" alt="gallery">
-                              </div>
-                              <div class="course-card__body">
-                                 <div class="course-card__title">
-                                    <h4>@book.Name</h4>
+                              <a asp-action="Details" asp-controller="Books" asp-route-id="@book.BookId"
+                                 asp-route-slug="@book.Slug">
+                                 <div class="course-card__img-area w-100 h-100">
+                                    <img class="home-book-image" src="@book.ImageURL" alt="gallery">
                                  </div>
+                              </a>
+                              <div class="course-card__body">
+                                 <a asp-action="Details" asp-controller="Books" asp-route-id="@book.BookId"
+                                    asp-route-slug="@book.Slug">
+                                    <div class="course-card__title">
+                                       <h4>@book.Name</h4>
+                                    </div>
+                                 </a>
+                              </div>
+                              <div class="course-card__footer d-block mt-auto">
                                  <div class="course-card__about">
                                     <img src="@book.AuthorImageURL" alt="ellipse11" class="rounded-circle">
                                     <span>@book.AuthorName</span>
                                  </div>
-                              </div>
-                              <div class="course-card__footer d-block">
-                                 <div class="course-card__footer_right d-flex justify-content-between">
+                                 <div class="course-card__footer_right d-flex justify-content-between mt-3">
                                     <div class="total-lextures no-btn">
                                        <img src="img/svg/book.svg" alt="book" class="svg">
                                        @book.ReaderCount người đọc
