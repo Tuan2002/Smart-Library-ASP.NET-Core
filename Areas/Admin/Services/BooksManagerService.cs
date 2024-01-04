@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Slugify;
 using Smart_Library.Areas.Admin.Models;
@@ -19,20 +18,22 @@ namespace Smart_Library.Areas.Admin.Services
         Task<ActionResponse> ShowBookAsync(int id);
         Task<ActionResponse> HideBookAsync(int id);
         Task<ActionResponse> DeleteBookAsync(int id);
-
     }
+
     public class BooksManagerService : IBooksManagerService
     {
         public readonly ILogger<BooksManagerService> _logger;
         public readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ApplicationDBContext _context;
 
-        public BooksManagerService(ILogger<BooksManagerService> logger, IHttpContextAccessor httpContextAccessor, ApplicationDBContext context)
+        public BooksManagerService(ILogger<BooksManagerService> logger, IHttpContextAccessor httpContextAccessor,
+            ApplicationDBContext context)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _context = context;
         }
+
         public async Task<ActionResponse> GetBooksAsync(int? page, int? pageSize)
         {
             try
@@ -87,6 +88,7 @@ namespace Smart_Library.Areas.Admin.Services
                 };
             }
         }
+
         public async Task<ActionResponse> GetBookByIdAsync(int id)
         {
             try
@@ -100,6 +102,7 @@ namespace Smart_Library.Areas.Admin.Services
                         Message = "Không tìm thấy sách"
                     };
                 }
+
                 var bookViewModel = new BookViewModel
                 {
                     BookId = book.BookId,
@@ -134,11 +137,13 @@ namespace Smart_Library.Areas.Admin.Services
                 };
             }
         }
+
         public async Task<ActionResponse> CreateBookAsync(CreateBookModel book)
         {
             try
             {
-                var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+                var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
+                             string.Empty;
                 if (string.IsNullOrEmpty(userId))
                 {
                     return new ActionResponse
@@ -147,9 +152,11 @@ namespace Smart_Library.Areas.Admin.Services
                         Message = "Bạn cần đăng nhập để thực hiện chức năng này"
                     };
                 }
+
                 var newBook = new Book
                 {
                     Name = book.Name,
+                    ShortDescription = book.ShortDescription,
                     Description = book.Description,
                     Slug = new SlugHelper().GenerateSlug(book.Name),
                     ImageURL = UploadImage.UploadSingleImage(book.Image) ?? "/uploads/images/default-book.png",
@@ -183,6 +190,7 @@ namespace Smart_Library.Areas.Admin.Services
                 };
             }
         }
+
         public async Task<ActionResponse> UpdateBookAsync(int id, UpdateBookModel book)
         {
             try
@@ -196,11 +204,13 @@ namespace Smart_Library.Areas.Admin.Services
                         Message = "Không tìm thấy sách"
                     };
                 }
+
                 bookToUpdate.Name = book.Name ?? bookToUpdate.Name;
                 bookToUpdate.ShortDescription = book.ShortDescription ?? bookToUpdate.ShortDescription;
                 bookToUpdate.Description = book.Description ?? bookToUpdate.Description;
                 bookToUpdate.Slug = book.Name != null ? new SlugHelper().GenerateSlug(book.Name) : bookToUpdate.Slug;
-                bookToUpdate.ImageURL = book.Image != null ? UploadImage.UploadSingleImage(book.Image) : bookToUpdate.ImageURL;
+                bookToUpdate.ImageURL =
+                    book.Image != null ? UploadImage.UploadSingleImage(book.Image) : bookToUpdate.ImageURL;
                 bookToUpdate.IsEBook = book.IsEBook ?? false;
                 bookToUpdate.Language = book.Language ?? bookToUpdate.Language;
                 bookToUpdate.Pages = book.Pages ?? bookToUpdate.Pages;
@@ -227,6 +237,7 @@ namespace Smart_Library.Areas.Admin.Services
                 };
             }
         }
+
         public async Task<ActionResponse> ShowBookAsync(int id)
         {
             try
@@ -240,6 +251,7 @@ namespace Smart_Library.Areas.Admin.Services
                         Message = "Không tìm thấy sách"
                     };
                 }
+
                 book.IsPublish = true;
                 _context.Books.Update(book);
                 await _context.SaveChangesAsync();
@@ -259,6 +271,7 @@ namespace Smart_Library.Areas.Admin.Services
                 };
             }
         }
+
         public async Task<ActionResponse> HideBookAsync(int id)
         {
             try
@@ -272,6 +285,7 @@ namespace Smart_Library.Areas.Admin.Services
                         Message = "Không tìm thấy sách"
                     };
                 }
+
                 book.IsPublish = false;
                 _context.Books.Update(book);
                 await _context.SaveChangesAsync();
@@ -291,6 +305,7 @@ namespace Smart_Library.Areas.Admin.Services
                 };
             }
         }
+
         public async Task<ActionResponse> DeleteBookAsync(int id)
         {
             try
@@ -304,6 +319,7 @@ namespace Smart_Library.Areas.Admin.Services
                         Message = "Không tìm thấy sách"
                     };
                 }
+
                 _context.Books.Remove(book);
                 await _context.SaveChangesAsync();
                 return new ActionResponse
@@ -321,7 +337,6 @@ namespace Smart_Library.Areas.Admin.Services
                     Message = "Xóa sách thất bại"
                 };
             }
-
         }
     }
 }

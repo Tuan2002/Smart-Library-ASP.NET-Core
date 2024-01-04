@@ -1,13 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Smart_Library.Areas.Admin.Models;
 using Smart_Library.Areas.Admin.Services;
 using Smart_Library.Config;
-using Smart_Library.Entities;
 using Smart_Library.Models;
-using Smart_Library.Services;
 
 namespace Smart_Library.Areas.Admin.Controllers
 {
@@ -39,10 +36,10 @@ namespace Smart_Library.Areas.Admin.Controllers
                 return StatusCode(500);
             }
             var data = response.Data as dynamic;
-            ViewBag.TotalBooks = data?.totalBooks;
-            ViewBag.TotalPage = data?.totalPages;
-            ViewBag.currentPageSize = data?.currentPageSize;
-            ViewBag.CurrentPage = data?.currentPage;
+            ViewBag.TotalBooks = data?.totalBooks ?? 0;
+            ViewBag.TotalPage = data?.totalPages ?? 1;
+            ViewBag.currentPageSize = data?.currentPageSize ?? 10;
+            ViewBag.CurrentPage = data?.currentPage ?? 1;
             var books = data?.books as List<BookViewModel>;
             return View(books);
         }
@@ -57,10 +54,10 @@ namespace Smart_Library.Areas.Admin.Controllers
                 return NotFound();
             }
             var data = response.Data as dynamic;
-            ViewBag.TotalCategories = data?.totalCategories;
-            ViewBag.TotalPage = data?.totalPages;
-            ViewBag.currentPageSize = data?.currentPageSize;
-            ViewBag.CurrentPage = data?.currentPage;
+            ViewBag.TotalCategories = data?.totalCategories ?? 0;
+            ViewBag.TotalPage = data?.totalPages ?? 1;
+            ViewBag.currentPageSize = data?.currentPageSize ?? 10;
+            ViewBag.CurrentPage = data?.currentPage ?? 1;
             var categories = data?.categories as List<CategoryViewModel>;
             return View(categories);
         }

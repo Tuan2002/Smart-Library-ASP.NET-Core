@@ -165,7 +165,7 @@ namespace Smart_Library.Areas.Admin.Services
                 authorToUpdate.Email = author.Email ?? authorToUpdate.Email;
                 authorToUpdate.Slug = slugHelper.GenerateSlug(author.Name) ?? authorToUpdate.Slug;
                 authorToUpdate.Address = author.Address ?? authorToUpdate.Address;
-                authorToUpdate.ImageURL = UploadImage.UploadSingleImage(author.Image) ?? authorToUpdate.ImageURL;
+                authorToUpdate.ImageURL = author.Image != null ? UploadImage.UploadSingleImage(author.Image) : authorToUpdate.ImageURL;
                 authorToUpdate.Title = author.Title ?? authorToUpdate.Title;
                 _context.Author.Update(authorToUpdate);
                 await _context.SaveChangesAsync();

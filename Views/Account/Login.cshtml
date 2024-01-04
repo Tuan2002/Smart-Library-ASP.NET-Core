@@ -8,7 +8,7 @@
         <div class="col-xxl-4 col-xl-6 col-lg-6 col-md-8 col-sm-8">
             <div class="edit-profile">
                 <div class="edit-profile__logos">
-                    <a href="index.html">
+                    <a href="/">
                         <img class="dark" src="/img/Logo-Hori.png" alt="">
                         <img class="light" src="/img/Logo-Hori-White.png" alt="">
                     </a>
@@ -21,29 +21,29 @@
                     </div>
                     <div class="card-body">
                         <form id="login-form" class="edit-profile__body" asp-controller="Account" asp-action="Login"
-                            asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                              asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
                             @Html.AntiForgeryToken()
                             <div class="form-group mb-25">
                                 <label asp-for="Email">Tài khoản</label>
                                 <input required asp-for="Email" type="text" class="form-control rounded-pill"
-                                    id="username" placeholder="Tài khoản">
+                                       id="username" placeholder="Tài khoản">
                             </div>
                             <div class="form-group mb-15">
                                 <label asp-for="Password">Mật khẩu</label>
                                 <div class="position-relative">
                                     <input required id="password-field" asp-for="Password" type="password"
-                                        class="rounded-pill form-control" name="password" placeholder="Mật khẩu">
+                                           class="rounded-pill form-control" name="password" placeholder="Mật khẩu">
                                     <div class="uil uil-eye-slash text-lighten fs-15 field-icon toggle-password2">
                                     </div>
                                 </div>
                             </div>
                             <div asp-validation-summary="ModelOnly"
-                                class="text-center text-danger error-message text-small">
+                                 class="text-center text-danger error-message text-small">
                             </div>
                             <div class="admin-condition">
                                 <div class="checkbox-theme-default checkbox-circle custom-checkbox">
                                     <input id="remember" class="checkbox rounded-circle" type="checkbox"
-                                        asp-for="RememberMe">
+                                           asp-for="RememberMe">
                                     <label for="remember">
                                         <span class="checkbox-text">Nhớ đăng nhập</span>
                                     </label>
@@ -52,10 +52,10 @@
                             </div>
                             <div class="spin-embadded loading-element">
                                 <div class="admin__button-group button-group d-flex pt-1 justify-content-md-start justify-content-center"
-                                    role="alert">
+                                     role="alert">
                                     <button type="submit"
-                                        class="btn btn-primary rounded-pill btn-default w-100 btn-squared lh-normal px-50 signIn-createBtn"
-                                        id="login-submit-btn">
+                                            class="btn btn-primary rounded-pill btn-default w-100 btn-squared lh-normal px-50 signIn-createBtn"
+                                            id="login-submit-btn">
                                         Đăng nhập
                                     </button>
                                     <div class="loaded-spin text-center">
@@ -78,7 +78,7 @@
                             <ul class="admin-socialBtn">
                                 <li>
                                     <button class="rounded-circle btn text-dark google">
-                                        <img class="svg" src="/img/google-Icon.svg" alt="img" />
+                                        <img class="svg" src="/img/google-Icon.svg" alt="img"/>
                                     </button>
                                 </li>
                                 <li>
@@ -97,7 +97,7 @@
                     <div class="admin-topbar">
                         <p class="mb-0">
                             Bạn đang gặp vấn đề khi đăng nhập?
-                            <a href="sign-up.html" class="color-primary">
+                            <a class="color-primary">
                                 Trợ giúp
                             </a>
                         </p>
@@ -129,8 +129,8 @@
 
 @if (currentPath.StartsWithSegments("/account/login"))
 {
-    @section ScriptLogin {
-    <script>
+    @section Scripts {
+        <script>
         // Clear error message
         const username = document.getElementById('username');
         const password = document.getElementById('password-field');
@@ -163,5 +163,5 @@
         }
         );
     </script>
-}
+    }
 }
