@@ -9,6 +9,8 @@ using Smart_Library.Middleware;
 using Smart_Library.Services;
 using Smart_Library.Utils;
 using Microsoft.Extensions.FileProviders;
+using AutoMapper;
+using Smart_Library.Config.AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("TuanLocal") ?? throw new InvalidOperationException("Connection string not found.");
@@ -31,6 +33,21 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 });
+// Add services to configure session
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = "SmartLibrary.Session";
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+// Add services to configure auto mapper
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new AutoMapperProfile());
+});
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 // Add services to configure web socket
 builder.Services.AddSingleton<WebSocketHandler>();
 // Add service to compile sass
@@ -52,6 +69,7 @@ builder.Services.AddScoped<IAuthorsManagerService, AuthorsManagerService>();
 builder.Services.AddScoped<IPublisherManagerService, PublishManagerService>();
 builder.Services.AddScoped<ICategoriesManagerService, CategoriesManagerService>();
 builder.Services.AddScoped<IBooksService, BooksService>();
+builder.Services.AddScoped<IOrderServices, OrderServices>();
 
 var app = builder.Build();
 var options = new RewriteOptions().Add(new RedirectLowerCaseRule());
@@ -75,6 +93,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication(); ;
 app.UseAuthorization();
+app.UseSession();
 app.UseMiddleware<ForceSignOutOnLockout>();
 app.UseWebSockets();
 app.UseMiddleware<WebSocketMiddleware>();

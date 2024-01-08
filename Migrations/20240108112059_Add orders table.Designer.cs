@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Smart_Library.Data;
 
@@ -11,9 +12,10 @@ using Smart_Library.Data;
 namespace Smart_Library.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240108112059_Add orders table")]
+    partial class Addorderstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -492,44 +494,6 @@ namespace Smart_Library.Migrations
                     b.HasKey("StatusId");
 
                     b.ToTable("OrderStatus");
-
-                    b.HasData(
-                        new
-                        {
-                            StatusId = 1,
-                            Description = "Đơn mượn sách đang chờ xử lý",
-                            StatusName = "Đang chờ xử lý"
-                        },
-                        new
-                        {
-                            StatusId = 2,
-                            Description = "Đơn đang chờ lấy sách",
-                            StatusName = "Chờ lấy sách"
-                        },
-                        new
-                        {
-                            StatusId = 3,
-                            Description = "Đã bàn giáo sách cho người mượn",
-                            StatusName = "Đã bàn giao sách"
-                        },
-                        new
-                        {
-                            StatusId = 4,
-                            Description = "Đã trả sách cho thủ thư",
-                            StatusName = "Đã trả sách"
-                        },
-                        new
-                        {
-                            StatusId = 5,
-                            Description = "Đơn mượn sách quá hạn trả sách",
-                            StatusName = "Quá hạn trả sách"
-                        },
-                        new
-                        {
-                            StatusId = 6,
-                            Description = "Đơn mượn sách đã hủy",
-                            StatusName = "Đã hủy"
-                        });
                 });
 
             modelBuilder.Entity("Smart_Library.Entities.Publisher", b =>

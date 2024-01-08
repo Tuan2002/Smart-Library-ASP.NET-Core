@@ -1,0 +1,1081 @@
+@using Microsoft.AspNetCore.Identity
+@using Smart_Library.Entities
+@using Smart_Library.Config
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Trang cá nhân";
+    var user = await UserManager.GetUserAsync(User);
+    var userRole = UserManager.GetRolesAsync(user).Result.FirstOrDefault();
+}
+<div class="container-fluid">
+    <div class="profile-content mb-50">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-main">
+                    <h4 class="breadcrumb-title">Trang cá nhân</h4>
+                    <div class="breadcrumb-action justify-content-center flex-wrap">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/"><i class="uil uil-estate"></i>Trang chủ</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Trang cá nhân</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-md-4  ">
+                <aside class="profile-sider">
+                    <!-- Profile Acoount -->
+                    <div class="card mb-25">
+                        <div class="card-body text-center pt-sm-30 pb-sm-0  px-25 pb-0">
+                            <div class="account-profile">
+                                <div class="ap-img w-100 d-flex justify-content-center">
+                                    <!-- Profile picture image-->
+                                    <img class="ap-img__main rounded-circle mb-3  wh-120 d-flex bg-opacity-primary"
+                                        src="@user.ProfileImage" alt="profile">
+                                </div>
+                                <div class="ap-nameAddress pb-3 pt-1">
+                                    <h5 class="ap-nameAddress__title">@user.FirstName @user.LastName</h5>
+                                    <p class="ap-nameAddress__subTitle fs-14 m-0">@userRole</p>
+                                    <p class="ap-nameAddress__subTitle fs-14 m-0">
+                                        <img src="img/svg/map-pin.svg" alt="map-pin" class="svg">@user.Address
+                                    </p>
+                                </div>
+                                <div class="ap-button button-group d-flex justify-content-center flex-wrap">
+                                    <button class="btn btn-primary btn-default btn-squared px-25"><img
+                                            src="img/svg/user-plus.svg" alt="user-plus" class="svg">
+                                        Chỉnh sửa
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-footer mt-20 pt-20 pb-20 px-0 bg-transparent">
+                                <div class="profile-overview d-flex justify-content-between flex-wrap">
+                                    <div class="po-details">
+                                        <h6 class="po-details__title pb-1">0</h6>
+                                        <span class="po-details__sTitle">Sách đã mượn</span>
+                                    </div>
+                                    <div class="po-details">
+                                        <h6 class="po-details__title pb-1">0</h6>
+                                        <span class="po-details__sTitle">Sách đang mượn</span>
+                                    </div>
+                                    <div class="po-details">
+                                        <h6 class="po-details__title pb-1">0</h6>
+                                        <span class="po-details__sTitle">Đã trả</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Profile Acoount End -->
+
+                    <!-- Profile User Bio -->
+                    <div class="card mb-25">
+                        <div class="user-bio border-bottom">
+                            <div class="card-header border-bottom-0 pt-sm-30 pb-sm-0  px-md-25 px-3">
+                                <div class="profile-header-title">
+                                    Tiểu sử
+                                </div>
+                            </div>
+                            <div class="card-body pt-md-1 pt-0">
+                                <div class="user-bio__content">
+                                    <p class="m-0">Chưa cập nhật</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-info border-bottom">
+                            <div class="card-header border-bottom-0 pt-sm-25 pb-sm-0  px-md-25 px-3">
+                                <div class="profile-header-title">
+                                    Thông tin liên hệ
+                                </div>
+                            </div>
+                            <div class="card-body pt-md-1 pt-0">
+                                <div class="user-content-info">
+                                    <p class="user-content-info__item">
+                                        <img class="svg" src="img/svg/mail.svg" alt="mail">@user.Email
+                                    </p>
+                                    <p class="user-content-info__item">
+                                        <img src="img/svg/phone.svg" alt="phone" class="svg">@user.PhoneNumber
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Profile User Bio End -->
+                </aside>
+            </div>
+
+            <div class="col-xxl-9 col-md-8">
+                <!-- Tab Menu -->
+                <div class="ap-tab ap-tab-header">
+                    <div class="ap-tab-header__img">
+                        <img src="/img/cover-photo.webp" alt="image" class="w-100 profile-cover-photo">
+                    </div>
+                    <div class="ap-tab-wrapper">
+                        <ul class="nav px-25 ap-tab-main" id="ap-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="ap-overview-tab" data-bs-toggle="pill"
+                                    href="#ap-overview" role="tab" aria-selected="true">Tổng quan</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="activity-tab" data-bs-toggle="pill" href="#activity" role="tab"
+                                    aria-selected="false">Hoạt động gần đây</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Tab Menu End -->
+                <div class="tab-content mt-25" id="ap-tabContent">
+                    <div class="tab-pane fade show active" id="ap-overview" role="tabpanel"
+                        aria-labelledby="ap-overview-tab">
+                        <div class="ap-content-wrapper">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <!-- Product Table -->
+                                    <div class="card mt-25 mb-40">
+                                        <div class="card-header px-md-25 px-3">
+                                            <h6>Đơn mượn sách</h6>
+                                            <div class="dropdown">
+                                                <a href="#" role="button" id="products" data-bs-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="false">
+                                                    <img src="img/svg/more-horizontal.svg" alt="more-horizontal"
+                                                        class="svg">
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right"
+                                                    aria-labelledby="products">
+                                                    <a class="dropdown-item" href="#">Action</a>
+                                                    <a class="dropdown-item" href="#">Another action</a>
+                                                    <a class="dropdown-item" href="#">Something else here</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div class="ap-product">
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Products Name</th>
+                                                                <th scope="col">Price</th>
+                                                                <th scope="col">sold</th>
+                                                                <th scope="col">Revenue</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>Samsung Galaxy S8 256GB</td>
+                                                                <td>$280</td>
+                                                                <td>126</td>
+                                                                <td>$38,536</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> Half Sleeve Shirt</td>
+                                                                <td>$25</td>
+                                                                <td>80</td>
+                                                                <td>$20,573 </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> Marco Shoes </td>
+                                                                <td>$32</td>
+                                                                <td>58</td>
+                                                                <td>$17,457</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>15 Mackbook Pro</td>
+                                                                <td>$9,50</td>
+                                                                <td>36</td>
+                                                                <td>$15,354</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>apple iphone x</td>
+                                                                <td>$985</td>
+                                                                <td>24</td>
+                                                                <td>$10,710</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Product Table End -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
+                        <div class="ap-post-content">
+                            <div class="row">
+                                <div class="col-xxl-8">
+                                    <!-- Friend post -->
+                                    <div class="card global-shadow mb-25">
+                                        <div class="friends-widget">
+                                            <div class="card-header px-md-25 px-3">
+                                                <h6>Friends</h6>
+                                            </div>
+                                            <div class="card-body p-0 py-10">
+                                                <div
+                                                    class="ffp d-flex ffp--hover justify-content-between  align-items-center w-100">
+                                                    <div class="d-flex">
+                                                        <div class="me-3 ffp__imgWrapper d-flex align-items-center">
+                                                            <span class="ffp__icon color-primary bg-opacity-primary">
+                                                                <img class="svg" src="img/svg/inbox.svg" alt="inbox">
+                                                            </span>
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block avatar avatar-md m-0 "
+                                                                style="background-image:url('img/author/4.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffp__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>
+                                                                    <span class="color-primary">James</span> sent you a
+                                                                    message
+                                                                </h6>
+                                                            </a>
+                                                            <p class="d-block">
+                                                                5 hours ago
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffp__button">
+
+
+                                                        <div class="dropdown  dropdown-click ">
+
+                                                            <button class="btn-link border-0 bg-transparent p-0"
+                                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                                <img src="img/svg/more-horizontal.svg"
+                                                                    alt="more-horizontal" class="svg">
+                                                            </button>
+
+
+                                                            <div
+                                                                class="dropdown-default dropdown-bottomRight dropdown-menu">
+                                                                <a class="dropdown-item" href="#">Item One</a>
+                                                                <a class="dropdown-item" href="#">Item Two</a>
+                                                                <a class="dropdown-item" href="#">Item Three</a>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="ffp d-flex ffp--hover justify-content-between  align-items-center w-100">
+                                                    <div class="d-flex">
+                                                        <div class="me-3 ffp__imgWrapper d-flex align-items-center">
+                                                            <span
+                                                                class="ffp__icon color-secondary bg-opacity-secondary">
+                                                                <img class="svg" src="img/svg/upload.svg" alt="upload">
+                                                            </span>
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block avatar avatar-md m-0 "
+                                                                style="background-image:url('img/author/1.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffp__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>
+                                                                    <span class="color-primary">Adam </span>upload
+                                                                    website template for sale
+                                                                </h6>
+                                                            </a>
+                                                            <p class="d-block">
+                                                                5 hours ago
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffp__button">
+
+
+                                                        <div class="dropdown  dropdown-click ">
+
+                                                            <button class="btn-link border-0 bg-transparent p-0"
+                                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                                <img src="img/svg/more-horizontal.svg"
+                                                                    alt="more-horizontal" class="svg">
+                                                            </button>
+
+
+                                                            <div
+                                                                class="dropdown-default dropdown-bottomRight dropdown-menu">
+                                                                <a class="dropdown-item" href="#">Item One</a>
+                                                                <a class="dropdown-item" href="#">Item Two</a>
+                                                                <a class="dropdown-item" href="#">Item Three</a>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="ffp d-flex ffp--hover justify-content-between  align-items-center w-100">
+                                                    <div class="d-flex">
+                                                        <div class="me-3 ffp__imgWrapper d-flex align-items-center">
+                                                            <span class="ffp__icon color-success bg-opacity-success">
+                                                                <img class="svg" src="img/svg/log-in.svg"
+                                                                    alt="log-in"></span>
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block avatar avatar-md m-0 "
+                                                                style="background-image:url('img/author/4.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffp__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>
+                                                                    <span class="color-primary">Mumtahin </span>has
+                                                                    registered
+                                                                </h6>
+                                                            </a>
+                                                            <p class="d-block">
+                                                                5 hours ago
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffp__button">
+
+
+                                                        <div class="dropdown  dropdown-click ">
+
+                                                            <button class="btn-link border-0 bg-transparent p-0"
+                                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                                <img src="img/svg/more-horizontal.svg"
+                                                                    alt="more-horizontal" class="svg">
+                                                            </button>
+
+
+                                                            <div
+                                                                class="dropdown-default dropdown-bottomRight dropdown-menu">
+                                                                <a class="dropdown-item" href="#">Item One</a>
+                                                                <a class="dropdown-item" href="#">Item Two</a>
+                                                                <a class="dropdown-item" href="#">Item Three</a>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="ffp d-flex ffp--hover justify-content-between  align-items-center w-100">
+                                                    <div class="d-flex">
+                                                        <div class="me-3 ffp__imgWrapper d-flex align-items-center">
+                                                            <span class="ffp__icon color-info bg-opacity-info">
+                                                                <img class="svg" src="img/svg/at-sign.svg"
+                                                                    alt="at-sign"></span>
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block avatar avatar-md m-0 "
+                                                                style="background-image:url('img/author/2.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffp__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>
+                                                                    <span class="color-primary">James </span>Send you a
+                                                                    message
+                                                                </h6>
+                                                            </a>
+                                                            <p class="d-block">
+                                                                5 hours ago
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffp__button">
+
+
+                                                        <div class="dropdown  dropdown-click ">
+
+                                                            <button class="btn-link border-0 bg-transparent p-0"
+                                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                                <img src="img/svg/more-horizontal.svg"
+                                                                    alt="more-horizontal" class="svg">
+                                                            </button>
+
+
+                                                            <div
+                                                                class="dropdown-default dropdown-bottomRight dropdown-menu">
+                                                                <a class="dropdown-item" href="#">Item One</a>
+                                                                <a class="dropdown-item" href="#">Item Two</a>
+                                                                <a class="dropdown-item" href="#">Item Three</a>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="ffp d-flex ffp--hover justify-content-between  align-items-center w-100">
+                                                    <div class="d-flex align">
+                                                        <div class="me-3 ffp__imgWrapper d-flex align-items-center">
+                                                            <span class="ffp__icon color-danger bg-opacity-danger">
+                                                                <img src="img/svg/heart.svg" alt="heart"
+                                                                    class="svg"></span>
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block avatar avatar-md m-0 "
+                                                                style="background-image:url('img/author/3.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffp__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>
+                                                                    <span class="color-primary">Adam </span>upload
+                                                                    website template for sale
+                                                                </h6>
+                                                            </a>
+                                                            <p class="d-block">
+                                                                5 hours ago
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffp__button">
+
+
+                                                        <div class="dropdown  dropdown-click ">
+
+                                                            <button class="btn-link border-0 bg-transparent p-0"
+                                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                                <img src="img/svg/more-horizontal.svg"
+                                                                    alt="more-horizontal" class="svg">
+                                                            </button>
+
+
+                                                            <div
+                                                                class="dropdown-default dropdown-bottomRight dropdown-menu">
+                                                                <a class="dropdown-item" href="#">Item One</a>
+                                                                <a class="dropdown-item" href="#">Item Two</a>
+                                                                <a class="dropdown-item" href="#">Item Three</a>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="ffp d-flex ffp--hover justify-content-between  align-items-center w-100">
+                                                    <div class="d-flex">
+                                                        <div class="me-3 ffp__imgWrapper d-flex align-items-center">
+                                                            <span class="ffp__icon color-warning bg-opacity-warning">
+                                                                <img class="svg" src="img/svg/message-square.svg"
+                                                                    alt="message-square"></span>
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block avatar avatar-md m-0 "
+                                                                style="background-image:url('img/author/4.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffp__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>
+                                                                    <span class="color-primary">James</span> sent you a
+                                                                    message
+                                                                </h6>
+                                                            </a>
+                                                            <p class="d-block">
+                                                                5 hours ago
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffp__button">
+
+
+                                                        <div class="dropdown  dropdown-click ">
+
+                                                            <button class="btn-link border-0 bg-transparent p-0"
+                                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                                <img src="img/svg/more-horizontal.svg"
+                                                                    alt="more-horizontal" class="svg">
+                                                            </button>
+
+
+                                                            <div
+                                                                class="dropdown-default dropdown-bottomRight dropdown-menu">
+                                                                <a class="dropdown-item" href="#">Item One</a>
+                                                                <a class="dropdown-item" href="#">Item Two</a>
+                                                                <a class="dropdown-item" href="#">Item Three</a>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="ffp d-flex ffp--hover justify-content-between  align-items-center w-100">
+                                                    <div class="d-flex">
+                                                        <div class="me-3 ffp__imgWrapper d-flex align-items-center">
+                                                            <span
+                                                                class="ffp__icon color-secondary bg-opacity-secondary">
+                                                                <img class="svg" src="img/svg/upload.svg"
+                                                                    alt="upload"></span>
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block avatar avatar-md m-0"
+                                                                style="background-image:url('img/author/1.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffp__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>
+                                                                    <span class="color-primary">Shreyu Neu</span> sent
+                                                                    you a
+                                                                    message
+                                                                </h6>
+                                                            </a>
+                                                            <p class="d-block">
+                                                                5 hours ago
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffp__button">
+
+
+                                                        <div class="dropdown  dropdown-click ">
+
+                                                            <button class="btn-link border-0 bg-transparent p-0"
+                                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                                <img src="img/svg/more-horizontal.svg"
+                                                                    alt="more-horizontal" class="svg">
+                                                            </button>
+
+
+                                                            <div
+                                                                class="dropdown-default dropdown-bottomRight dropdown-menu">
+                                                                <a class="dropdown-item" href="#">Item One</a>
+                                                                <a class="dropdown-item" href="#">Item Two</a>
+                                                                <a class="dropdown-item" href="#">Item Three</a>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="ffp d-flex ffp--hover justify-content-between  align-items-center w-100">
+                                                    <div class="d-flex">
+                                                        <div class="me-3 ffp__imgWrapper d-flex align-items-center">
+                                                            <span class="ffp__icon color-success bg-opacity-success">
+                                                                <img class="svg" src="img/svg/log-in.svg"
+                                                                    alt="log-in"></span>
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block avatar avatar-md m-0 "
+                                                                style="background-image:url('img/author/4.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffp__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>
+                                                                    <span class="color-primary">Mumtahin </span>has
+                                                                    registered
+                                                                </h6>
+                                                            </a>
+                                                            <p class="d-block">
+                                                                5 hours ago
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffp__button">
+
+
+                                                        <div class="dropdown  dropdown-click ">
+
+                                                            <button class="btn-link border-0 bg-transparent p-0"
+                                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                                <img src="img/svg/more-horizontal.svg"
+                                                                    alt="more-horizontal" class="svg">
+                                                            </button>
+
+
+                                                            <div
+                                                                class="dropdown-default dropdown-bottomRight dropdown-menu">
+                                                                <a class="dropdown-item" href="#">Item One</a>
+                                                                <a class="dropdown-item" href="#">Item Two</a>
+                                                                <a class="dropdown-item" href="#">Item Three</a>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="ffp d-flex ffp--hover justify-content-between  align-items-center w-100">
+                                                    <div class="d-flex">
+                                                        <div class="me-3 ffp__imgWrapper d-flex align-items-center">
+                                                            <span class="ffp__icon color-info bg-opacity-info">
+                                                                <img class="svg" src="img/svg/at-sign.svg"
+                                                                    alt="at-sign"></span>
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block avatar avatar-md m-0 "
+                                                                style="background-image:url('img/author/2.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffp__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>
+                                                                    <span class="color-primary">James </span>Send you a
+                                                                    message
+                                                                </h6>
+                                                            </a>
+                                                            <p class="d-block">
+                                                                5 hours ago
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffp__button">
+
+
+                                                        <div class="dropdown  dropdown-click ">
+
+                                                            <button class="btn-link border-0 bg-transparent p-0"
+                                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                                <img src="img/svg/more-horizontal.svg"
+                                                                    alt="more-horizontal" class="svg">
+                                                            </button>
+
+
+                                                            <div
+                                                                class="dropdown-default dropdown-bottomRight dropdown-menu">
+                                                                <a class="dropdown-item" href="#">Item One</a>
+                                                                <a class="dropdown-item" href="#">Item Two</a>
+                                                                <a class="dropdown-item" href="#">Item Three</a>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="ffp d-flex ffp--hover justify-content-between  align-items-center w-100">
+                                                    <div class="d-flex align">
+                                                        <div class="me-3 ffp__imgWrapper d-flex align-items-center">
+                                                            <span class="ffp__icon color-danger bg-opacity-danger">
+                                                                <img src="img/svg/heart.svg" alt="heart"
+                                                                    class="svg"></span>
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block avatar avatar-md m-0 "
+                                                                style="background-image:url('img/author/3.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffp__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>
+                                                                    <span class="color-primary">Adam </span>upload
+                                                                    website template for sale
+                                                                </h6>
+                                                            </a>
+                                                            <p class="d-block">
+                                                                5 hours ago
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffp__button">
+
+
+                                                        <div class="dropdown  dropdown-click ">
+
+                                                            <button class="btn-link border-0 bg-transparent p-0"
+                                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                                <img src="img/svg/more-horizontal.svg"
+                                                                    alt="more-horizontal" class="svg">
+                                                            </button>
+
+
+                                                            <div
+                                                                class="dropdown-default dropdown-bottomRight dropdown-menu">
+                                                                <a class="dropdown-item" href="#">Item One</a>
+                                                                <a class="dropdown-item" href="#">Item Two</a>
+                                                                <a class="dropdown-item" href="#">Item Three</a>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="ffp d-flex ffp--hover justify-content-between  align-items-center w-100">
+                                                    <div class="d-flex">
+                                                        <div class="me-3 ffp__imgWrapper d-flex align-items-center">
+                                                            <span class="ffp__icon color-warning bg-opacity-warning">
+                                                                <img class="svg" src="img/svg/message-square.svg"
+                                                                    alt="message-square"></span>
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block avatar avatar-md m-0 "
+                                                                style="background-image:url('img/author/4.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffp__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>
+                                                                    <span class="color-primary">James</span> sent you a
+                                                                    message
+                                                                </h6>
+                                                            </a>
+                                                            <p class="d-block">
+                                                                5 hours ago
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffp__button">
+
+
+                                                        <div class="dropdown  dropdown-click ">
+
+                                                            <button class="btn-link border-0 bg-transparent p-0"
+                                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                                <img src="img/svg/more-horizontal.svg"
+                                                                    alt="more-horizontal" class="svg">
+                                                            </button>
+
+
+                                                            <div
+                                                                class="dropdown-default dropdown-bottomRight dropdown-menu">
+                                                                <a class="dropdown-item" href="#">Item One</a>
+                                                                <a class="dropdown-item" href="#">Item Two</a>
+                                                                <a class="dropdown-item" href="#">Item Three</a>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="ffp d-flex ffp--hover justify-content-between  align-items-center w-100">
+                                                    <div class="d-flex">
+                                                        <div class="me-3 ffp__imgWrapper d-flex align-items-center">
+                                                            <span
+                                                                class="ffp__icon color-secondary bg-opacity-secondary">
+                                                                <img class="svg" src="img/svg/upload.svg"
+                                                                    alt="upload"></span>
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block avatar avatar-md m-0"
+                                                                style="background-image:url('img/author/1.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffp__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>
+                                                                    <span class="color-primary">Shreyu Neu</span> sent
+                                                                    you a
+                                                                    message
+                                                                </h6>
+                                                            </a>
+                                                            <p class="d-block">
+                                                                5 hours ago
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffp__button">
+
+
+                                                        <div class="dropdown  dropdown-click ">
+
+                                                            <button class="btn-link border-0 bg-transparent p-0"
+                                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                                <img src="img/svg/more-horizontal.svg"
+                                                                    alt="more-horizontal" class="svg">
+                                                            </button>
+
+
+                                                            <div
+                                                                class="dropdown-default dropdown-bottomRight dropdown-menu">
+                                                                <a class="dropdown-item" href="#">Item One</a>
+                                                                <a class="dropdown-item" href="#">Item Two</a>
+                                                                <a class="dropdown-item" href="#">Item Three</a>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Friend Post End -->
+                                </div>
+                                <div class="col-xxl-4">
+                                    <!-- Friend Widgets -->
+                                    <div class="card global-shadow mb-25">
+                                        <div class="friends-widget">
+                                            <div class="card-header px-md-25 px-3">
+                                                <h6>Friends</h6>
+                                            </div>
+                                            <div class="card-body p-0">
+                                                <div class="ffw d-flex justify-content-between">
+                                                    <div class="d-flex flex-wrap">
+                                                        <div class="me-3 ffw__imgWrapper">
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block ap-profile-image "
+                                                                style="background-image:url('img/author/4.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffw__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>Meyri Carles</h6>
+                                                            </a>
+                                                            <span class="d-block">
+                                                                UI Designer
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+
+
+
+                                                        <button
+                                                            class="btn btn-default btn-squared color-light btn-outline-light friends-follow">follow
+                                                        </button>
+
+
+
+
+                                                    </div>
+                                                </div>
+                                                <div class="ffw d-flex justify-content-between">
+                                                    <div class="d-flex flex-wrap">
+                                                        <div class="me-3 ffw__imgWrapper">
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block ap-profile-image "
+                                                                style="background-image:url('img/author/1.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffw__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>Shreyu Neu</h6>
+                                                            </a>
+                                                            <span class="d-block">
+                                                                Product Designer
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffw__button">
+
+
+
+                                                        <button
+                                                            class="btn btn-default btn-squared color-light btn-outline-light friends-follow"><img
+                                                                src="img/svg/check.svg" alt="check" class="svg">
+                                                            follow
+                                                        </button>
+
+
+
+
+                                                    </div>
+                                                </div>
+                                                <div class="ffw d-flex justify-content-between">
+                                                    <div class="d-flex flex-wrap">
+                                                        <div class="me-3 ffw__imgWrapper">
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block ap-profile-image "
+                                                                style="background-image:url('img/author/4.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffw__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>Domnic Harris</h6>
+                                                            </a>
+                                                            <span class="d-block">
+                                                                Executive Assistant
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffw__button">
+
+
+
+                                                        <button
+                                                            class="btn btn-default btn-squared color-light btn-outline-light friends-follow"><img
+                                                                src="img/svg/check.svg" alt="check" class="svg">
+                                                            follow
+                                                        </button>
+
+
+
+
+                                                    </div>
+                                                </div>
+                                                <div class="ffw d-flex justify-content-between">
+                                                    <div class="d-flex flex-wrap">
+                                                        <div class="me-3 ffw__imgWrapper">
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block ap-profile-image "
+                                                                style="background-image:url('img/author/2.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffw__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>Khalid Hasan</h6>
+                                                            </a>
+                                                            <span class="d-block">
+                                                                UI director
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffw__button">
+
+
+
+                                                        <button
+                                                            class="btn btn-default btn-squared color-light btn-outline-light friends-follow"><img
+                                                                src="img/svg/check.svg" alt="check" class="svg">
+                                                            follow
+                                                        </button>
+
+
+
+
+                                                    </div>
+                                                </div>
+                                                <div class="ffw d-flex justify-content-between">
+                                                    <div class="d-flex flex-wrap">
+                                                        <div class="me-3 ffw__imgWrapper">
+                                                            <span
+                                                                class=" profile-image bg-opacity-secondary rounded-circle d-block ap-profile-image "
+                                                                style="background-image:url('img/author/3.jpg'); background-size: cover;"></span>
+                                                        </div>
+                                                        <div class="ffw__title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>Tuhin Molla</h6>
+                                                            </a>
+                                                            <span class="d-block">
+                                                                System Administrator
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ffw__button">
+
+
+
+                                                        <button
+                                                            class="btn btn-default btn-squared color-light btn-outline-light friends-follow"><img
+                                                                src="img/svg/check.svg" alt="check" class="svg">
+                                                            follow
+                                                        </button>
+
+
+
+
+                                                    </div>
+                                                </div>
+                                                <a class="view-more-comment color-primary fs-13 fw-500 px-25 pb-20"
+                                                    href="#">Load more friends</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Friend Widgets End -->
+
+                                    <!-- Gallery Image -->
+                                    <div class="card global-shadow mb-25">
+                                        <div class="photo-gallery-widget">
+                                            <div
+                                                class="card-header justify-content-between d-flex flex-wrap px-md-25 px-3">
+                                                <h6>photos</h6>
+                                                <a class="color-primary fs-13 fw-500 mt-lg-0 mt-1" href="#">see all</a>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="wig">
+                                                    <div class="wig__item">
+                                                        <img src="img/315.png" alt="gallery">
+                                                    </div>
+                                                    <div class="wig__item">
+                                                        <img src="img/325.png" alt="gallery">
+                                                    </div>
+                                                    <div class="wig__item">
+                                                        <img src="img/design.png" alt="gallery">
+                                                    </div>
+                                                    <div class="wig__item">
+                                                        <img src="img/99.png" alt="gallery">
+                                                    </div>
+                                                    <div class="wig__item">
+                                                        <img src="img/166.png" alt="gallery">
+                                                    </div>
+                                                    <div class="wig__item">
+                                                        <img src="img/287.png" alt="gallery">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Gallery Image End -->
+
+                                    <!-- Gallery Video Popup -->
+                                    <div class="card global-shadow mb-25">
+                                        <div class="video-gallery-widget">
+                                            <div
+                                                class="card-header justify-content-between d-flex flex-wrap px-md-25 px-3">
+                                                <h6>videos</h6>
+                                                <a class="color-primary fs-13 fw-500 mt-lg-0 mt-1" href="#">see all</a>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="wig">
+                                                    <div class="wig__item wig-overlay">
+                                                        <img src="img/juice-2.png" alt="gallery">
+                                                        <div class="wig-overlay__content">
+                                                            <a class="wig-overlay__iconWrapper popup-youtube"
+                                                                href="https://www.youtube.com/watch?v=i9E_Blai8vk">
+                                                                <img class="svg" src="img/svg/play.svg" alt="img">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wig__item wig-overlay">
+                                                        <img src="img/cup-card.png" alt="gallery">
+                                                        <div class="wig-overlay__content">
+                                                            <a class="wig-overlay__iconWrapper popup-youtube"
+                                                                href="https://www.youtube.com/watch?v=i9E_Blai8vk">
+                                                                <img class="svg" src="img/svg/play.svg" alt="img">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wig__item wig-overlay">
+                                                        <img src="img/round-box.png" alt="gallery">
+                                                        <div class="wig-overlay__content">
+                                                            <a class="wig-overlay__iconWrapper popup-youtube"
+                                                                href="https://www.youtube.com/watch?v=i9E_Blai8vk">
+                                                                <img class="svg" src="img/svg/play.svg" alt="img">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wig__item wig-overlay">
+                                                        <img src="img/glass.png" alt="gallery">
+                                                        <div class="wig-overlay__content">
+                                                            <a class="wig-overlay__iconWrapper popup-youtube"
+                                                                href="https://www.youtube.com/watch?v=i9E_Blai8vk">
+                                                                <img class="svg" src="img/svg/play.svg" alt="img">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wig__item wig-overlay">
+                                                        <img src="img/bottles.png" alt="gallery">
+                                                        <div class="wig-overlay__content">
+                                                            <a class="wig-overlay__iconWrapper popup-youtube"
+                                                                href="https://www.youtube.com/watch?v=i9E_Blai8vk">
+                                                                <img class="svg" src="img/svg/play.svg" alt="img">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wig__item wig-overlay">
+                                                        <img src="img/325.png" alt="gallery">
+                                                        <div class="wig-overlay__content">
+                                                            <a class="wig-overlay__iconWrapper" href="#">
+                                                                <img class="svg" src="img/svg/play.svg" alt="img">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Gallery Video Popup End -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

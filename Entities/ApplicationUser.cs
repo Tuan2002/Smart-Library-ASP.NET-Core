@@ -16,5 +16,6 @@ namespace Smart_Library.Entities
         public int WorkspaceId { get; set; }
         public virtual Workspace Workspace { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
+        public virtual ICollection<Order> Orders { get; set; } = null!;
     }
 }

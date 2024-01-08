@@ -1,5 +1,6 @@
 @using Microsoft.AspNetCore.Identity
 @using Smart_Library.Entities
+@using Smart_Library.Config
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @{
@@ -62,26 +63,10 @@
                 <li class="nav-message">
                     <div class="dropdown-custom">
                         <a href="javascript:;" class="nav-item-toggle icon-active">
-                            <img class="svg" src="/img/svg/message.svg" alt="img">
+                            <img class="svg" src="/img/svg/cart.svg" alt="img">
                         </a>
                         <div class="dropdown-parent-wrapper">
-                            <div class="dropdown-wrapper">
-                                <h2 class="dropdown-wrapper__title">Tin nhắm</h2>
-                                <ul>
-                                    <div class="card card-default card-md mb-4">
-                                        <div class="card-body">
-                                            <div class="dm-empty text-center">
-                                                <div class="dm-empty__image">
-                                                    <img src="/img/svg/empty.svg" alt="Empty table">
-                                                </div>
-                                                <div class="dm-empty__text">
-                                                    <p class="">Không có tin nhắn nào!</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </ul>
-                            </div>
+                            @await Component.InvokeAsync("Cart")
                         </div>
                     </div>
                 </li>
@@ -150,16 +135,16 @@
                                     </div>
                                     <div class="nav-author__options">
                                         <ul>
-                                            @if (UserRole?.ToUpper() == "QUẢN TRỊ VIÊN" &&
+                                            @if (UserRole == AppRoles.Admin &&
                                            !currentPath.StartsWithSegments("/admin"))
                                             {
                                                 <li>
-                                                    <a href="/admin/">
+                                                    <a asp-controller="Home" asp-area="Admin" asp-action="Index">
                                                         <i class="uil uil-apps"></i>Trang quản trị</a>
                                                 </li>
                                             }
                                             <li>
-                                                <a href="">
+                                                <a asp-controller="Home" asp-action="MyProfile">
                                                     <i class="uil uil-user"></i>Trang cá nhân</a>
                                             </li>
                                             <li>

@@ -1,0 +1,203 @@
+@model IList<CartItem>
+@using Microsoft.AspNetCore.Identity
+@using Smart_Library.Entities
+@using Smart_Library.Config
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Giỏ sách";
+    var user = UserManager.GetUserAsync(User).Result;
+
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="shop-breadcrumb">
+                <div class="breadcrumb-main">
+                    <h4 class="breadcrumb-title">Giỏ sách</h4>
+                    <div class="breadcrumb-action justify-content-center flex-wrap">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#"><i class="uil uil-estate"></i>Trang chủ</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Giỏ sách</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="cartPage global-shadow pe-sm-30 ps-sm-30  p-15 py-sm-30 radius-xl w-100 mb-30">
+        <div class="row justify-content-center">
+            <div class="cus-xl-9 col-12 ">
+                <div class="product-cart mb-sm-0 mb-20">
+                    <div class="table-responsive">
+                        <table id="cart" class="table table-borderless table-hover">
+                            <thead>
+                                <tr class="product-cart__header">
+                                    <th scope="col">SÁCH</th>
+                                    <th scope="col">SỐ TRANG</th>
+                                    <th scope="col">TÁC GIẢ</th>
+                                    <th scope="col">SỐ LƯỢNG</th>
+                                    <th scope="col">SỐ NGÀY MƯỢN</th>
+                                    <th scope="col" class="">THAO TÁC</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="Product-cart-title">
+                                            <div class="media align-items-center">
+                                                <img class="me-3 wh-60 align-self-center rounded-circle" src="@item.Book.ImageURL"
+                                                    alt="Generic placeholder image">
+                                                <div class="media-body">
+                                                    <h5 class="mt-0">@item.Book.Name</h5>
+                                                    <div class="d-flex">
+                                                        <span>@item.Book.CategoryName</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="price">@item.Book.Pages</td>
+                                        <td>
+                                            <h6 class="price">@item.Book.AuthorName</h6>
+                                        </td>
+                                        <td>
+                                            <!-- Start: Product Quantity -->
+                                            <div class="quantity product-cart__quantity user-select-none" data-book="@item.BookId">
+                                                <input type="button" value="-" class="qty-minus bttn bttn-left wh-36">
+                                                <input type="number" disabled value="@item.Quantity" class="qty qh-36 input">
+                                                <input type="button" value="+" class="qty-plus bttn bttn-right wh-36">
+                                            </div>
+                                            <!-- End: Product Quantity -->
+                                        </td>
+                                        <td>
+                                            <!-- Start: Product End day -->
+                                            <div class="quantity product-cart__quantity user-select-none" data-book="@item.BookId">
+                                                <input type="button" value="-" class="day-minus bttn bttn-left wh-36">
+                                                <input type="number" disabled value="@item.NumOfDay" class="qty qh-36 input">
+                                                <input type="button" value="+" class="day-plus bttn bttn-right wh-36">
+                                            </div>
+                                            <!-- End: Product End day -->
+                                        </td>
+                                        <td class="actions text-center">
+                                            <a title="Xoá khỏi giỏ hàng" type="button" asp-action="RemoveFromCart" asp-controller="Orders" asp-route-bookId="@item.BookId"
+                                                class="action-btn fs-24 text-danger">
+                                                <i class="las la-trash-alt"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table><!-- End: table -->
+                    </div>
+                </div><!-- End: .product-cart-->
+            </div><!-- End: .cus-xl-9 -->
+            <div class="cus-xl-3 col-md-8  ">
+                <div class="card order-summery p-sm-25 p-15 order-summery--width mt-lg-0 mt-20">
+                    <div class="card-header border-bottom-0 p-0 pb-25">
+                        <h5 class="fw-500">Xác nhận mượn sách</h5>
+                    </div>
+                    <div class="card-body px-sm-25 px-20">
+                        <div class="total">
+                            <div class="subtotalTotal">
+                                Số loại sách:
+                                <span>@Model.Count</span>
+                            </div>
+                            <div class="subtotalTotal">
+                                Tên người mượn:
+                                <span>@user?.FirstName @user?.LastName</span>
+                            </div>
+                            <div class="subtotalTotal">
+                                Số điện thoại:
+                                <span>@user?.PhoneNumber</span>
+                            </div>
+                        </div>
+                        <div class="total-money d-flex justify-content-between">
+                            <h6>Tổng số sách: </h6>
+                            <h5 class="total-book">@Model.Sum(item => item.Quantity)</h5>
+                        </div>
+                        <a href="checkout.html" class="checkout btn-secondary content-center w-100 btn-lg mt-20">
+                            Đăng ký mượn sách<i class="las la-arrow-right"></i>
+                        </a>
+                    </div>
+                </div><!-- End: .order-summery-->
+            </div><!-- End: .cus-xl-9 -->
+        </div>
+    </div><!-- End: .global-shadow -->
+</div>
+@section Scripts{
+    <script>
+        const totalBook = $(".total-book");
+        async function UpdateQuantity (bookId, type) {
+            let result;
+            await $.ajax({
+                url: `/Orders/UpdateQuantity/${bookId}`,
+                type: "PUT",
+                data: {
+                    type: type
+                },
+                success: function (data) {
+                    if (data.isSuccess) {
+                        result = true;
+                    }
+                }
+            });
+            return result;
+        }
+        async function UpdateDay (bookId, type) {
+            let result;
+            await $.ajax({
+                url: `/Orders/UpdateDay/${bookId}`,
+                type: "PUT",
+                data: {
+                    type: type
+                },
+                success: function (data) {
+                    if (data.isSuccess) {
+                        result = true;
+                    }
+                }
+            });
+            return result;
+        }
+        $(document).on("click", ".qty-plus", async function () {
+            const bookId = $(this).parent().data("book");
+            const result = await UpdateQuantity(bookId, "increase");
+            if (result) {
+                totalBook.text(+totalBook.text() + 1);
+                $(this).prev().val(+$(this).prev().val() + 1);
+            }
+        });
+        $(document).on("click", ".qty-minus", async function () {
+        if ($(this).next().val() > 1) {
+            const bookId = $(this).parent().data("book");
+            const result = await UpdateQuantity(bookId, "decrease");
+            if (result) {
+                totalBook.text(+totalBook.text() - 1);
+                $(this).next().val(+$(this).next().val() - 1);
+            }
+        }  
+        });
+        $(document).on("click", ".day-plus", async function () {
+            const bookId = $(this).parent().data("book");
+            const result = await UpdateDay(bookId, "increase");
+            if (result) {
+                    $(this).prev().val(+$(this).prev().val() + 1);
+            }
+        });
+        $(document).on("click", ".day-minus", async function () {
+        if ($(this).next().val() > 1) {
+            const bookId = $(this).parent().data("book");
+            const result = await UpdateDay(bookId, "decrease");
+            if (result) {
+                $(this).next().val(+$(this).next().val() - 1);
+            }
+        }  
+        });
+    </script>
+}
