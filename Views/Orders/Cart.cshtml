@@ -121,9 +121,12 @@
                             <h6>Tổng số sách: </h6>
                             <h5 class="total-book">@Model.Sum(item => item.Quantity)</h5>
                         </div>
-                        <a href="checkout.html" class="checkout btn-secondary content-center w-100 btn-lg mt-20">
-                            Đăng ký mượn sách<i class="las la-arrow-right"></i>
-                        </a>
+                        <form asp-action="CreateOrder" asp-controller="Orders" method="POST">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="checkout btn-secondary content-center w-100 btn-lg mt-20">
+                                Đăng ký mượn sách<i class="las la-arrow-right"></i>
+                            </button>
+                        </form>
                     </div>
                 </div><!-- End: .order-summery-->
             </div><!-- End: .cus-xl-9 -->

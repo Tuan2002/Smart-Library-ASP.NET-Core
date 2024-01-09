@@ -80,5 +80,38 @@ namespace Smart_Library.Controllers
             var response = await _orderServices.UpdateDayAsync(bookId, type);
             return Ok(response);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("CreateOrder")]
+        public async Task<IActionResult> CreateOrder()
+        {
+            var response = await _orderServices.CreateOrderAsync();
+            if (!response.IsSuccess)
+            {
+                TempData["SystemMessage"] = response?.Message ?? "Tạo đơn mượn sách thất bại";
+                TempData["Type"] = "error";
+                return RedirectToAction("Index", "Home");
+            }
+            TempData["SystemMessage"] = response?.Message ?? "Đăng ký mượn sách thành công";
+            TempData["Type"] = "success";
+            return RedirectToAction("MyProfile", "Home");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("CancelOrder")]
+        public async Task<IActionResult> CancelOrder(int orderId)
+        {
+            var response = await _orderServices.CancelOrderAsync(orderId);
+            if (!response.IsSuccess)
+            {
+                TempData["SystemMessage"] = response?.Message ?? "Hủy đơn mượn sách thất bại";
+                TempData["Type"] = "error";
+                return RedirectToAction("Index", "Home");
+            }
+            TempData["SystemMessage"] = response?.Message ?? "Hủy đơn mượn sách thành công";
+            TempData["Type"] = "success";
+            return RedirectToAction("MyOrders", "Home");
+        }
+
     }
 }

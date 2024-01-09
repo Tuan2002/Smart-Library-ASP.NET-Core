@@ -1,0 +1,233 @@
+@model IList<OrderViewModel>
+@{
+    ViewData["Title"] = "Quản lý mượn trả sách";
+    var currentPage = ViewBag.CurrentPage;
+    var currentPageSize = ViewBag.CurrentPageSize;
+    var totalPage = ViewBag.TotalPage;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="breadcrumb-main user-member justify-content-sm-between ">
+                <div class=" d-flex flex-wrap justify-content-center breadcrumb-main__wrapper">
+                    <div class="d-flex align-items-center user-member__title justify-content-center me-sm-25">
+                        <h4 class="fw-500 breadcrumb-title">Quản lý đơn mượn sách</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="userDatatable global-shadow border-light-0 p-30 bg-white radius-xl w-100 mb-30">
+                <div class="table-responsive">
+                    <table class="table mb-0 table-striped table-hover">
+                        <thead>
+                            <tr class="userDatatable-header radius-xs">
+                                <th>
+                                    <span class="userDatatable-title">ID</span>
+                                </th>
+                                <th>
+                                    <span class="userDatatable-title">NGƯỜI MƯỢN</span>
+                                </th>
+                                <th>
+                                    <span class="userDatatable-title">SỐ ĐIỆN THOẠI</span>
+                                </th>
+                                <th>
+                                    <span class="userDatatable-title">THỜI GIAN TẠO</span>
+                                </th>
+                                <th>
+                                    <span class="userDatatable-title">TỔNG SỐ SÁCH</span>
+                                </th>
+                                <th>
+                                    <span class="userDatatable-title">TRẠNG THÁI</span>
+                                </th>
+                                <th class="actions">
+                                    <span class="userDatatable-title float-end">HÀNH ĐỘNG</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                <tr class="order-data-container" data-id="@order.OrderId">
+                                    <td>@order.OrderId</td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div class="userDatatable-inline-title">
+                                                <a href="#" class="text-dark fw-500">
+                                                    <h6>@order.User.FirstName @order.User.LastName</h6>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="userDatatable-content--subject">
+                                            @order.User.PhoneNumber
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="userDatatable-content--subject">
+                                            @order.CreateDate.ToString("HH:mm - dd/MM/yyyy")
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="userDatatable-content--priority">
+                                            @order.TotalBook
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="userDatatable-content d-inline-block">
+                                            @switch (order.StatusId)
+                                            {
+                                                case 1:
+                                                    <text>
+                                                        <span
+                                                            class="bg-opacity-warning color-warning rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                    </text>
+                                                    break;
+                                                case 2:
+                                                    <text>
+                                                        <span
+                                                            class="bg-opacity-warning color-warning rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                    </text>
+                                                    break;
+                                                case 3:
+                                                    <text>
+                                                        <span
+                                                            class="bg-opacity-success color-success rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                    </text>
+                                                    break;
+                                                case 4:
+                                                    <text>
+                                                        <span
+                                                            class="bg-opacity-primary color-primary rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                    </text>
+                                                    break;
+                                                case 6:
+                                                    <text>
+                                                        <span
+                                                            class="bg-opacity-danger color-danger rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                    </text>
+                                                    break;
+                                                default:
+                                                    <text>
+                                                        <span
+                                                            class="bg-opacity-primary color-primary rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                    </text>
+                                                    break;
+                                            }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <ul class="orderDatatable_actions mb-0 d-flex flex-wrap">
+                                            <li>
+                                                <a title="Xem chi tiết" asp-action="Details" asp-controller="Orders"
+                                                    asp-area="Admin" asp-route-orderId="@order.OrderId">
+                                                    <i class="uil uil-eye"></i>
+                                                </a>
+                                            </li>
+                                            @if (order.StatusId == 1)
+                                            {
+                                                <li>
+                                                    <a title="Xác nhận mượn sách nhanh" class="view" asp-action="ConfirmAll"
+                                                        asp-controller="Orders" asp-area="Admin"
+                                                        asp-route-orderId="@order.OrderId">
+                                                        <i class="uil uil-check"></i>
+                                                    </a>
+                                                </li>
+
+                                            }
+                                            @if (order.StatusId == 3)
+                                            {
+                                                <li>
+                                                    <a title="Xác nhận trả sách nhanh" class="view" asp-action="ReturnAll"
+                                                        asp-controller="Orders" asp-area="Admin"
+                                                        asp-route-orderId="@order.OrderId">
+                                                        <i class="uil uil-redo"></i>
+                                                    </a>
+                                                </li>
+                                            }
+                                            <li>
+                                                <a title="Xoá đơn mượn" class="remove" data-bs-toggle="modal"
+                                                    data-bs-target="#delete-order">
+                                                    <i class="uil uil-trash-alt"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-end pt-30">
+                    <nav class="dm-page ">
+                        <ul class="dm-pagination d-flex">
+                            <li class="dm-pagination__item">
+                                @if (currentPage > 1)
+                                {
+                                    var prevPage = currentPage - 1;
+                                    <a asp-action="Index" asp-controller="Orders" asp-area="Admin"
+                                        asp-route-page="@prevPage"
+                                        class="dm-pagination__link rounded-pill pagination-control">
+                                        <span class="la la-angle-left"></span>
+                                    </a>
+                                }
+                                @for (int i = 1; i <= totalPage; i++)
+                                {
+                                    var active = i == currentPage ? "active" : "";
+                                    <a asp-action="Index" asp-controller="Orders" asp-area="Admin" asp-route-page="@i"
+                                        class="dm-pagination__link rounded-pill @active">
+                                        <span class="page-number">@i</span>
+                                    </a>
+                                }
+                                @if (currentPage < totalPage && totalPage > 1)
+                                {
+                                    var nextPage = currentPage + 1;
+                                    <a asp-action="Index" asp-controller="Orders" asp-area="Admin"
+                                        asp-route-page="@nextPage"
+                                        class="dm-pagination__link rounded-pill pagination-control">
+                                        <span class="la la-angle-right"></span>
+                                    </a>
+                                }
+                            </li>
+                            <li class="dm-pagination__item">
+                                <div class="paging-option">
+                                    <form asp-action="Index" asp-controller="Orders" asp-area="Admin" method="GET"
+                                        id="page-size-form">
+                                        <input type="hidden" name="page" value="@currentPage" />
+                                        <select id="change-page-size" class="page-size-select" name="pageSize"
+                                            class="page-selection rounded-pill">
+                                            <option value="10" selected="@(currentPageSize == 10)">10 đơn mượn/trang
+                                            </option>
+                                            <option value="25" selected="@(currentPageSize == 25)">25 đơn mượn/trang
+                                            </option>
+                                            <option value="50" selected="@(currentPageSize == 50)">50 đơn mượn/trang
+                                            </option>
+                                        </select>
+                                    </form>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="./DeleteOrderModal.cshtml" />
+
+<script>
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+            const pageSizeForm = document.getElementById('page-size-form')
+            const pageSelection = $('#change-page-size')
+            pageSelection.change(function () {
+                pageSizeForm.submit()
+            })
+        },
+    )
+</script>

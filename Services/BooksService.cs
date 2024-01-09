@@ -9,7 +9,7 @@ namespace Smart_Library.Services
     {
         Task<ActionResponse> GetCategoriesAsync();
         Task<ActionResponse> GetAuthorsAsync();
-        Task<ActionResponse> GetListBookAsync(int? page, int? pageSize);
+        Task<ActionResponse> GetListBookAsync(int? page, int? pageSize, string? categoryName = null, string? authorName = null);
         Task<ActionResponse> GetBookDetailAsync(int id);
     }
     public class BooksService : IBooksService
@@ -80,14 +80,22 @@ namespace Smart_Library.Services
                 };
             }
         }
-        public async Task<ActionResponse> GetListBookAsync(int? page, int? pageSize)
+        public async Task<ActionResponse> GetListBookAsync(int? page, int? pageSize, string? categoryName = null, string? authorName = null)
         {
             try
             {
                 var query = _context.Books.AsQueryable();
-                var totalBooks = await query.CountAsync();
                 var currentPage = page ?? 1;
                 var currentPageSize = pageSize ?? 10;
+                if (!string.IsNullOrEmpty(categoryName))
+                {
+                    query = query.Where(book => book.Category.Name == categoryName);
+                }
+                if (!string.IsNullOrEmpty(authorName))
+                {
+                    query = query.Where(book => book.Author.Name == authorName);
+                }
+                var totalBooks = await query.CountAsync();
                 var totalPages = (int)Math.Ceiling((double)totalBooks / currentPageSize);
                 var books = await query
                     .Where(book => book.IsPublish == true)

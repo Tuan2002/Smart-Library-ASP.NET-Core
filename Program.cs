@@ -68,6 +68,7 @@ builder.Services.AddScoped<IBooksManagerService, BooksManagerService>();
 builder.Services.AddScoped<IAuthorsManagerService, AuthorsManagerService>();
 builder.Services.AddScoped<IPublisherManagerService, PublishManagerService>();
 builder.Services.AddScoped<ICategoriesManagerService, CategoriesManagerService>();
+builder.Services.AddScoped<IOrdersManagerService, OrdersManagerService>();
 builder.Services.AddScoped<IBooksService, BooksService>();
 builder.Services.AddScoped<IOrderServices, OrderServices>();
 

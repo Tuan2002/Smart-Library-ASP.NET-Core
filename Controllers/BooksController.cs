@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Web;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Smart_Library.Models;
@@ -18,9 +19,24 @@ namespace Smart_Library.Controllers
             _logger = logger;
             _booksService = booksService;
         }
-        public IActionResult Index(int? page, int? pageSize)
+        public async Task<IActionResult> Index(int? page, int? pageSize, string? categoryName, string? authorName)
         {
-            return NotFound();
+            var decodeCategoryName = HttpUtility.UrlDecode(categoryName);
+            var decodeAuthorName = HttpUtility.UrlDecode(authorName);
+            var response = await _booksService.GetListBookAsync(page, pageSize, decodeCategoryName, authorName);
+            var data = response.Data as dynamic;
+            ViewBag.CategoryName = decodeCategoryName ?? null;
+            ViewBag.AuthorName = decodeAuthorName;
+            ViewBag.TotalBooks = data?.totalBooks;
+            ViewBag.TotalPage = data?.totalPages;
+            ViewBag.currentPageSize = data?.currentPageSize;
+            ViewBag.CurrentPage = data?.currentPage;
+            var booksList = data?.books as List<BookViewModel>;
+            if (booksList == null || booksList.Count == 0)
+            {
+                return NotFound();
+            }
+            return View(booksList);
         }
         [HttpGet]
         [Route("{id}/{slug}")]

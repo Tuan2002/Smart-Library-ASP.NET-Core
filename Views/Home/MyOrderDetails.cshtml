@@ -1,0 +1,245 @@
+@using Microsoft.AspNetCore.Identity
+@using Smart_Library.Entities
+@using Smart_Library.Config
+@using Smart_Library.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model IList<OrderDetailViewModel>
+
+@{
+    ViewData["Title"] = "Lịch sử mượn sách - #" + Model.FirstOrDefault()?.OrderId;
+    var user = await UserManager.GetUserAsync(User);
+    var userRole = UserManager.GetRolesAsync(user).Result.FirstOrDefault();
+}
+<div class="container-fluid">
+    <div class="profile-content mb-50">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-main">
+                    <h4 class="breadcrumb-title">Lịch sử mượn sách của tôi - #@Model.FirstOrDefault()?.OrderId</h4>
+                    <div class="breadcrumb-action justify-content-center flex-wrap">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/"><i class="uil uil-estate"></i>Trang chủ</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Lịch sử chi tiết</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-md-4  ">
+                <aside class="profile-sider">
+                    <!-- Profile Acoount -->
+                    <div class="card mb-25">
+                        <div class="card-body text-center pt-sm-30 pb-sm-0  px-25 pb-0">
+                            <div class="account-profile">
+                                <div class="ap-img w-100 d-flex justify-content-center">
+                                    <!-- Profile picture image-->
+                                    <img class="ap-img__main rounded-circle mb-3  wh-120 d-flex bg-opacity-primary"
+                                        src="@user.ProfileImage" alt="profile">
+                                </div>
+                                <div class="ap-nameAddress pb-3 pt-1">
+                                    <h5 class="ap-nameAddress__title">@user.FirstName @user.LastName</h5>
+                                    <p class="ap-nameAddress__subTitle fs-14 m-0">@userRole</p>
+                                    <p class="ap-nameAddress__subTitle fs-14 m-0">
+                                        <img src="/img/svg/map-pin.svg" alt="map-pin" class="svg">@user.Address
+                                    </p>
+                                </div>
+                                <div class="ap-button button-group d-flex justify-content-center flex-wrap">
+                                    <button class="btn btn-primary btn-default btn-squared px-25"><img
+                                            src="/img/svg/user-plus.svg" alt="user-plus" class="svg">
+                                        Chỉnh sửa
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-footer mt-20 pt-20 pb-20 px-0 bg-transparent">
+                                <div class="profile-overview d-flex justify-content-between flex-wrap">
+                                    <div class="po-details">
+                                        <h6 class="po-details__title pb-1">@user.Orders.Count</h6>
+                                        <span class="po-details__sTitle">Số lần mượn sách</span>
+                                    </div>
+                                    <div class="po-details">
+                                        <h6 class="po-details__title pb-1">@user.Orders.Count(item =>
+                                            item.OrderDetails.Any(status => status.StatusId == 3))</h6>
+                                        <span class="po-details__sTitle">Sách đang mượn</span>
+                                    </div>
+                                    <div class="po-details">
+                                        <h6 class="po-details__title pb-1">@user.Orders.Count(item =>
+                                            item.OrderDetails.Any(status => status.StatusId == 4))</h6>
+                                        <span class="po-details__sTitle">Sách đã trả</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Profile Acoount End -->
+                    <!-- Profile User Bio -->
+                    <div class="card mb-25">
+                        <div class="user-bio border-bottom">
+                            <div class="card-header border-bottom-0 pt-sm-30 pb-sm-0  px-md-25 px-3">
+                                <div class="profile-header-title">
+                                    Tiểu sử
+                                </div>
+                            </div>
+                            <div class="card-body pt-md-1 pt-0">
+                                <div class="user-bio__content">
+                                    <p class="m-0">Chưa cập nhật</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-info border-bottom">
+                            <div class="card-header border-bottom-0 pt-sm-25 pb-sm-0  px-md-25 px-3">
+                                <div class="profile-header-title">
+                                    Thông tin liên hệ
+                                </div>
+                            </div>
+                            <div class="card-body pt-md-1 pt-0">
+                                <div class="user-content-info">
+                                    <p class="user-content-info__item">
+                                        <img class="svg" src="img/svg/mail.svg" alt="mail">@user.Email
+                                    </p>
+                                    <p class="user-content-info__item">
+                                        <img src="img/svg/phone.svg" alt="phone" class="svg">@user.PhoneNumber
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Profile User Bio End -->
+                </aside>
+            </div>
+
+            <div class="col-xxl-9 col-md-8">
+                <div class="userDatatable global-shadow border-light-0 p-30 bg-white radius-xl w-100 mb-30">
+                    <div class="table-responsive">
+                        <table class="table mb-0 table-borderless">
+                            <thead>
+                                <tr class="userDatatable-header">
+                                    <th>
+                                        <div class="d-flex align-items-center">
+                                            <span class="userDatatable-title">SÁCH</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <span class="userDatatable-title">MÃ ĐƠN</span>
+                                    </th>
+                                    <th>
+                                        <span class="userDatatable-title">NGÀY MƯỢN</span>
+                                    </th>
+                                    <th>
+                                        <span class="userDatatable-title">NGÀY TRẢ</span>
+                                    </th>
+                                    <th>
+                                        <span class="userDatatable-title">SỐ LƯỢNG</span>
+                                    </th>
+                                    <th>
+                                        <span class="userDatatable-title">TRẠNG THÁI</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Count == 0)
+                                {
+                                    <tr>
+                                        <td colspan="7">
+                                            <div class="card card-default card-md mb-4">
+                                                <div class="card-body">
+                                                    <div class="dm-empty text-center">
+                                                        <div class="dm-empty__image">
+                                                            <img src="/img/svg/empty.svg" alt="Empty table">
+                                                        </div>
+                                                        <div class="dm-empty__text">
+                                                            <p class="">Không có đơn mượn sách nào gần đây!</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                                @foreach (var order in Model)
+                                {
+                                    <tr class="book-data-container">
+                                        <td>
+                                            <div class="d-flex">
+                                                <div class="userDatatable__imgWrapper d-flex align-items-center">
+                                                    <a class="profile-image rounded-circle d-block m-0 wh-38"
+                                                        style="background-image:url('@order.Book.ImageURL'); background-size: cover;">
+                                                    </a>
+                                                </div>
+                                                <div class="userDatatable-inline-title text-truncate">
+                                                    <a class="text-dark fw-500">
+                                                        <h6 class="d-block text-truncate pe-3" style="max-width: 200px;">
+                                                            @order.Book.Name</h6>
+                                                    </a>
+                                                    <p class="d-block mb-0">@order.Book.AuthorName</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="userDatatable-content">@order.OrderId</div>
+                                        </td>
+                                        <td>
+                                            <div class="userDatatable-content">@order.OrderDate.ToString("HH:mm:ss - dd/MM/yyyy")</div>
+                                        </td>
+                                        <td>
+                                            <div class="userDatatable-content">@order.ReturnDate.ToString("HH:mm:ss - dd/MM/yyyy")</div>
+                                        </td>
+                                        <td>
+                                            <div class="userDatatable-content">
+                                                @order.Quantity
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="user-status-tag userDatatable-content d-inline-block">
+                                                @switch (order.StatusId)
+                                                {
+                                                    case 1:
+                                                        <text>
+                                                            <span
+                                                                class="bg-opacity-primary color-primary rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                        </text>
+                                                        break;
+                                                    case 2:
+                                                        <text>
+                                                            <span
+                                                                class="bg-opacity-warning color-warning rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                        </text>
+                                                        break;
+                                                    case 3:
+                                                        <text>
+                                                            <span
+                                                                class="bg-opacity-success color-success rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                        </text>
+                                                        break;
+                                                    case 4:
+                                                        <text>
+                                                            <span
+                                                                class="bg-opacity-primary color-primary rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                        </text>
+                                                        break;
+                                                    case 6:
+                                                        <text>
+                                                            <span
+                                                                class="bg-opacity-danger color-danger rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                        </text>
+                                                        break;
+                                                    default:
+                                                        <text>
+                                                            <span
+                                                                class="bg-opacity-primary color-primary rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                        </text>
+                                                        break;
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

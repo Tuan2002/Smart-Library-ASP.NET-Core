@@ -15,6 +15,8 @@ namespace Smart_Library.Config.AutoMapper
             .ForMember(dest => dest.PublisherName, opt => opt.MapFrom(src => src.Publisher.Name))
             .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
             .ForMember(dest => dest.AddedByName, opt => opt.MapFrom(src => src.AddedBy.FirstName + " " + src.AddedBy.LastName));
+            CreateMap<Order, OrderViewModel>();
+            CreateMap<OrderDetail, OrderDetailViewModel>();
         }
     }
 }

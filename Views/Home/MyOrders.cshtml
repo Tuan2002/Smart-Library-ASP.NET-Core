@@ -1,0 +1,287 @@
+@using Microsoft.AspNetCore.Identity
+@using Smart_Library.Entities
+@using Smart_Library.Config
+@using Smart_Library.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model IList<OrderViewModel>
+
+@{
+    ViewData["Title"] = "Lịch sử mượn sách của tôi";
+    var user = await UserManager.GetUserAsync(User);
+    var userRole = UserManager.GetRolesAsync(user).Result.FirstOrDefault();
+    var currentPage = ViewBag.CurrentPage;
+    var totalOrders = ViewBag.TotalOrder;
+    var currentPageSize = ViewBag.CurrentPageSize;
+    var totalPage = ViewBag.TotalPage;
+}
+<div class="container-fluid">
+    <div class="profile-content mb-50">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-main">
+                    <h4 class="breadcrumb-title">Lịch sử mượn sách của tôi</h4>
+                    <div class="breadcrumb-action justify-content-center flex-wrap">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/"><i class="uil uil-estate"></i>Trang chủ</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Đơn mượn</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-md-4  ">
+                <aside class="profile-sider">
+                    <!-- Profile Acoount -->
+                    <div class="card mb-25">
+                        <div class="card-body text-center pt-sm-30 pb-sm-0  px-25 pb-0">
+                            <div class="account-profile">
+                                <div class="ap-img w-100 d-flex justify-content-center">
+                                    <!-- Profile picture image-->
+                                    <img class="ap-img__main rounded-circle mb-3  wh-120 d-flex bg-opacity-primary"
+                                        src="@user.ProfileImage" alt="profile">
+                                </div>
+                                <div class="ap-nameAddress pb-3 pt-1">
+                                    <h5 class="ap-nameAddress__title">@user.FirstName @user.LastName</h5>
+                                    <p class="ap-nameAddress__subTitle fs-14 m-0">@userRole</p>
+                                    <p class="ap-nameAddress__subTitle fs-14 m-0">
+                                        <img src="/img/svg/map-pin.svg" alt="map-pin" class="svg">@user.Address
+                                    </p>
+                                </div>
+                                <div class="ap-button button-group d-flex justify-content-center flex-wrap">
+                                    <button class="btn btn-primary btn-default btn-squared px-25"><img
+                                            src="/img/svg/user-plus.svg" alt="user-plus" class="svg">
+                                        Chỉnh sửa
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-footer mt-20 pt-20 pb-20 px-0 bg-transparent">
+                                <div class="profile-overview d-flex justify-content-between flex-wrap">
+                                    <div class="po-details">
+                                        <h6 class="po-details__title pb-1">@user.Orders.Count</h6>
+                                        <span class="po-details__sTitle">Số lần mượn sách</span>
+                                    </div>
+                                    <div class="po-details">
+                                        <h6 class="po-details__title pb-1">@user.Orders.Count(item =>
+                                            item.OrderDetails.Any(status => status.StatusId == 3))</h6>
+                                        <span class="po-details__sTitle">Sách đang mượn</span>
+                                    </div>
+                                    <div class="po-details">
+                                        <h6 class="po-details__title pb-1">@user.Orders.Count(item =>
+                                            item.OrderDetails.Any(status => status.StatusId == 4))</h6>
+                                        <span class="po-details__sTitle">Sách đã trả</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Profile Acoount End -->
+                    <!-- Profile User Bio -->
+                    <div class="card mb-25">
+                        <div class="user-bio border-bottom">
+                            <div class="card-header border-bottom-0 pt-sm-30 pb-sm-0  px-md-25 px-3">
+                                <div class="profile-header-title">
+                                    Tiểu sử
+                                </div>
+                            </div>
+                            <div class="card-body pt-md-1 pt-0">
+                                <div class="user-bio__content">
+                                    <p class="m-0">Chưa cập nhật</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-info border-bottom">
+                            <div class="card-header border-bottom-0 pt-sm-25 pb-sm-0  px-md-25 px-3">
+                                <div class="profile-header-title">
+                                    Thông tin liên hệ
+                                </div>
+                            </div>
+                            <div class="card-body pt-md-1 pt-0">
+                                <div class="user-content-info">
+                                    <p class="user-content-info__item">
+                                        <img class="svg" src="img/svg/mail.svg" alt="mail">@user.Email
+                                    </p>
+                                    <p class="user-content-info__item">
+                                        <img src="img/svg/phone.svg" alt="phone" class="svg">@user.PhoneNumber
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Profile User Bio End -->
+                </aside>
+            </div>
+
+            <div class="col-xxl-9 col-md-8">
+                <div class="userDatatable global-shadow border-light-0 p-30 bg-white radius-xl w-100 mb-30">
+                    <div class="table-responsive">
+                        <table class="table mb-0 table-striped table-hover">
+                            <thead>
+                                <tr class="userDatatable-header radius-xs">
+                                    <th>
+                                        <span class="userDatatable-title">ID</span>
+                                    </th>
+                                    <span class="userDatatable-title">THỜI GIAN GỬI ĐƠN</span>
+                                    </th>
+                                    <th>
+                                        <span class="userDatatable-title">TỔNG SỐ SÁCH</span>
+                                    </th>
+                                    <th>
+                                        <span class="userDatatable-title">TRẠNG THÁI</span>
+                                    </th>
+                                    <th class="actions">
+                                        <span class="userDatatable-title float-end">HÀNH ĐỘNG</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in Model)
+                                {
+                                    <tr class="order-data-container" data-id="@order.OrderId">
+                                        <td>@order.OrderId</td>
+                                        <td>
+                                            <div class="userDatatable-content--subject">
+                                                @order.CreateDate.ToString("HH:mm - dd/MM/yyyy")
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="userDatatable-content--priority">
+                                                @order.TotalBook
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="userDatatable-content d-inline-block">
+                                                @switch (order.StatusId)
+                                                {
+                                                    case 1:
+                                                        <text>
+                                                            <span
+                                                                class="bg-opacity-warning color-warning rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                        </text>
+                                                        break;
+                                                    case 2:
+                                                        <text>
+                                                            <span
+                                                                class="bg-opacity-warning color-warning rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                        </text>
+                                                        break;
+                                                    case 3:
+                                                        <text>
+                                                            <span
+                                                                class="bg-opacity-success color-success rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                        </text>
+                                                        break;
+                                                    case 4:
+                                                        <text>
+                                                            <span
+                                                                class="bg-opacity-primary color-primary rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                        </text>
+                                                        break;
+                                                    case 6:
+                                                        <text>
+                                                            <span
+                                                                class="bg-opacity-danger color-danger rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                        </text>
+                                                        break;
+                                                    default:
+                                                        <text>
+                                                            <span
+                                                                class="bg-opacity-primary color-primary rounded-pill userDatatable-content-status">@order.Status.StatusName</span>
+                                                        </text>
+                                                        break;
+                                                }
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <ul class="orderDatatable_actions mb-0 d-flex flex-wrap">
+                                                <li>
+                                                    <a title="Xem chi tiết" asp-action="MyOrderDetails"
+                                                        asp-controller="Home" asp-route-orderId="@order.OrderId">
+                                                        <i class="uil uil-eye"></i>
+                                                    </a>
+                                                </li>
+
+                                                @if (order.StatusId < 3)
+                                                {
+                                                    <li>
+                                                        <a title="Huỷ đơn mượn" class="view" data-bs-toggle="modal"
+                                                            data-bs-target="#delete-order">
+                                                            <i class="uil uil-redo"></i>
+                                                        </a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-end pt-30">
+                        <nav class="dm-page ">
+                            <ul class="dm-pagination d-flex">
+                                <li class="dm-pagination__item">
+                                    @if (currentPage > 1)
+                                    {
+                                        var prevPage = currentPage - 1;
+                                        <a asp-action="MyOrders" asp-controller="Home" asp-route-page="@prevPage"
+                                            class="dm-pagination__link rounded-pill pagination-control">
+                                            <span class="la la-angle-left"></span>
+                                        </a>
+                                    }
+                                    @for (int i = 1; i <= totalPage; i++)
+                                    {
+                                        var active = i == currentPage ? "active" : "";
+                                        <a asp-action="MyOrders" asp-controller="Home" asp-route-page="@i"
+                                            class="dm-pagination__link rounded-pill @active">
+                                            <span class="page-number">@i</span>
+                                        </a>
+                                    }
+                                    @if (currentPage < totalPage && totalPage > 1)
+                                    {
+                                        var nextPage = currentPage + 1;
+                                        <a asp-action="MyOrders" asp-controller="Home" asp-route-page="@nextPage"
+                                            class="dm-pagination__link rounded-pill pagination-control">
+                                            <span class="la la-angle-right"></span>
+                                        </a>
+                                    }
+                                </li>
+                                <li class="dm-pagination__item">
+                                    <div class="paging-option">
+                                        <form asp-action="MyOrders" asp-controller="Home" method="GET"
+                                            id="page-size-form">
+                                            <input type="hidden" name="page" value="@currentPage" />
+                                            <select id="change-page-size" class="page-size-select" name="pageSize"
+                                                class="page-selection rounded-pill">
+                                                <option value="10" selected="@(currentPageSize == 10)">10 đơn mượn/trang
+                                                </option>
+                                                <option value="25" selected="@(currentPageSize == 25)">25 đơn mượn/trang
+                                                </option>
+                                                <option value="50" selected="@(currentPageSize == 50)">50 đơn mượn/trang
+                                                </option>
+                                            </select>
+                                        </form>
+                                    </div>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="./CancelOrderModal.cshtml" />
+<script>
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+            const pageSizeForm = document.getElementById('page-size-form')
+            const pageSelection = $('#change-page-size')
+            pageSelection.change(function () {
+                pageSizeForm.submit()
+            })
+        },
+    )
+</script>

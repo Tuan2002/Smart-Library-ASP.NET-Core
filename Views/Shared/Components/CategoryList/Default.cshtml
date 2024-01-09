@@ -7,8 +7,8 @@
         {
             <li>
                 <div class="w-100">
-                    <span class="fs-14 color-gray">@category.Name<span
-                            class="item-numbers">@category.TotalBooks</span></span>
+                    <a asp-action="Index" asp-controller="Books" asp-route-categoryName="@category.Name"
+                        class="fs-14 color-gray">@category.Name<span class="item-numbers">@category.TotalBooks</span></a>
                 </div>
             </li>
         }
