@@ -94,7 +94,7 @@ namespace Smart_Library.Controllers
             }
             TempData["SystemMessage"] = response?.Message ?? "Đăng ký mượn sách thành công";
             TempData["Type"] = "success";
-            return RedirectToAction("MyProfile", "Home");
+            return RedirectToAction("MyOrders", "Home");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
