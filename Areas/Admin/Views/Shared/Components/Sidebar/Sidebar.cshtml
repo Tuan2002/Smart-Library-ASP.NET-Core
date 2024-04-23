@@ -13,6 +13,18 @@
                     <span class="menu-text">Quản lý người dùng</span>
                 </a>
             </li>
+            <li>
+                <a asp-action="Index" asp-active asp-controller="Authors" asp-area="Admin">
+                    <span class="nav-icon uil uil-user-check"></span>
+                    <span class="menu-text">Quản lý tác giả</span>
+                </a>
+            </li>
+            <li>
+                <a asp-action="Index" asp-active asp-controller="Publishers" asp-area="Admin">
+                    <span class="nav-icon uil uil-books"></span>
+                    <span class="menu-text">Quản lý nhà xuất bản</span>
+                </a>
+            </li>
             <li
                 class="has-child user-select-none  @(ViewContext.RouteData.Values["controller"]?.ToString() == "Books" && ViewContext.RouteData.Values["Area"]?.ToString() == "Admin" ? "open" : "")">
                 <a role="button" asp-action="Index" asp-controller="Books" asp-area="Admin" asp-active>
@@ -33,6 +45,18 @@
                         </a>
                     </li>
                 </ul>
+            </li>
+            <li>
+                <a asp-action="Index" asp-active asp-controller="Orders" asp-area="Admin">
+                    <span class="nav-icon uil uil-books"></span>
+                    <span class="menu-text">Quản lý mượn sách</span>
+                </a>
+            </li>
+            <li>
+                <a asp-action="Index" asp-active asp-controller="FileManager" asp-area="Admin">
+                    <span class="nav-icon uil uil-file"></span>
+                    <span class="menu-text">Quản lý tệp tin</span>
+                </a>
             </li>
         </ul>
     </div>

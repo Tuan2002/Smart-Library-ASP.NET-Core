@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Smart_Library.Config;
 
 namespace Smart_Library.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Quản trị viên")]
+    [Authorize(Roles = AppRoles.Admin)]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

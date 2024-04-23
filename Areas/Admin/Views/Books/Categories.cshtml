@@ -3,6 +3,9 @@
 @model IList<CategoryViewModel>
 @{
     ViewData["Title"] = "Quản lý danh mục sách";
+    var currentPage = ViewBag.CurrentPage;
+    var currentPageSize = ViewBag.CurrentPageSize;
+    var totalPage = ViewBag.TotalPage;
 }
 <div class="container-fluid">
     <div class="row">
@@ -69,12 +72,12 @@
                                     </td>
                                     <td>
                                         <div class="userDatatable-content--priority">
-                                            @category.CreatedAt.ToString("HH:mm - dd/MM/yyyy")
+                                            @category.CreatedAt?.ToString("HH:mm - dd/MM/yyyy")
                                         </div>
                                     </td>
                                     <td>
                                         <div class="userDatatable-content d-inline-block">
-                                            @if (!category.Status)
+                                            @if (!category?.Status ?? false)
                                             {
                                                 <span
                                                     class="bg-opacity-danger color-danger rounded-pill userDatatable-content-status">Tạm ẩn</span>
@@ -89,7 +92,7 @@
                                     </td>
                                     <td>
                                         <ul class="orderDatatable_actions mb-0 d-flex flex-wrap">
-                                            @if (category.Status)
+                                            @if (category?.Status ?? false)
                                             {
                                             <li>
                                                 <a title="Ẩn danh mục" class="view" data-bs-toggle="modal" data-bs-target="#toogle-visiable-category">
@@ -105,12 +108,12 @@
                                             </li>
                                             }
                                             <li>
-                                                <a href="#" class="edit">
+                                                <a title="Chỉnh sửa danh mục" class="edit" data-bs-toggle="modal" data-bs-target="#update-category">
                                                     <i class="uil uil-edit"></i>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#" class="remove">
+                                                <a title="Xoá danh mục" class="remove" data-bs-toggle="modal" data-bs-target="#delete-category">
                                                     <i class="uil uil-trash-alt"></i>
                                                 </a>
                                             </li>
@@ -121,11 +124,73 @@
                         </tbody>
                     </table>
                 </div>
+                     <div class="d-flex justify-content-end pt-30">
+                        <nav class="dm-page ">
+                            <ul class="dm-pagination d-flex">
+                                <li class="dm-pagination__item">
+                                    @if (currentPage > 1)
+                                    {
+                                        var prevPage = currentPage - 1;
+                                        <a asp-action="Categories" asp-controller="Books" asp-area="Admin" asp-route-page="@prevPage"
+                                            class="dm-pagination__link rounded-pill pagination-control">
+                                            <span class="la la-angle-left"></span>
+                                        </a>
+                                    }
+                                    @for (int i = 1; i <= totalPage; i++)
+                                    {
+                                        var active = i == currentPage ? "active" : "";
+                                        <a asp-action="Categories" asp-controller="Books" asp-area="Admin" asp-route-page="@i"
+                                            class="dm-pagination__link rounded-pill @active">
+                                            <span class="page-number">@i</span>
+                                        </a>
+                                    }
+                                    @if (currentPage < totalPage && totalPage > 1)
+                                    {
+                                        var nextPage = currentPage + 1;
+                                        <a asp-action="Categories" asp-controller="Books" asp-area="Admin" asp-route-page="@nextPage"
+                                            class="dm-pagination__link rounded-pill pagination-control">
+                                            <span class="la la-angle-right"></span>
+                                        </a>
+                                    }
+                                </li>
+                                <li class="dm-pagination__item">
+                                    <div class="paging-option">
+                                        <form asp-action="Categories" asp-controller="Books" method="GET" id="page-size-form">
+                                            <input type="hidden" name="page" value="@currentPage" />
+                                            <select id="change-page-size" class="page-size-select" name="pageSize"
+                                                class="page-selection rounded-pill">
+                                                <option value="10" selected="@(currentPageSize == 10)">10 danh mục/trang
+                                                </option>
+                                                <option value="25" selected="@(currentPageSize == 25)">25 danh mục/trang
+                                                </option>
+                                                <option value="50" selected="@(currentPageSize == 50)">50 danh mục/trang
+                                                </option>
+                                            </select>
+                                        </form>
+                                    </div>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
             </div>
         </div>
     </div>
 </div>
 <partial name="./ToogleVisiableCategory.cshtml"/>
+<partial name="./DeleteCategoryModal.cshtml"/>
+<partial name="./UpdateCategoryModal.cshtml"/>
+<script>
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+               const pageSizeForm = document.getElementById('page-size-form')
+        const pageSelection = $('#change-page-size')
+        pageSelection.change(function () {
+            pageSizeForm.submit()
+        })
+        },
+    )
+</script>
 @await Html.PartialAsync("./CreateCategoryModal.cshtml", new CreateCategoryModel())
  @if (TempData["CategoryMessage"] != null)
   {

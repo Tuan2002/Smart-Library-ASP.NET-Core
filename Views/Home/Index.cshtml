@@ -1,8 +1,337 @@
-﻿@{
-    ViewData["Title"] = "Trang chủ";
+﻿@using Smart_Library.Models
+@model IList<BookViewModel>
+@{
+   ViewData["Title"] = "Trang chủ";
+   var totalBooks = ViewBag.TotalBooks;
+   var currentPage = ViewBag.CurrentPage;
+   var currentPageSize = ViewBag.CurrentPageSize;
+   var totalPage = ViewBag.TotalPage;
+   var booksByPages = @Model.OrderByDescending(book => book.Pages).ToList();
+   var booksByReaders = @Model.OrderByDescending(book => book.ReaderCount).ToList();
+   var booksByLanguage = @Model.OrderBy(book => book.Language).ToList();
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="products_page product_page--grid my-20">
+   <div class="container-fluid">
+      <div class="row justify-content-center">
+         <div class="columns-1 col-lg-8 col-sm-10 mb-lg-0 mb-30">
+            <div class="widget mb-lg-30">
+               <div class="widget-header-title px-20 py-15">
+                  <h6 class="d-flex align-content-center fw-500">
+                     <img src="img/svg/sliders.svg" alt="sliders" class="svg"> Bộ lọc
+                  </h6>
+               </div>
+               <div class="category_sidebar">
+                  <aside class="product-sidebar-widget mb-30 user-select-none">
+                     <!-- Title -->
+                     <div class="widget_title" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2"
+                        role="button" aria-expanded="true">
+                        <h6>Danh mục</h6>
+                     </div>
+                     <!-- Title -->
+                     <!-- Body -->
+                     <div class="card border-0 shadow-none multi-collapse mt-10 collapse show"
+                        id="multiCollapseExample2">
+                        @await Component.InvokeAsync("CategoryList")
+                     </div>
+                     <!-- Body -->
+                  </aside>
+                  <!-- End: Aside -->
+                  <!-- Start: Aside -->
+                  <aside class="product-sidebar-widget mb-30 user-select-none">
+                     <!-- Title -->
+                     <div class="widget_title" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3"
+                        role="button" aria-expanded="true">
+                        <h6>Tác giả</h6>
+                     </div>
+                     <!-- Title -->
+                     <!-- Body -->
+                     <div class="card border-0 shadow-none multi-collapse mt-10 collapse show"
+                        id="multiCollapseExample3">
+                        @await Component.InvokeAsync("AuthorList")
+                     </div>
+                     <!-- Body -->
+                  </aside>
+                  <!-- End: Aside -->
+               </div>
+            </div><!-- End: .widget -->
+         </div><!-- End: .columns-1 -->
+         <div class="columns-2 col-lg-12">
+            <!-- Start: Top Bar -->
+            <!-- Start: Top Bar -->
+            <div class="shop_products_top_filter">
+               <div class="project-top-wrapper d-flex flex-wrap align-items-center">
+                  <div class="project-top-left d-flex flex-wrap align-items-center">
+                     <div class="project-search shop-search  global-shadow ">
+                        <form action="/" class="d-flex align-items-center user-member__form">
+                           <img src="img/svg/search.svg" alt="search" class="svg">
+                           <input class="form-control me-sm-2 border-0 box-shadow-none" type="text"
+                              placeholder="Tìm kiếm sách, tài liệu" aria-label="Search">
+                        </form>
+                     </div>
+                     <span
+                        class="project-result-showing fs-14 color-gray ms-xl-25 me-xl-0 text-center mt-lg-0 mt-20">Hiển
+                        thị
+                        <span>@currentPageSize</span> trên tổng số <span>@totalBooks</span>
+                        kết quả</span>
+                  </div>
+                  <div class="project-top-right d-flex flex-wrap align-items-center">
+                     <div class="project-category flex-wrap d-flex align-items-center">
+                        <p class="fs-14 color-gray">Sắp xếp theo:</p>
+                        <div class="project-tap project-tab__product">
+                           <ul class="nav px-1 " id="ap-tab" role="tablist">
+                              <li class="nav-item">
+                                 <a class="nav-link active" id="ap-overview-tab" data-bs-toggle="pill"
+                                    href="#ap-overview" role="tab" aria-controls="ap-overview" aria-selected="true">Số
+                                    người đọc</a>
+                              </li>
+                              <li class="nav-item">
+                                 <a class="nav-link" id="timeline-tab" data-bs-toggle="pill" href="#timeline" role="tab"
+                                    aria-controls="timeline" aria-selected="false">Số trang</a>
+                              </li>
+                              <li class="nav-item">
+                                 <a class="nav-link" id="activity-tab" data-bs-toggle="pill" href="#activity" role="tab"
+                                    aria-controls="activity" aria-selected="false">Ngôn ngữ</a>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                     <div class="project-icon-selected content-center mt-lg-0 mt-25">
+                        <div class="listing-social-link listing-social-link__products pb-lg-0 pb-xs-2">
+                           <div class="icon-list-social d-flex">
+                              <a class="icon-list-social__link rounded-circle icon-list-social__style justify-content-center active ms-xl-20"
+                                 href="#">
+                                 <img class="svg" src="img/svg/grid.svg" alt="grid"></a>
+                              <a class="icon-list-social__link rounded-circle icon-list-social__style justify-content-center  "
+                                 href="product-list.html">
+                                 <img class="svg" src="img/svg/list.svg" alt="list"></a>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- End: Top Bar -->
+            <!-- End: Top Bar -->
+            <!-- Start: Shop Item -->
+            <div class="tab-content mt-25" id="ap-tabContent">
+               <div class="tab-pane fade show active" id="ap-overview" role="tabpanel"
+                  aria-labelledby="ap-overview-tab">
+                  <!-- Start: Shop Item -->
+                  <div class="row mt-2">
+                     @foreach (var book in booksByReaders)
+                     {
+                        <div class="col-xxl-3 col-xl-4 col-sm-6 col-12 mb-25">
+                           <div class="course-card">
+                              <a asp-action="Details" asp-controller="Books" asp-route-id="@book.BookId"
+                                 asp-route-slug="@book.Slug">
+                                 <div class="course-card__img-area w-100 h-100">
+                                    <img class="home-book-image" src="@book.ImageURL" alt="gallery">
+                                 </div>
+                              </a>
+                              <div class="course-card__body">
+                                 <a asp-action="Details" asp-controller="Books" asp-route-id="@book.BookId"
+                                    asp-route-slug="@book.Slug">
+                                    <div class="course-card__title">
+                                       <h4>@book.Name</h4>
+                                    </div>
+                                 </a>
+                              </div>
+                              <div class="course-card__footer d-block mt-auto">
+                                 <div class="course-card__about">
+                                    <img src="@book.AuthorImageURL" alt="ellipse11" class="rounded-circle">
+                                    <span>@book.AuthorName</span>
+                                 </div>
+                                 <div class="course-card__footer_right d-flex justify-content-between mt-3">
+                                    <div class="total-lextures no-btn">
+                                       <img src="img/svg/book.svg" alt="book" class="svg">
+                                       @book.ReaderCount người đọc
+                                    </div>
+                                    <div class="total-hours no-btn">
+                                       <img class="svg" src="img/svg/file-text.svg" alt="page">
+                                       @book.Pages trang
+                                    </div>
+                                 </div>
+                                 <div class="mt-3 d-flex justify-content-center w-100">
+                                    <a asp-controller="Orders" asp-action="AddToCart" asp-route-bookId="@book.BookId"
+                                       class="btn btn-default btn-primary btn-xs rounded-pill">
+                                       <i class="uil uil-shopping-bag"></i>
+                                       Mượn sách
+                                    </a>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     }
+                  </div>
+                  <!-- End: Shop Item -->
+               </div>
+               <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
+                  <div class="row product-page-list">
+                     @foreach (var book in booksByPages)
+                     {
+                        <div class="col-xxl-3 col-xl-4 col-sm-6 col-12 mb-25">
+                           <div class="course-card">
+                              <a asp-action="Details" asp-controller="Books" asp-route-id="@book.BookId"
+                                 asp-route-slug="@book.Slug">
+                                 <div class="course-card__img-area w-100 h-100">
+                                    <img class="home-book-image" src="@book.ImageURL" alt="gallery">
+                                 </div>
+                              </a>
+                              <div class="course-card__body">
+                                 <a asp-action="Details" asp-controller="Books" asp-route-id="@book.BookId"
+                                    asp-route-slug="@book.Slug">
+                                    <div class="course-card__title">
+                                       <h4>@book.Name</h4>
+                                    </div>
+                                 </a>
+                              </div>
+                              <div class="course-card__footer d-block mt-auto">
+                                 <div class="course-card__about">
+                                    <img src="@book.AuthorImageURL" alt="ellipse11" class="rounded-circle">
+                                    <span>@book.AuthorName</span>
+                                 </div>
+                                 <div class="course-card__footer_right d-flex justify-content-between mt-3">
+                                    <div class="total-lextures no-btn">
+                                       <img src="img/svg/book.svg" alt="book" class="svg">
+                                       @book.ReaderCount người đọc
+                                    </div>
+                                    <div class="total-hours no-btn">
+                                       <img class="svg" src="img/svg/file-text.svg" alt="page">
+                                       @book.Pages trang
+                                    </div>
+                                 </div>
+                                 <div class="mt-3 d-flex justify-content-center w-100">
+                                    <a asp-controller="Orders" asp-action="AddToCart" asp-route-bookId="@book.BookId"
+                                       class="btn btn-default btn-primary btn-xs rounded-pill">
+                                       <i class="uil uil-shopping-bag"></i>
+                                       Mượn sách
+                                    </a>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     }
+                  </div>
+               </div>
+               <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
+                  <div class="row product-page-list">
+                     @foreach (var book in booksByLanguage)
+                     {
+                        <div class="col-xxl-3 col-xl-4 col-sm-6 col-12 mb-25">
+                           <div class="course-card">
+                              <a asp-action="Details" asp-controller="Books" asp-route-id="@book.BookId"
+                                 asp-route-slug="@book.Slug">
+                                 <div class="course-card__img-area w-100 h-100">
+                                    <img class="home-book-image" src="@book.ImageURL" alt="gallery">
+                                 </div>
+                              </a>
+                              <div class="course-card__body">
+                                 <a asp-action="Details" asp-controller="Books" asp-route-id="@book.BookId"
+                                    asp-route-slug="@book.Slug">
+                                    <div class="course-card__title">
+                                       <h4>@book.Name</h4>
+                                    </div>
+                                 </a>
+                              </div>
+                              <div class="course-card__footer d-block mt-auto">
+                                 <div class="course-card__about">
+                                    <img src="@book.AuthorImageURL" alt="ellipse11" class="rounded-circle">
+                                    <span>@book.AuthorName</span>
+                                 </div>
+                                 <div class="course-card__footer_right d-flex justify-content-between mt-3">
+                                    <div class="total-lextures no-btn">
+                                       <img src="img/svg/book.svg" alt="book" class="svg">
+                                       @book.ReaderCount người đọc
+                                    </div>
+                                    <div class="total-hours no-btn">
+                                       <img class="svg" src="img/svg/file-text.svg" alt="page">
+                                       @book.Pages trang
+                                    </div>
+                                 </div>
+                                 <div class="mt-3 d-flex justify-content-center w-100">
+                                    <a asp-controller="Orders" asp-action="AddToCart" asp-route-bookId="@book.BookId"
+                                       class="btn btn-default btn-primary btn-xs rounded-pill">
+                                       <i class="uil uil-shopping-bag"></i>
+                                       Mượn sách
+                                    </a>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     }
+                  </div>
+               </div>
+            </div>
+            <!-- End: Shop Item -->
+            <div class="row">
+               <div class="col-12">
+                  <div class="user-pagination">
+                     <div class="d-flex justify-content-lg-end justify-content-center mt-1 mb-30">
+                        <nav class="dm-page ">
+                           <ul class="dm-pagination d-flex">
+                              <li class="dm-pagination__item">
+                                 @if (currentPage > 1)
+                                 {
+                                    var prevPage = currentPage - 1;
+                                    <a asp-action="Index" asp-controller="Home" asp-route-page="@prevPage"
+                                       class="dm-pagination__link rounded-pill pagination-control">
+                                       <span class="la la-angle-left"></span>
+                                    </a>
+                                 }
+                                 @for (int i = 1; i <= totalPage; i++)
+                                 {
+                                    var active = i == currentPage ? "active" : "";
+                                    <a asp-action="Index" asp-controller="Home" asp-route-page="@i"
+                                       class="dm-pagination__link rounded-pill @active">
+                                       <span class="page-number">@i</span>
+                                    </a>
+                                 }
+                                 @if (currentPage < totalPage && totalPage > 1)
+                                 {
+                                    var nextPage = currentPage + 1;
+                                    <a asp-action="Index" asp-controller="Home" asp-route-page="@nextPage"
+                                       class="dm-pagination__link rounded-pill pagination-control">
+                                       <span class="la la-angle-right"></span>
+                                    </a>
+                                 }
+                              </li>
+                              <li class="dm-pagination__item">
+                                 <div class="paging-option">
+                                    <form asp-action="Index" asp-controller="Home" method="GET" id="page-size-form">
+                                       <input type="hidden" name="page" value="@currentPage" />
+                                       <select id="change-page-size" class="page-size-select" name="pageSize"
+                                          class="page-selection rounded-pill">
+                                          <option value="10" selected="@(currentPageSize == 10)">10 đầu sách/trang
+                                          </option>
+                                          <option value="25" selected="@(currentPageSize == 25)">25 đầu sách/trang
+                                          </option>
+                                          <option value="50" selected="@(currentPageSize == 50)">50 đầu sách/trang
+                                          </option>
+                                       </select>
+                                    </form>
+                                 </div>
+                              </li>
+                           </ul>
+                        </nav>
+                     </div>
+                     <!-- End of Pagination-->
+                  </div>
+               </div>
+            </div>
+         </div><!-- End: .columns-2 -->
+      </div>
+   </div>
 </div>
+<!-- End: .products -->
+<script>
+   document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+         const pageSizeForm = document.getElementById('page-size-form')
+         const pageSelection = $('#change-page-size')
+         pageSelection.change(function () {
+            pageSizeForm.submit()
+         })
+      },
+   )
+</script>

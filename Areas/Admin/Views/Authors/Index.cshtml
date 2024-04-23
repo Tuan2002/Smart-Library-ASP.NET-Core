@@ -1,0 +1,231 @@
+@using Smart_Library.Models
+@using Smart_Library.Areas.Admin.Models
+@{
+    ViewData["Title"] = "Quản lý danh sách tác giả";
+    var totalAuthors = ViewBag.TotalAuthors;
+    var currentPage = ViewBag.CurrentPage;
+    var currentPageSize = ViewBag.CurrentPageSize;
+    var totalPage = ViewBag.TotalPage;
+}
+@model IList<AuthorViewModel>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="contact-breadcrumb">
+                <div class="breadcrumb-main add-contact justify-content-sm-between ">
+                    <div class=" d-flex flex-wrap justify-content-center breadcrumb-main__wrapper">
+                        <div class="d-flex align-items-center add-contact__title justify-content-center me-sm-25">
+                            <h4 class="fw-500 breadcrumb-title">Danh sách tác giả</h4>
+                            <span class="sub-title ms-sm-25 ps-sm-25"></span>
+                        </div>
+                        <div class="d-flex align-items-center add-contact__form my-sm-0 my-2">
+                            <img src="/img/svg/search.svg" alt="search" class="svg">
+                            <input class="form-control me-sm-2 border-0 radius-xl box-shadow-none" type="text" id="search-author"
+                                placeholder="Tìm kiếm theo tên" aria-label="Search">
+                        </div>
+                    </div>
+                    <div class="action-btn">
+                        <a class="btn px-15 btn-primary rounded-pill" data-bs-toggle="modal"
+                            data-bs-target="#add-contact">
+                            <i class="las la-plus fs-16"></i>Thêm tác giả
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- ends: contact-breadcrumb -->
+        </div>
+    </div>
+    <div class="row contact-card-group authors-container">
+        @if (totalAuthors == 0)
+        {
+            <div class="col-12 mt-20">
+                <div class="card card-default card-md mb-4">
+                    <div class="card-body">
+                        <div class="dm-empty text-center">
+                            <div class="dm-empty__image">
+                                <img src="/img/svg/empty.svg" alt="Empty table">
+                            </div>
+                            <div class="dm-empty__text">
+                                <p class="">Không có tác giả nào!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @foreach (var author in Model)
+        {
+            <div class="col-xl-3 mb-25">
+                <div class="card contact-card">
+                    <div class="card-body text-center pt-30 px-25 pb-0">
+                        <div class="card__more-action dropdown dropdown-click">
+                            <button class="btn-link border-0 bg-transparent p-0" data-bs-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <img src="/img/svg/more-horizontal.svg" alt="more-horizontal" class="svg">
+                            </button>
+                            <div class="dropdown-default dropdown-bottomLeft dropdown-menu-right dropdown-menu radius-xl author-data-container"
+                                data-name="@author.Name" data-id="@author.AuthorId" data-image="@author.ImageURL" data-email="@author.Email"
+                                data-title="@author.Title" data-address="@author.Address">
+                                <a role="button" class="dropdown-item text-primary" data-bs-toggle="modal"
+                                    data-bs-target="#update-author"> <i class="uil uil-edit text-primary"></i>
+                                    Chỉnh sửa</a>
+                                <a role="button" class="dropdown-item remove text-danger" data-bs-toggle="modal"
+                                    data-bs-target="#delete-author"><i
+                                        class="uil uil-trash-alt text-danger"></i> Xoá
+                                    bỏ</a>
+                            </div>
+                        </div>
+                        <div class="contact-profile-card text-center">
+                            <div class="cp-img d-flex justify-content-center">
+                                <img class="cp-img__main rounded-circle object-fit-cover" src="@author.ImageURL"
+                                    alt="HexaDash Contact">
+                            </div>
+                            <div class="cp-info">
+                                <h6 class="cp-info__title">@author.Name</h6>
+                                <span class="cp-info__designation">@author.Title</span>
+                            </div>
+                        </div>
+                        <div class="card-footer mt-20 pt-20 pb-20 px-0 bg-transparent">
+                            <ul class="c-info-list">
+                                <li class="c-info-list__item d-flex">
+                                    <div class="c-info-item-icon">
+                                        <img src="/img/svg/clock-ticket.svg" alt="mail" class="svg">
+                                    </div>
+                                    <p class="c-info-item-text">
+                                        @author.AddedAt?.ToString("dd/MM/yyyy, HH:mm")
+                                    </p>
+                                </li>
+                                <li class="c-info-list__item d-flex">
+                                    <div class="c-info-item-icon">
+                                        <img src="/img/svg/mail.svg" alt="mail" class="svg">
+                                    </div>
+                                    <p class="c-info-item-text">
+                                        @author.Email
+                                    </p>
+                                </li>
+                                <li class="c-info-list__item d-flex">
+                                    <div class="c-info-item-icon">
+                                        <img src="/img/svg/map-pin.svg" alt="map-pin" class="svg">
+                                    </div>
+                                    <p class="c-info-item-text">
+                                        @author.Address
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- end: card -->
+            </div>
+            <!-- ends: col-xl-3 -->
+        }
+    </div>
+</div>
+@await Html.PartialAsync("./AddAuthorModal.cshtml", new CreateAuthorModel())
+@await Html.PartialAsync("./UpdateAuthorModal.cshtml", new UpdateAuthorModel())
+@await Html.PartialAsync("./DeleteAuthorModal.cshtml")
+@section Search {
+<script type="text/javascript">
+    const searchUrl = "/admin/authors/search";
+    const authorsContainer = $(".authors-container");
+    const searchBox = $("#search-author");
+    const searchAuthor = (searchValue) => {
+            $.ajax({
+    type: "GET",
+    url: "/admin/authors/search",
+    data: {
+        query: searchValue
+    },
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (response) {
+        authorsContainer.empty();
+        const authors = response.data.authors;
+        authors.map((author) => {
+            const addedAtDate = new Date(author.addedAt);
+            const formattedDate = addedAtDate.toLocaleString('en-GB', {
+                hour: '2-digit',
+                minute: '2-digit',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+            });
+        const html = `
+        <div class="col-xl-3 mb-25">
+    <div class="card contact-card">
+        <div class="card-body text-center pt-30 px-25 pb-0">
+            <div class="card__more-action dropdown dropdown-click">
+                <button class="btn-link border-0 bg-transparent p-0" data-bs-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <img src="/img/svg/more-horizontal.svg" alt="more-horizontal" class="svg">
+                </button>
+                <div class="dropdown-default dropdown-bottomLeft dropdown-menu-right dropdown-menu radius-xl author-data-container"
+                    data-name="${author.name}" data-id="${author.authorId}" data-image="${author.imageURL}" data-email="${author.email}"
+                    data-title="${author.title}" data-address="${author.address}">
+                    <a role="button" class="dropdown-item text-primary" data-bs-toggle="modal"
+                        data-bs-target="#update-author"> <i class="uil uil-edit text-primary"></i>
+                        Chỉnh sửa</a>
+                    <a role="button" class="dropdown-item remove text-danger" data-bs-toggle="modal"
+                        data-bs-target="#delete-author"><i
+                            class="uil uil-trash-alt text-danger"></i> Xoá
+                        bỏ</a>
+                </div>
+            </div>
+            <div class="contact-profile-card text-center">
+                <div class="cp-img d-flex justify-content-center">
+                    <img class="cp-img__main rounded-circle object-fit-cover" src="${author.imageURL}"
+                        alt="HexaDash Contact">
+                </div>
+                <div class="cp-info">
+                    <h6 class="cp-info__title">${author.name}</h6>
+                    <span class="cp-info__designation">${author.title}</span>
+                </div>
+            </div>
+            <div class="card-footer mt-20 pt-20 pb-20 px-0 bg-transparent">
+                <ul class="c-info-list">
+                    <li class="c-info-list__item d-flex">
+                        <div class="c-info-item-icon">
+                            <img src="/img/svg/clock-ticket.svg" alt="mail" class="svg">
+                        </div>
+                        <p class="c-info-item-text">${formattedDate}
+                        </p>
+                    </li>
+                    <li class="c-info-list__item d-flex">
+                        <div class="c-info-item-icon">
+                            <img src="/img/svg/mail.svg" alt="mail" class="svg">
+                        </div>
+                        <p class="c-info-item-text">
+                            ${author.email}
+                        </p>
+                    </li>
+                    <li class="c-info-list__item d-flex">
+                        <div class="c-info-item-icon">
+                            <img src="/img/svg/map-pin.svg" alt="map-pin" class="svg">
+                        </div>
+                        <p class="c-info-item-text">
+                            ${author.address}
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- end: card -->
+    </div>
+    <!-- ends: col-xl-3 -->`;
+    authorsContainer.append(html);
+    })
+    },
+    });
+
+    }
+    var timeout;
+    searchBox.on("keyup", (e) => {
+    const searchValue = e.target.value;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+        searchAuthor(searchValue);
+    }, 1000);
+    });
+</script>
+}

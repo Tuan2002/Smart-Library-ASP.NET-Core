@@ -1,17 +1,18 @@
-using System.Net;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using static Smart_Library.Config.SystemRules;
 using Smart_Library.Areas.Admin.Services;
 using Smart_Library.Data;
 using Smart_Library.Entities;
 using Smart_Library.Middleware;
 using Smart_Library.Services;
 using Smart_Library.Utils;
-using static Smart_Library.Config.AppRules;
+using Microsoft.Extensions.FileProviders;
+using AutoMapper;
+using Smart_Library.Config.AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
-
 var connectionString = builder.Configuration.GetConnectionString("TuanLocal") ?? throw new InvalidOperationException("Connection string not found.");
 // Add services to connect to database
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
@@ -32,6 +33,21 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 });
+// Add services to configure session
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = "SmartLibrary.Session";
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+// Add services to configure auto mapper
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new AutoMapperProfile());
+});
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 // Add services to configure web socket
 builder.Services.AddSingleton<WebSocketHandler>();
 // Add service to compile sass
@@ -49,7 +65,12 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUsersManagerService, UsersManagerService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IBooksManagerService, BooksManagerService>();
+builder.Services.AddScoped<IAuthorsManagerService, AuthorsManagerService>();
+builder.Services.AddScoped<IPublisherManagerService, PublishManagerService>();
+builder.Services.AddScoped<ICategoriesManagerService, CategoriesManagerService>();
+builder.Services.AddScoped<IOrdersManagerService, OrdersManagerService>();
 builder.Services.AddScoped<IBooksService, BooksService>();
+builder.Services.AddScoped<IOrderServices, OrderServices>();
 
 var app = builder.Build();
 var options = new RewriteOptions().Add(new RedirectLowerCaseRule());
@@ -63,10 +84,17 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseStatusCodePagesWithReExecute("/error/{0}");
 app.UseHttpsRedirection();
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Uploads")),
+    RequestPath = new PathString("/uploads")
+}
+);
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication(); ;
 app.UseAuthorization();
+app.UseSession();
 app.UseMiddleware<ForceSignOutOnLockout>();
 app.UseWebSockets();
 app.UseMiddleware<WebSocketMiddleware>();
@@ -76,5 +104,5 @@ app.MapControllerRoute(
         );
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}/{slug?}");
 app.Run();

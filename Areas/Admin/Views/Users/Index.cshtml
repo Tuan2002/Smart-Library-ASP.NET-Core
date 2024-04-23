@@ -2,6 +2,10 @@
 @model IList<UserViewModel>
 @{
     ViewData["Title"] = "Quản lý người dùng";
+    var totalUsers = ViewBag.TotalUsers;
+    var currentPage = ViewBag.CurrentPage;
+    var currentPageSize = ViewBag.CurrentPageSize;
+    var totalPage = ViewBag.TotalPage;
 }
 <div class="container-fluid">
     <div class="row">
@@ -72,7 +76,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.ToList().Count == 0 || Model == null)
+                            @if (@totalUsers == 0)
                             {
                                 <tr>
                                     <td colspan="7">
@@ -195,36 +199,45 @@
                         <nav class="dm-page ">
                             <ul class="dm-pagination d-flex">
                                 <li class="dm-pagination__item">
-                                    <a href="#" class="dm-pagination__link rounded-pill pagination-control">
-                                        <span class="la la-angle-left"></span>
-                                    </a>
-                                    <a href="#" class="dm-pagination__link rounded-pill active">
-                                        <span class="page-number">1</span>
-                                    </a>
-                                    <a href="#" class="dm-pagination__link rounded-pill">
-                                        <span class="page-number">2</span>
-                                    </a>
-                                    <a href="#" class="dm-pagination__link rounded-pill">
-                                        <span class="page-number">3</span>
-                                    </a>
-                                    <a href="#" class="dm-pagination__link rounded-pill pagination-control">
-                                        <span class="page-number">...</span>
-                                    </a>
-                                    <a href="#" class="dm-pagination__link rounded-pill">
-                                        <span class="page-number">12</span>
-                                    </a>
-                                    <a href="#" class="dm-pagination__link rounded-pill pagination-control">
-                                        <span class="la la-angle-right"></span>
-                                    </a>
-                                    <a href="#" class="dm-pagination__option"></a>
+                                    @if (currentPage > 1)
+                                    {
+                                        var prevPage = currentPage - 1;
+                                        <a asp-action="Index" asp-controller="Users" asp-area="Admin" asp-route-page="@prevPage"
+                                            class="dm-pagination__link rounded-pill pagination-control">
+                                            <span class="la la-angle-left"></span>
+                                        </a>
+                                    }
+                                    @for (int i = 1; i <= totalPage; i++)
+                                    {
+                                        var active = i == currentPage ? "active" : "";
+                                        <a asp-action="Index" asp-controller="Users" asp-area="Admin" asp-route-page="@i"
+                                            class="dm-pagination__link rounded-pill @active">
+                                            <span class="page-number">@i</span>
+                                        </a>
+                                    }
+                                    @if (currentPage < totalPage && totalPage > 1)
+                                    {
+                                        var nextPage = currentPage + 1;
+                                        <a asp-action="Index" asp-controller="Users" asp-area="Admin" asp-route-page="@nextPage"
+                                            class="dm-pagination__link rounded-pill pagination-control">
+                                            <span class="la la-angle-right"></span>
+                                        </a>
+                                    }
                                 </li>
                                 <li class="dm-pagination__item">
                                     <div class="paging-option">
-                                        <select name="page-number" class="page-selection rounded-pill">
-                                            <option value="20">20 dòng/trang</option>
-                                            <option value="40">40 dòng/trang</option>
-                                            <option value="60">60 dòng/trang</option>
-                                        </select>
+                                        <form asp-action="Index" asp-controller="Users" method="GET" id="page-size-form">
+                                            <input type="hidden" name="page" value="@currentPage" />
+                                            <select id="change-page-size" class="page-size-select" name="pageSize"
+                                                class="page-selection rounded-pill">
+                                                <option value="10" selected="@(currentPageSize == 10)">10 người/trang
+                                                </option>
+                                                <option value="25" selected="@(currentPageSize == 25)">25 người/trang
+                                                </option>
+                                                <option value="50" selected="@(currentPageSize == 50)">50 người/trang
+                                                </option>
+                                            </select>
+                                        </form>
                                     </div>
                                 </li>
                             </ul>

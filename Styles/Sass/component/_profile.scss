@@ -81,7 +81,6 @@
   @include e(sTitle) {
     @include ofs(14px, lh(14px, 25px), 400);
     color: var(--color-light);
-    text-transform: capitalize;
   }
 }
 
@@ -90,7 +89,6 @@
   @include e(content) {
     @include ofs(15px, lh(15px, 25px), 400);
     color: var(--color-gray);
-    text-transform: capitalize;
   }
 
   .card-body {
@@ -290,7 +288,6 @@
       margin: 2px 0 16px;
       color: var(--color-gray);
       @include ofs(15px, lh(15px, 25px), 400);
-      text-transform: capitalize;
     }
   }
 
@@ -552,7 +549,6 @@
     font-size: 14px;
     line-height: 20px;
     font-weight: 500;
-    text-transform: capitalize;
     padding: 17px 25px;
     color: var(--color-dark);
 
@@ -575,7 +571,6 @@
       border: none;
       padding: 17px 25px;
       @include ofs(14px, null, 400);
-      text-transform: capitalize;
     }
   }
 }
@@ -637,7 +632,6 @@
     a {
       @include ofs(13px, lh(13px, 22px), 400);
       color: var(--color-light);
-      text-transform: capitalize;
 
       &:not(:last-child) {
         margin-right: 20px;
@@ -690,7 +684,6 @@
     display: none;
     height: 35px;
     @extend .content-center;
-    text-transform: capitalize;
     box-shadow: 0 8px 13px #5f63f233;
   }
 
@@ -858,7 +851,6 @@
 .ap-post-cc-reply {
   p {
     @include ofs(14px, lh(14px, 22px), 400);
-    text-transform: capitalize;
   }
 
   @include e(reaction) {
@@ -868,7 +860,6 @@
     li {
       color: var(--color-lighten);
       @include ofs(13px, lh(13px, 22px), 400);
-      text-transform: capitalize;
       position: relative;
 
       &:not(:last-child) {
@@ -1003,7 +994,6 @@
 
   button {
     @include ofs(12px, lh(12px, 15px), 500);
-    text-transform: capitalize;
     padding: 8px 14px;
     border-radius: $border-radius;
     border: 1px solid var(--border-color);

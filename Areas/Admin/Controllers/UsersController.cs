@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Smart_Library.Areas.Admin.Models;
 using Smart_Library.Areas.Admin.Services;
+using Smart_Library.Config;
 using Smart_Library.Data;
 using Smart_Library.Entities;
 using Smart_Library.Utils;
@@ -13,7 +14,7 @@ namespace Smart_Library.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
-    [Authorize(Roles = "Quản trị viên")]
+    [Authorize(Roles = AppRoles.Admin)]
     public class UsersController : Controller
     {
         public readonly IUsersManagerService _usersManagerService;
@@ -31,10 +32,20 @@ namespace Smart_Library.Areas.Admin.Controllers
             _usersManagerService = usersManagerService;
         }
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page, int? pageSize)
         {
-            var UserList = await _usersManagerService.GetUsersListAsync();
-            return View(UserList);
+            var response = await _usersManagerService.GetUsersListAsync(page, pageSize);
+            if (response.IsSuccess)
+            {
+                var data = response.Data as dynamic;
+                ViewBag.TotalUsers = data?.totalUsers;
+                ViewBag.TotalPage = data?.totalPages;
+                ViewBag.currentPageSize = data?.currentPageSize;
+                ViewBag.CurrentPage = data?.currentPage;
+                var users = data?.users as List<UserViewModel>;
+                return View(users);
+            }
+            return NotFound();
         }
         [HttpGet]
         [Route("Create")]
@@ -217,7 +228,7 @@ namespace Smart_Library.Areas.Admin.Controllers
         [Route("Import/Download")]
         public IActionResult DownloadExcelTemplate()
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "documents", "DULIEUMAU.xlsx");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", "documents", "DULIEUMAU.xlsx");
             if (!System.IO.File.Exists(path))
             {
                 return NotFound();

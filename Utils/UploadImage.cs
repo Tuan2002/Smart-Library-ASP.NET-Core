@@ -11,7 +11,7 @@ namespace Smart_Library.Utils
                 return null;
             }
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "images", fileName);
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", "images", fileName);
             // Copy file to path
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
@@ -19,10 +19,9 @@ namespace Smart_Library.Utils
             }
             // Example: /uploads/images/fileName
             // Return path to save in database
-            return filePath.Substring(filePath.IndexOf("/uploads"));
+            return filePath.Substring(filePath.IndexOf("/Uploads")).ToLowerInvariant();
 
         }
-
         // Upload single image with custom folder name
         public static string? UploadSingleImage(IFormFile? file, string? folderName)
         {
@@ -33,13 +32,13 @@ namespace Smart_Library.Utils
             string storeFolder = folderName ?? "images";
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
             // Check if folder exists in wwwroot/uploads/storeFolder
-            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", storeFolder);
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", storeFolder);
             // If folder doesn't exist, create it in wwwroot/uploads/storeFolder
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", storeFolder, fileName);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", storeFolder, fileName);
             // Copy file to path
             using (var stream = new FileStream(path, FileMode.Create))
             {
@@ -47,7 +46,7 @@ namespace Smart_Library.Utils
             }
             // Example: /uploads/storeFolder/fileName
             // Return path to save in database
-            return path.Substring(path.IndexOf("/uploads"));
+            return path.Substring(path.IndexOf("/Uploads")).ToLowerInvariant();
         }
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Smart_Library.Config;
 using Smart_Library.Models;
 using Smart_Library.Services;
 
@@ -57,11 +58,11 @@ namespace Smart_Library.Controllers
             }
             TempData["AuthMessage"] = "Đăng nhập thành công";
             TempData["Type"] = "success";
-            if (LoginResult.Roles != null && LoginResult.Roles.Contains("Quản trị viên") && loginModel.ReturnUrl == "/")
+            if (LoginResult.Roles != null && LoginResult.Roles.Contains(AppRoles.Admin) && loginModel.ReturnUrl == "/")
                 return RedirectToAction("Index", "Home", new { area = "Admin" });
             if (!string.IsNullOrEmpty(loginModel.ReturnUrl) && Url.IsLocalUrl(loginModel.ReturnUrl))
             {
-                if (LoginResult.Roles != null && !LoginResult.Roles.Contains("Quản trị viên") && loginModel.ReturnUrl.Contains("/admin"))
+                if (LoginResult.Roles != null && !LoginResult.Roles.Contains(AppRoles.Admin) && loginModel.ReturnUrl.Contains("/admin"))
                     return RedirectToAction("Index", "Home");
                 return Redirect(loginModel.ReturnUrl);
             }
